@@ -150,52 +150,6 @@ export default function SettingsPage() {
         )}
       </div>
 
-      <div className="card" style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
-        <h2 style={{ fontSize: '1.25rem', fontWeight: 600 }}>Employee Colors</h2>
-        <p style={{ color: 'var(--text-secondary)', fontSize: '0.9rem' }}>
-          Assign distinct colors to team members. These colors will be used in the Timeline and Capacity views to help identify workloads quickly.
-        </p>
-
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
-          {mockUsers.map(user => (
-            <div key={user.id} style={{ 
-              display: 'flex', 
-              alignItems: 'center', 
-              justifyContent: 'space-between', 
-              padding: '16px', 
-              border: '1px solid var(--border-light)', 
-              borderRadius: '8px',
-              background: 'var(--bg-secondary)'
-            }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
-                <img src={user.avatarUrl} alt={user.name} style={{ width: '40px', height: '40px', borderRadius: '50%' }} />
-                <div>
-                  <div style={{ fontWeight: 600 }}>{user.name}</div>
-                  <div style={{ fontSize: '0.8rem', color: 'var(--text-tertiary)' }}>{user.department} • {user.role}</div>
-                </div>
-              </div>
-              
-              <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-                <span style={{ fontSize: '0.85rem', color: 'var(--text-secondary)' }}>Assigned Color:</span>
-                <input 
-                  type="color" 
-                  value={colors[user.id] || '#3b82f6'} 
-                  onChange={(e) => updateColor(user.id, e.target.value)}
-                  style={{
-                    width: '40px',
-                    height: '40px',
-                    padding: '0',
-                    border: 'none',
-                    borderRadius: '8px',
-                    cursor: 'pointer',
-                    background: 'none'
-                  }}
-                />
-              </div>
-            </div>
-          ))}
-        </div>
-      </div>
     </div>
   );
 }

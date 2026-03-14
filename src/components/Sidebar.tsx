@@ -11,7 +11,6 @@ export default function Sidebar() {
     { name: 'Dashboard', href: '/', icon: LayoutDashboard },
     { name: 'Machine', href: '/dashboard', icon: LayoutDashboard },
     { name: 'Planning', href: '/timeline', icon: CalendarDays },
-    { name: 'Settings', href: '/settings', icon: Settings },
   ];
 
   return (
