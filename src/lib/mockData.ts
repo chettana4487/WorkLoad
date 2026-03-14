@@ -43,140 +43,140 @@ export const mockUsers: User[] = [
     "name": "นายธีระวุฒิ คลองแถว",
     "role": "Programmer",
     "department": "Engineering",
-    "avatarUrl": "https://i.pravatar.cc/150?u=u2"
+    "avatarUrl": "/api/avatar?name=%E0%B8%99%E0%B8%B2%E0%B8%A2%E0%B8%98%E0%B8%B5%E0%B8%A3%E0%B8%B0%E0%B8%A7%E0%B8%B8%E0%B8%92%E0%B8%B4%20%E0%B8%84%E0%B8%A5%E0%B8%AD%E0%B8%87%E0%B9%81%E0%B8%96%E0%B8%A7"
   },
   {
     "id": "u3",
     "name": "นายเมธี หีบทอง",
     "role": "Electrical Production",
     "department": "Production",
-    "avatarUrl": "https://i.pravatar.cc/150?u=u3"
+    "avatarUrl": "/api/avatar?name=%E0%B8%99%E0%B8%B2%E0%B8%A2%E0%B9%80%E0%B8%A1%E0%B8%98%E0%B8%B5%20%E0%B8%AB%E0%B8%B5%E0%B8%9A%E0%B8%97%E0%B8%AD%E0%B8%87"
   },
   {
     "id": "u4",
     "name": "นายวณัฐพงษ์ แก้วมงคล",
     "role": "Electrical Production",
     "department": "Production",
-    "avatarUrl": "https://i.pravatar.cc/150?u=u4"
+    "avatarUrl": "/api/avatar?name=%E0%B8%99%E0%B8%B2%E0%B8%A2%E0%B8%A7%E0%B8%93%E0%B8%B1%E0%B8%90%E0%B8%9E%E0%B8%87%E0%B8%A9%E0%B9%8C%20%E0%B9%81%E0%B8%81%E0%B9%89%E0%B8%A7%E0%B8%A1%E0%B8%87%E0%B8%84%E0%B8%A5"
   },
   {
     "id": "u5",
     "name": "นายเทียนชัย ดวงจันทร์",
     "role": "Electrical Production",
     "department": "Production",
-    "avatarUrl": "https://i.pravatar.cc/150?u=u5"
+    "avatarUrl": "/api/avatar?name=%E0%B8%99%E0%B8%B2%E0%B8%A2%E0%B9%80%E0%B8%97%E0%B8%B5%E0%B8%A2%E0%B8%99%E0%B8%8A%E0%B8%B1%E0%B8%A2%20%E0%B8%94%E0%B8%A7%E0%B8%87%E0%B8%88%E0%B8%B1%E0%B8%99%E0%B8%97%E0%B8%A3%E0%B9%8C"
   },
   {
     "id": "u6",
     "name": "นายจตุรวิชญ์ ว่องไว",
     "role": "Programmer",
     "department": "Engineering",
-    "avatarUrl": "https://i.pravatar.cc/150?u=u6"
+    "avatarUrl": "/api/avatar?name=%E0%B8%99%E0%B8%B2%E0%B8%A2%E0%B8%88%E0%B8%95%E0%B8%B8%E0%B8%A3%E0%B8%A7%E0%B8%B4%E0%B8%8A%E0%B8%8D%E0%B9%8C%20%E0%B8%A7%E0%B9%88%E0%B8%AD%E0%B8%87%E0%B9%84%E0%B8%A7"
   },
   {
     "id": "u7",
     "name": "นายปัญญา หัตถปนิตย์",
     "role": "Programmer",
     "department": "Engineering",
-    "avatarUrl": "https://i.pravatar.cc/150?u=u7"
+    "avatarUrl": "/api/avatar?name=%E0%B8%99%E0%B8%B2%E0%B8%A2%E0%B8%9B%E0%B8%B1%E0%B8%8D%E0%B8%8D%E0%B8%B2%20%E0%B8%AB%E0%B8%B1%E0%B8%95%E0%B8%96%E0%B8%9B%E0%B8%99%E0%B8%B4%E0%B8%95%E0%B8%A2%E0%B9%8C"
   },
   {
     "id": "u8",
     "name": "นายกิติพงศ์ ไชยรัตน์",
     "role": "Programmer",
     "department": "Engineering",
-    "avatarUrl": "https://i.pravatar.cc/150?u=u8"
+    "avatarUrl": "/api/avatar?name=%E0%B8%99%E0%B8%B2%E0%B8%A2%E0%B8%81%E0%B8%B4%E0%B8%95%E0%B8%B4%E0%B8%9E%E0%B8%87%E0%B8%A8%E0%B9%8C%20%E0%B9%84%E0%B8%8A%E0%B8%A2%E0%B8%A3%E0%B8%B1%E0%B8%95%E0%B8%99%E0%B9%8C"
   },
   {
     "id": "u9",
     "name": "นายวิชากร  คนไทย",
     "role": "Programmer",
     "department": "Engineering",
-    "avatarUrl": "https://i.pravatar.cc/150?u=u9"
+    "avatarUrl": "/api/avatar?name=%E0%B8%99%E0%B8%B2%E0%B8%A2%E0%B8%A7%E0%B8%B4%E0%B8%8A%E0%B8%B2%E0%B8%81%E0%B8%A3%20%20%E0%B8%84%E0%B8%99%E0%B9%84%E0%B8%97%E0%B8%A2"
   },
   {
     "id": "u10",
     "name": "นายไกรสิทธิ์  แสงจันทร์",
     "role": "Electrical Production",
     "department": "Production",
-    "avatarUrl": "https://i.pravatar.cc/150?u=u10"
+    "avatarUrl": "/api/avatar?name=%E0%B8%99%E0%B8%B2%E0%B8%A2%E0%B9%84%E0%B8%81%E0%B8%A3%E0%B8%AA%E0%B8%B4%E0%B8%97%E0%B8%98%E0%B8%B4%E0%B9%8C%20%20%E0%B9%81%E0%B8%AA%E0%B8%87%E0%B8%88%E0%B8%B1%E0%B8%99%E0%B8%97%E0%B8%A3%E0%B9%8C"
   },
   {
     "id": "u11",
     "name": "นายศุภวัฒน์ ไชยชาญ",
     "role": "Electrical Production",
     "department": "Production",
-    "avatarUrl": "https://i.pravatar.cc/150?u=u11"
+    "avatarUrl": "/api/avatar?name=%E0%B8%99%E0%B8%B2%E0%B8%A2%E0%B8%A8%E0%B8%B8%E0%B8%A0%E0%B8%A7%E0%B8%B1%E0%B8%92%E0%B8%99%E0%B9%8C%20%E0%B9%84%E0%B8%8A%E0%B8%A2%E0%B8%8A%E0%B8%B2%E0%B8%8D"
   },
   {
     "id": "u12",
     "name": "นายอัครพงษ์  ขุมเงิน",
     "role": "Programmer",
     "department": "Engineering",
-    "avatarUrl": "https://i.pravatar.cc/150?u=u12"
+    "avatarUrl": "/api/avatar?name=%E0%B8%99%E0%B8%B2%E0%B8%A2%E0%B8%AD%E0%B8%B1%E0%B8%84%E0%B8%A3%E0%B8%9E%E0%B8%87%E0%B8%A9%E0%B9%8C%20%20%E0%B8%82%E0%B8%B8%E0%B8%A1%E0%B9%80%E0%B8%87%E0%B8%B4%E0%B8%99"
   },
   {
     "id": "u13",
     "name": "นายชุมพล มังคละเสถียร",
     "role": "Electrical Production",
     "department": "Production",
-    "avatarUrl": "https://i.pravatar.cc/150?u=u13"
+    "avatarUrl": "/api/avatar?name=%E0%B8%99%E0%B8%B2%E0%B8%A2%E0%B8%8A%E0%B8%B8%E0%B8%A1%E0%B8%9E%E0%B8%A5%20%E0%B8%A1%E0%B8%B1%E0%B8%87%E0%B8%84%E0%B8%A5%E0%B8%B0%E0%B9%80%E0%B8%AA%E0%B8%96%E0%B8%B5%E0%B8%A2%E0%B8%A3"
   },
   {
     "id": "u14",
     "name": "นายสันติสุข บุตรจันทร์",
     "role": "Electrical Production",
     "department": "Production",
-    "avatarUrl": "https://i.pravatar.cc/150?u=u14"
+    "avatarUrl": "/api/avatar?name=%E0%B8%99%E0%B8%B2%E0%B8%A2%E0%B8%AA%E0%B8%B1%E0%B8%99%E0%B8%95%E0%B8%B4%E0%B8%AA%E0%B8%B8%E0%B8%82%20%E0%B8%9A%E0%B8%B8%E0%B8%95%E0%B8%A3%E0%B8%88%E0%B8%B1%E0%B8%99%E0%B8%97%E0%B8%A3%E0%B9%8C"
   },
   {
     "id": "u15",
     "name": "นายวันเฉลิม เนื่องนาคา",
     "role": "Electrical Production",
     "department": "Production",
-    "avatarUrl": "https://i.pravatar.cc/150?u=u15"
+    "avatarUrl": "/api/avatar?name=%E0%B8%99%E0%B8%B2%E0%B8%A2%E0%B8%A7%E0%B8%B1%E0%B8%99%E0%B9%80%E0%B8%89%E0%B8%A5%E0%B8%B4%E0%B8%A1%20%E0%B9%80%E0%B8%99%E0%B8%B7%E0%B9%88%E0%B8%AD%E0%B8%87%E0%B8%99%E0%B8%B2%E0%B8%84%E0%B8%B2"
   },
   {
     "id": "u16",
     "name": "นายอภิชาติ  ไพศาลสิทธิ์",
     "role": "Electrical Production",
     "department": "Production",
-    "avatarUrl": "https://i.pravatar.cc/150?u=u16"
+    "avatarUrl": "/api/avatar?name=%E0%B8%99%E0%B8%B2%E0%B8%A2%E0%B8%AD%E0%B8%A0%E0%B8%B4%E0%B8%8A%E0%B8%B2%E0%B8%95%E0%B8%B4%20%20%E0%B9%84%E0%B8%9E%E0%B8%A8%E0%B8%B2%E0%B8%A5%E0%B8%AA%E0%B8%B4%E0%B8%97%E0%B8%98%E0%B8%B4%E0%B9%8C"
   },
   {
     "id": "u17",
     "name": "นายศิกษกะ  ปุ้งโพธิ์",
     "role": "Programmer",
     "department": "Engineering",
-    "avatarUrl": "https://i.pravatar.cc/150?u=u17"
+    "avatarUrl": "/api/avatar?name=%E0%B8%99%E0%B8%B2%E0%B8%A2%E0%B8%A8%E0%B8%B4%E0%B8%81%E0%B8%A9%E0%B8%81%E0%B8%B0%20%20%E0%B8%9B%E0%B8%B8%E0%B9%89%E0%B8%87%E0%B9%82%E0%B8%9E%E0%B8%98%E0%B8%B4%E0%B9%8C"
   },
   {
     "id": "u18",
     "name": "นายจรณินท์ ถินประสาท",
     "role": "Programmer",
     "department": "Engineering",
-    "avatarUrl": "https://i.pravatar.cc/150?u=u18"
+    "avatarUrl": "/api/avatar?name=%E0%B8%99%E0%B8%B2%E0%B8%A2%E0%B8%88%E0%B8%A3%E0%B8%93%E0%B8%B4%E0%B8%99%E0%B8%97%E0%B9%8C%20%E0%B8%96%E0%B8%B4%E0%B8%99%E0%B8%9B%E0%B8%A3%E0%B8%B0%E0%B8%AA%E0%B8%B2%E0%B8%97"
   },
   {
     "id": "u19",
     "name": "นายศุภมิตร ไทยแท้",
     "role": "Electrical Production",
     "department": "Production",
-    "avatarUrl": "https://i.pravatar.cc/150?u=u19"
+    "avatarUrl": "/api/avatar?name=%E0%B8%99%E0%B8%B2%E0%B8%A2%E0%B8%A8%E0%B8%B8%E0%B8%A0%E0%B8%A1%E0%B8%B4%E0%B8%95%E0%B8%A3%20%E0%B9%84%E0%B8%97%E0%B8%A2%E0%B9%81%E0%B8%97%E0%B9%89"
   },
   {
     "id": "u20",
     "name": "น.ส.ณิชกานต์  วัฒนธรรม",
     "role": "Programmer",
     "department": "Engineering",
-    "avatarUrl": "https://i.pravatar.cc/150?u=u20"
+    "avatarUrl": "/api/avatar?name=%E0%B8%99.%E0%B8%AA.%E0%B8%93%E0%B8%B4%E0%B8%8A%E0%B8%81%E0%B8%B2%E0%B8%99%E0%B8%95%E0%B9%8C%20%20%E0%B8%A7%E0%B8%B1%E0%B8%92%E0%B8%99%E0%B8%98%E0%B8%A3%E0%B8%A3%E0%B8%A1"
   },
   {
     "id": "u21",
     "name": "นายสันติ แป้นคง",
     "role": "Electrical Production",
     "department": "Production",
-    "avatarUrl": "https://i.pravatar.cc/150?u=u21"
+    "avatarUrl": "/api/avatar?name=%E0%B8%99%E0%B8%B2%E0%B8%A2%E0%B8%AA%E0%B8%B1%E0%B8%99%E0%B8%95%E0%B8%B4%20%E0%B9%81%E0%B8%9B%E0%B9%89%E0%B8%99%E0%B8%84%E0%B8%87"
   }
 ];
 

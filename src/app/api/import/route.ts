@@ -90,7 +90,7 @@ export async function POST(req: Request) {
             name: assigneeName,
             role: Number(taskNum) === 2100 ? 'Electrical Designer' : Number(taskNum) === 2400 ? 'Programmer' : 'Electrical Production',
             department: Number(taskNum) === 2100 ? 'Design' : Number(taskNum) === 2400 ? 'Engineering' : 'Production',
-            avatarUrl: `https://i.pravatar.cc/150?u=${userId}`
+            avatarUrl: `/api/avatar?name=\${encodeURIComponent(assigneeName)}`
           });
         }
       }
