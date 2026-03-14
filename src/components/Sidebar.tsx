@@ -9,7 +9,8 @@ export default function Sidebar() {
 
   const navItems = [
     { name: 'Dashboard', href: '/', icon: LayoutDashboard },
-    { name: 'Machine', href: '/dashboard', icon: LayoutDashboard },
+    { name: 'Machine', href: '/dashboard', icon: FolderKanban },
+    { name: 'Team Workload', href: '/team', icon: Users },
     { name: 'Planning', href: '/timeline', icon: CalendarDays },
   ];
 
