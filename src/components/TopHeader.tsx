@@ -1,8 +1,30 @@
 'use client';
 
-import { Bell, Search } from 'lucide-react';
+import { Search, Sun, Moon } from 'lucide-react';
+import { useState, useEffect } from 'react';
 
 export default function TopHeader() {
+  const [theme, setTheme] = useState<'light' | 'dark'>('light');
+
+  // Initialize theme from localStorage or system preference
+  useEffect(() => {
+    const savedTheme = localStorage.getItem('theme') as 'light' | 'dark' | null;
+    const systemTheme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+    const initialTheme = savedTheme || systemTheme;
+    
+    setTheme(initialTheme);
+    document.documentElement.classList.remove('light', 'dark');
+    document.documentElement.classList.add(initialTheme);
+  }, []);
+
+  const toggleTheme = () => {
+    const newTheme = theme === 'light' ? 'dark' : 'light';
+    setTheme(newTheme);
+    localStorage.setItem('theme', newTheme);
+    document.documentElement.classList.remove('light', 'dark');
+    document.documentElement.classList.add(newTheme);
+  };
+
   return (
     <header className="top-header">
       <div style={{ display: 'flex', alignItems: 'center', backgroundColor: 'var(--bg-tertiary)', padding: '8px 16px', borderRadius: 'var(--radius-full)', width: '300px' }}>
@@ -23,28 +45,23 @@ export default function TopHeader() {
       </div>
 
       <div style={{ display: 'flex', alignItems: 'center', gap: '20px' }}>
-        <button style={{ position: 'relative' }}>
-          <Bell size={20} color="var(--text-secondary)" />
-          <span style={{ 
-            position: 'absolute', 
-            top: '-2px', left: '10px', 
-            width: '8px', height: '8px', 
-            backgroundColor: 'var(--danger)', 
-            borderRadius: '50%' 
-          }}></span>
+        <button 
+          onClick={toggleTheme}
+          style={{ 
+            display: 'flex', 
+            alignItems: 'center', 
+            justifyContent: 'center',
+            width: '40px',
+            height: '40px',
+            borderRadius: '12px',
+            backgroundColor: 'var(--bg-tertiary)',
+            color: 'var(--text-secondary)',
+            transition: 'all 0.2s ease'
+          }}
+          title={`Switch to ${theme === 'light' ? 'dark' : 'light'} mode`}
+        >
+          {theme === 'light' ? <Moon size={20} /> : <Sun size={20} />}
         </button>
-        
-        <div style={{ display: 'flex', alignItems: 'center', gap: '12px', borderLeft: '1px solid var(--border-light)', paddingLeft: '20px' }}>
-          <div style={{ textAlign: 'right' }}>
-            <div style={{ fontSize: '0.9rem', fontWeight: 500 }}>Admin User</div>
-            <div style={{ fontSize: '0.8rem', color: 'var(--text-tertiary)' }}>Director</div>
-          </div>
-          <img 
-            src="https://i.pravatar.cc/150?u=admin" 
-            alt="Current User" 
-            style={{ width: '40px', height: '40px', borderRadius: '50%', objectFit: 'cover' }}
-          />
-        </div>
       </div>
     </header>
   );
