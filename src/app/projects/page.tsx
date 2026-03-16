@@ -1,9 +1,10 @@
 'use client';
 
-import { mockProjects, mockUsers } from '@/lib/mockData';
-import { Briefcase, Code, PenTool, Users, Target, Activity } from 'lucide-react';
+import { mockProjects, mockUsers, mockTasks } from '@/lib/mockData';
+import { Briefcase, Code, PenTool, Users, Target, Activity, Calendar } from 'lucide-react';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
+import { format, parseISO, differenceInDays, startOfMonth, endOfMonth, eachDayOfInterval } from 'date-fns';
 
 export default function ProjectsPage() {
   const [isDarkMode, setIsDarkMode] = useState(false);
@@ -37,8 +38,8 @@ export default function ProjectsPage() {
       {/* Header */}
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end' }}>
         <div>
-          <h1 style={{ fontSize: '2rem', fontWeight: 600, marginBottom: '8px' }}>Machines Portfolio</h1>
-          <p style={{ color: 'var(--text-secondary)' }}>Track machine construction responsibilities and budget allocations across Design, Program, and Production.</p>
+          <h1 style={{ fontSize: '2rem', fontWeight: 600, marginBottom: '8px' }}>Projects Portfolio</h1>
+          <p style={{ color: 'var(--text-secondary)' }}>Track project construction responsibilities and budget allocations across Design, Program, and Production.</p>
         </div>
       </div>
 
@@ -167,6 +168,15 @@ export default function ProjectsPage() {
 
               </div>
 
+              {/* Project Timeline Section */}
+              <div style={{ borderTop: '1px solid var(--border-light)', paddingTop: '24px' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '16px' }}>
+                  <Calendar size={18} className="text-secondary" />
+                  <h3 style={{ fontSize: '1rem', fontWeight: 600, color: 'var(--text-primary)' }}>Project Timeline Schedule</h3>
+                </div>
+                <ProjectTimeline projectId={project.id} />
+              </div>
+
             </div>
           );
         })}
@@ -223,6 +233,111 @@ function ResponsibilityCard({ title, icon, data, users, formatCurrency }: any) {
         </div>
       </div>
 
+    </div>
+  );
+}
+
+// Sub-component for rendering the project-specific timeline
+function ProjectTimeline({ projectId }: { projectId: string }) {
+  const projectTasks = useMemo(() => mockTasks.filter(t => t.projectId === projectId), [projectId]);
+  
+  // Use a fixed range for March 2026 for consistency with Dashboard
+  const baseDate = parseISO('2026-03-01');
+  const monthStart = startOfMonth(baseDate);
+  const monthEnd = endOfMonth(baseDate);
+  const days = eachDayOfInterval({ start: monthStart, end: monthEnd });
+  
+  if (projectTasks.length === 0) {
+    return (
+      <div style={{ padding: '20px', textAlign: 'center', color: 'var(--text-tertiary)', background: 'var(--bg-secondary)', borderRadius: '12px', fontSize: '0.9rem', border: '1px dashed var(--border-light)' }}>
+        No tasks scheduled for this project.
+      </div>
+    );
+  }
+
+  const colWidth = 24; // Compact view
+
+  return (
+    <div style={{ background: 'var(--bg-secondary)', borderRadius: '12px', border: '1px solid var(--border-light)', overflow: 'hidden' }}>
+      <div style={{ overflowX: 'auto', padding: '16px' }}>
+        <div style={{ minWidth: 'fit-content' }}>
+          
+          {/* Timeline Header - Dates */}
+          <div style={{ display: 'flex', marginBottom: '8px', paddingLeft: '200px' }}>
+            {days.map((day, idx) => {
+              const isWeekend = day.getDay() === 0 || day.getDay() === 6;
+              return (
+                <div key={idx} style={{ 
+                  minWidth: `${colWidth}px`, 
+                  textAlign: 'center', 
+                  fontSize: '0.65rem', 
+                  color: isWeekend ? 'var(--danger)' : 'var(--text-tertiary)' 
+                }}>
+                  {format(day, 'd')}
+                </div>
+              );
+            })}
+          </div>
+
+          {/* Task Rows */}
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+            {projectTasks.map((task) => {
+              const tStart = parseISO(task.startDate);
+              const tEnd = parseISO(task.endDate);
+              
+              // Bounds to month
+              const drawStart = tStart < monthStart ? monthStart : tStart;
+              const drawEnd = tEnd > monthEnd ? monthEnd : tEnd;
+              
+              if (drawEnd < monthStart || drawStart > monthEnd) return null;
+
+              const leftOffset = differenceInDays(drawStart, monthStart) * colWidth;
+              const width = (differenceInDays(drawEnd, drawStart) + 1) * colWidth;
+              const user = mockUsers.find(u => u.id === task.userId);
+
+              return (
+                <div key={task.id} style={{ display: 'flex', alignItems: 'center', height: '32px' }}>
+                  {/* Task Label / Assignee */}
+                  <div style={{ 
+                    width: '200px', 
+                    fontSize: '0.8rem', 
+                    color: 'var(--text-secondary)', 
+                    display: 'flex', 
+                    alignItems: 'center', 
+                    gap: '8px',
+                    paddingRight: '12px',
+                    overflow: 'hidden',
+                    textOverflow: 'ellipsis',
+                    whiteSpace: 'nowrap'
+                  }}>
+                    <img src={user?.avatarUrl} alt="" style={{ width: '18px', height: '18px', borderRadius: '50%' }} />
+                    <span style={{ fontWeight: 500, color: 'var(--text-primary)' }}>{user?.name.split(' ')[1] || 'User'}</span>: {task.title}
+                  </div>
+                  
+                  {/* Timeline Bar Container */}
+                  <div style={{ position: 'relative', flex: 1, height: '12px', background: 'var(--bg-tertiary)', borderRadius: '6px' }}>
+                    <div style={{ 
+                      position: 'absolute', 
+                      left: `${leftOffset}px`, 
+                      width: `${width}px`, 
+                      height: '100%', 
+                      background: 'var(--brand-primary)', 
+                      borderRadius: '6px',
+                      opacity: 0.8
+                    }} 
+                    title={`${task.title} (${task.startDate} to ${task.endDate})`}
+                    />
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+
+        </div>
+      </div>
+      <div style={{ padding: '8px 16px', background: 'var(--bg-tertiary)', borderTop: '1px solid var(--border-light)', fontSize: '0.7rem', color: 'var(--text-tertiary)', textAlign: 'right' }}>
+        Viewing Schedule for {format(monthStart, 'MMMM yyyy')}
+      </div>
     </div>
   );
 }
