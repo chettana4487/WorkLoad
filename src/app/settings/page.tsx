@@ -201,7 +201,67 @@ export default function SettingsPage() {
                 to { transform: rotate(360deg); }
               }
             `}</style>
-            {isUploading ? 'กำลังนำเข้าข้อมูล กรุณารอสักครู่...' : 'Select Excel File'}
+            {isUploading ? 'กำลังนำเข้าข้อมูล กรุณารอสักครู่...' : 'Select Schedule Excel'}
+          </button>
+        </div>
+      </div>
+
+      {/* Cost Monitoring Import */}
+      <div className="card" style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
+        <h2 style={{ fontSize: '1.25rem', fontWeight: 600 }}>Import Cost Monitoring (Excel)</h2>
+        <p style={{ color: 'var(--text-secondary)', fontSize: '0.9rem' }}>
+          Upload an Excel (.xlsx) file with project cost data (2100, 2300, 2400, 4400, 7300).
+        </p>
+
+        <div>
+          <input
+            type="file"
+            accept=".xlsx"
+            id="cost-upload"
+            style={{ display: 'none' }}
+            onChange={async (e) => {
+              const file = e.target.files?.[0];
+              if (!file) return;
+              setIsUploading(true);
+              const formData = new FormData();
+              formData.append('file', file);
+              try {
+                const res = await fetch('/api/import/cost', { method: 'POST', body: formData });
+                if (res.ok) {
+                  alert('Cost data imported successfully!');
+                  window.location.reload();
+                } else {
+                  const err = await res.json();
+                  alert('Failed to import cost: ' + (err.error || 'Unknown error'));
+                }
+              } catch (err) {
+                alert('An error occurred during cost upload.');
+              } finally {
+                setIsUploading(false);
+                e.target.value = '';
+              }
+            }}
+          />
+          <button
+            onClick={() => document.getElementById('cost-upload')?.click()}
+            disabled={isUploading}
+            style={{
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: '8px',
+              padding: '10px 16px',
+              backgroundColor: isUploading ? 'var(--text-secondary)' : '#10b981', // Green for cost
+              color: 'white',
+              border: 'none',
+              borderRadius: '6px',
+              fontWeight: 500,
+              cursor: isUploading ? 'wait' : 'pointer',
+              opacity: isUploading ? 0.8 : 1,
+              transition: 'all 0.2s ease',
+            }}
+          >
+            {isUploading ? <Loader2 size={18} className="animate-spin" /> : <Upload size={18} />}
+            {isUploading ? 'กำลังนำเข้าข้อมูล...' : 'Select Cost Excel File'}
           </button>
         </div>
       </div>

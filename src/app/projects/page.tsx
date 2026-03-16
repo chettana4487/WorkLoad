@@ -112,10 +112,25 @@ export default function ProjectsPage() {
           const isOverBudgetOverall = totalActual > totalPlan;
 
           const chartData = [
-            { name: 'Design', Plan: project.responsibilities.design.plannedCost, Actual: project.responsibilities.design.actualCost },
-            { name: 'Program', Plan: project.responsibilities.program.plannedCost, Actual: project.responsibilities.program.actualCost },
-            { name: 'Production', Plan: project.responsibilities.production.plannedCost, Actual: project.responsibilities.production.actualCost },
+            { name: '2100', Plan: project.detailedCosts?.['2100']?.plan ?? project.responsibilities.design.plannedCost, Actual: project.detailedCosts?.['2100']?.actual ?? project.responsibilities.design.actualCost },
+            { name: '2400', Plan: project.detailedCosts?.['2400']?.plan ?? project.responsibilities.program.plannedCost, Actual: project.detailedCosts?.['2400']?.actual ?? project.responsibilities.program.actualCost },
+            { name: '4400', Plan: project.detailedCosts?.['4400']?.plan ?? project.responsibilities.production.plannedCost, Actual: project.detailedCosts?.['4400']?.actual ?? project.responsibilities.production.actualCost },
           ];
+
+          if (project.detailedCosts?.['2300']?.plan || project.detailedCosts?.['2300']?.actual) {
+            chartData.push({ 
+              name: '2300', 
+              Plan: project.detailedCosts['2300'].plan, 
+              Actual: project.detailedCosts['2300'].actual 
+            });
+          }
+          if (project.detailedCosts?.['7300']?.plan || project.detailedCosts?.['7300']?.actual) {
+            chartData.push({ 
+              name: '7300', 
+              Plan: project.detailedCosts['7300'].plan, 
+              Actual: project.detailedCosts['7300'].actual 
+            });
+          }
 
           return (
             <div key={project.id} className="card" style={{ padding: '24px', display: 'flex', flexDirection: 'column', gap: '24px', borderLeft: `4px solid ${project.colorCode}` }}>
@@ -125,6 +140,11 @@ export default function ProjectsPage() {
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
                   <span style={{ fontSize: '0.85rem', fontWeight: 600, color: 'var(--brand-primary)', letterSpacing: '0.05em' }}>{project.projectNumber}</span>
                   <h2 style={{ fontSize: '1.25rem', fontWeight: 600, color: 'var(--text-primary)' }}>{project.name}</h2>
+                  {project.customer && (
+                    <div style={{ fontSize: '0.9rem', color: 'var(--primary-color)', fontWeight: 500, marginTop: '-4px' }}>
+                      Customer: {project.customer}
+                    </div>
+                  )}
                   <div style={{ display: 'flex', gap: '16px', fontSize: '0.85rem', color: 'var(--text-secondary)', marginTop: '4px' }}>
                     <span style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
                       <Activity size={14} /> {project.status}
@@ -156,32 +176,70 @@ export default function ProjectsPage() {
                 {/* Responsibilities Grid */}
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
                 
-                {/* Design Section */}
+                {/* Design Section (2100) */}
                 <ResponsibilityCard 
-                  title="Design" 
+                  title="Design (2100)" 
                   icon={<PenTool size={18} />} 
-                  data={project.responsibilities.design} 
+                  data={{
+                    plannedCost: project.detailedCosts?.['2100']?.plan ?? project.responsibilities.design.plannedCost,
+                    actualCost: project.detailedCosts?.['2100']?.actual ?? project.responsibilities.design.actualCost
+                  }} 
                   users={getResponsibleUsers(project.responsibilities.design.userIds)} 
                   formatCurrency={formatCurrency}
                 />
 
-                {/* Program Section */}
+                {/* Program Section (2400) */}
                 <ResponsibilityCard 
-                  title="Program" 
+                  title="Program (2400)" 
                   icon={<Code size={18} />} 
-                  data={project.responsibilities.program} 
+                  data={{
+                    plannedCost: project.detailedCosts?.['2400']?.plan ?? project.responsibilities.program.plannedCost,
+                    actualCost: project.detailedCosts?.['2400']?.actual ?? project.responsibilities.program.actualCost
+                  }} 
                   users={getResponsibleUsers(project.responsibilities.program.userIds)} 
                   formatCurrency={formatCurrency}
                 />
 
-                {/* Production Section */}
+                {/* Production Section (4400) */}
                 <ResponsibilityCard 
-                  title="Production" 
+                  title="Production (4400)" 
                   icon={<Briefcase size={18} />} 
-                  data={project.responsibilities.production} 
+                  data={{
+                    plannedCost: project.detailedCosts?.['4400']?.plan ?? project.responsibilities.production.plannedCost,
+                    actualCost: project.detailedCosts?.['4400']?.actual ?? project.responsibilities.production.actualCost
+                  }} 
                   users={getResponsibleUsers(project.responsibilities.production.userIds)} 
                   formatCurrency={formatCurrency}
                 />
+
+                {/* Additional Sections (2300, 7300) */}
+                {(project.detailedCosts?.['2300']?.plan || project.detailedCosts?.['2300']?.actual) && (
+                  <div style={{ padding: '12px', background: 'var(--bg-tertiary)', borderRadius: '8px', fontSize: '0.85rem' }}>
+                    <div style={{ fontWeight: 600, marginBottom: '4px' }}>Task 2300</div>
+                    <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                      <span>Plan: {formatCurrency(project.detailedCosts['2300'].plan)}</span>
+                      <span style={{ color: project.detailedCosts['2300'].actual > project.detailedCosts['2300'].plan ? 'var(--danger)' : 'var(--success)' }}>
+                        Actual: {formatCurrency(project.detailedCosts['2300'].actual)}
+                      </span>
+                    </div>
+                    {project.detailedCosts['2300'].po > 0 && (
+                      <div style={{ color: 'var(--text-tertiary)', fontSize: '0.75rem', marginTop: '2px' }}>
+                        PO Cost: {formatCurrency(project.detailedCosts['2300'].po)}
+                      </div>
+                    )}
+                  </div>
+                )}
+                {(project.detailedCosts?.['7300']?.plan || project.detailedCosts?.['7300']?.actual) && (
+                  <div style={{ padding: '12px', background: 'var(--bg-tertiary)', borderRadius: '8px', fontSize: '0.85rem' }}>
+                    <div style={{ fontWeight: 600, marginBottom: '4px' }}>Task 7300</div>
+                    <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                      <span>Plan: {formatCurrency(project.detailedCosts['7300'].plan)}</span>
+                      <span style={{ color: project.detailedCosts['7300'].actual > project.detailedCosts['7300'].plan ? 'var(--danger)' : 'var(--success)' }}>
+                        Actual: {formatCurrency(project.detailedCosts['7300'].actual)}
+                      </span>
+                    </div>
+                  </div>
+                )}
                 </div>
 
                 {/* Vertical Separator */}

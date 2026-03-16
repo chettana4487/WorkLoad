@@ -64,7 +64,7 @@ export default function TopHeader() {
           boxShadow: 'var(--shadow-sm)',
           textShadow: '0 1px 2px rgba(0,0,0,0.1)'
         }}>
-          ELECTRICAL ENGINEERING (PPNs)
+          ELECTRICAL ENGINEERING
         </div>
       </div>
 
