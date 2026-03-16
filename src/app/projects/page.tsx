@@ -112,21 +112,21 @@ export default function ProjectsPage() {
           const isOverBudgetOverall = totalActual > totalPlan;
 
           const chartData = [
-            { name: '2100', Plan: project.detailedCosts?.['2100']?.plan ?? project.responsibilities.design.plannedCost, Actual: project.detailedCosts?.['2100']?.actual ?? project.responsibilities.design.actualCost },
-            { name: '2400', Plan: project.detailedCosts?.['2400']?.plan ?? project.responsibilities.program.plannedCost, Actual: project.detailedCosts?.['2400']?.actual ?? project.responsibilities.program.actualCost },
-            { name: '4400', Plan: project.detailedCosts?.['4400']?.plan ?? project.responsibilities.production.plannedCost, Actual: project.detailedCosts?.['4400']?.actual ?? project.responsibilities.production.actualCost },
+            { name: 'Design', Plan: project.detailedCosts?.['2100']?.plan ?? project.responsibilities.design.plannedCost, Actual: project.detailedCosts?.['2100']?.actual ?? project.responsibilities.design.actualCost },
+            { name: 'Program', Plan: project.detailedCosts?.['2400']?.plan ?? project.responsibilities.program.plannedCost, Actual: project.detailedCosts?.['2400']?.actual ?? project.responsibilities.program.actualCost },
+            { name: 'Production', Plan: project.detailedCosts?.['4400']?.plan ?? project.responsibilities.production.plannedCost, Actual: project.detailedCosts?.['4400']?.actual ?? project.responsibilities.production.actualCost },
           ];
 
           if (project.detailedCosts?.['2300']?.plan || project.detailedCosts?.['2300']?.actual) {
             chartData.push({ 
-              name: '2300', 
+              name: 'Materials', 
               Plan: project.detailedCosts['2300'].plan, 
               Actual: project.detailedCosts['2300'].actual 
             });
           }
           if (project.detailedCosts?.['7300']?.plan || project.detailedCosts?.['7300']?.actual) {
             chartData.push({ 
-              name: '7300', 
+              name: 'Other', 
               Plan: project.detailedCosts['7300'].plan, 
               Actual: project.detailedCosts['7300'].actual 
             });
@@ -215,7 +215,7 @@ export default function ProjectsPage() {
                 {/* Additional Sections (2300, 7300) */}
                 {(project.detailedCosts?.['2300']?.plan || project.detailedCosts?.['2300']?.actual) && (
                   <div style={{ padding: '12px', background: 'var(--bg-tertiary)', borderRadius: '8px', fontSize: '0.85rem' }}>
-                    <div style={{ fontWeight: 600, marginBottom: '4px' }}>Task 2300</div>
+                    <div style={{ fontWeight: 600, marginBottom: '4px' }}>Materials (2300)</div>
                     <div style={{ display: 'flex', justifyContent: 'space-between' }}>
                       <span>Plan: {formatCurrency(project.detailedCosts['2300'].plan)}</span>
                       <span style={{ color: project.detailedCosts['2300'].actual > project.detailedCosts['2300'].plan ? 'var(--danger)' : 'var(--success)' }}>

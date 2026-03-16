@@ -61,13 +61,11 @@ export async function POST(req: Request) {
       
       let project = projectsMap.get(projNum);
       if (!project) {
-        // If project doesn't exist, we could create it, but for cost monitoring
-        // we usually update existing ones. Let's create if missing for robustness.
         const id = `p${projectsMap.size + 1}`;
         project = {
           id,
           projectNumber: projNum,
-          name: `Project ${projNum}`,
+          name: row['proj_name'] || `Project ${projNum}`,
           status: 'Active',
           type: 'In-House',
           health: 'Good',
@@ -82,6 +80,11 @@ export async function POST(req: Request) {
         };
         projectsMap.set(projNum, project);
         mockProjects.push(project);
+      } else {
+        // Update name if proj_name is provided
+        if (row['proj_name']) {
+          project.name = row['proj_name'];
+        }
       }
       
       // Update customer
