@@ -34,149 +34,148 @@ export interface Task {
   endDate: string;
   workloadPercentage: number;
   hideOnTimeline?: boolean;
-  department?: Department;
 }
 
 export const mockUsers: User[] = [
   {
-    "id": "u2",
+    "id": "u1",
     "name": "นายธีระวุฒิ คลองแถว",
     "role": "Programmer",
     "department": "Engineering",
-    "avatarUrl": "/api/avatar?name=%E0%B8%99%E0%B8%B2%E0%B8%A2%E0%B8%98%E0%B8%B5%E0%B8%A3%E0%B8%B0%E0%B8%A7%E0%B8%B8%E0%B8%92%E0%B8%B4%20%E0%B8%84%E0%B8%A5%E0%B8%AD%E0%B8%87%E0%B9%81%E0%B8%96%E0%B8%A7"
+    "avatarUrl": "/นายธีระวุฒิ คลองแถว.JPG"
   },
   {
-    "id": "u3",
+    "id": "u2",
     "name": "นายเมธี หีบทอง",
     "role": "Electrical Production",
     "department": "Production",
-    "avatarUrl": "/api/avatar?name=%E0%B8%99%E0%B8%B2%E0%B8%A2%E0%B9%80%E0%B8%A1%E0%B8%98%E0%B8%B5%20%E0%B8%AB%E0%B8%B5%E0%B8%9A%E0%B8%97%E0%B8%AD%E0%B8%87"
+    "avatarUrl": "/นายเมธี หีบทอง.png"
   },
   {
-    "id": "u4",
+    "id": "u3",
     "name": "นายวณัฐพงษ์ แก้วมงคล",
     "role": "Electrical Production",
     "department": "Production",
-    "avatarUrl": "/api/avatar?name=%E0%B8%99%E0%B8%B2%E0%B8%A2%E0%B8%A7%E0%B8%93%E0%B8%B1%E0%B8%90%E0%B8%9E%E0%B8%87%E0%B8%A9%E0%B9%8C%20%E0%B9%81%E0%B8%81%E0%B9%89%E0%B8%A7%E0%B8%A1%E0%B8%87%E0%B8%84%E0%B8%A5"
+    "avatarUrl": "/นายวณัฐพงษ์ แก้วมงคล.jpg"
   },
   {
-    "id": "u5",
+    "id": "u4",
     "name": "นายเทียนชัย ดวงจันทร์",
     "role": "Electrical Production",
     "department": "Production",
-    "avatarUrl": "/api/avatar?name=%E0%B8%99%E0%B8%B2%E0%B8%A2%E0%B9%80%E0%B8%97%E0%B8%B5%E0%B8%A2%E0%B8%99%E0%B8%8A%E0%B8%B1%E0%B8%A2%20%E0%B8%94%E0%B8%A7%E0%B8%87%E0%B8%88%E0%B8%B1%E0%B8%99%E0%B8%97%E0%B8%A3%E0%B9%8C"
+    "avatarUrl": "/นายเทียนชัย ดวงจันทร์.jpg"
   },
   {
-    "id": "u6",
+    "id": "u5",
     "name": "นายจตุรวิชญ์ ว่องไว",
     "role": "Programmer",
     "department": "Engineering",
-    "avatarUrl": "/api/avatar?name=%E0%B8%99%E0%B8%B2%E0%B8%A2%E0%B8%88%E0%B8%95%E0%B8%B8%E0%B8%A3%E0%B8%A7%E0%B8%B4%E0%B8%8A%E0%B8%8D%E0%B9%8C%20%E0%B8%A7%E0%B9%88%E0%B8%AD%E0%B8%87%E0%B9%84%E0%B8%A7"
+    "avatarUrl": "/นายจตุรวิชญ์ ว่องไว.jpg"
   },
   {
-    "id": "u7",
+    "id": "u6",
     "name": "นายปัญญา หัตถปนิตย์",
     "role": "Programmer",
     "department": "Engineering",
-    "avatarUrl": "/api/avatar?name=%E0%B8%99%E0%B8%B2%E0%B8%A2%E0%B8%9B%E0%B8%B1%E0%B8%8D%E0%B8%8D%E0%B8%B2%20%E0%B8%AB%E0%B8%B1%E0%B8%95%E0%B8%96%E0%B8%9B%E0%B8%99%E0%B8%B4%E0%B8%95%E0%B8%A2%E0%B9%8C"
+    "avatarUrl": "/นายปัญญา หัตถปนิตย์.JPG"
   },
   {
-    "id": "u8",
+    "id": "u7",
     "name": "นายกิติพงศ์ ไชยรัตน์",
     "role": "Programmer",
     "department": "Engineering",
-    "avatarUrl": "/api/avatar?name=%E0%B8%99%E0%B8%B2%E0%B8%A2%E0%B8%81%E0%B8%B4%E0%B8%95%E0%B8%B4%E0%B8%9E%E0%B8%87%E0%B8%A8%E0%B9%8C%20%E0%B9%84%E0%B8%8A%E0%B8%A2%E0%B8%A3%E0%B8%B1%E0%B8%95%E0%B8%99%E0%B9%8C"
+    "avatarUrl": "/นายกิติพงศ์ ไชยรัตน์.jpg"
   },
   {
-    "id": "u9",
+    "id": "u8",
     "name": "นายวิชากร  คนไทย",
     "role": "Programmer",
     "department": "Engineering",
-    "avatarUrl": "/api/avatar?name=%E0%B8%99%E0%B8%B2%E0%B8%A2%E0%B8%A7%E0%B8%B4%E0%B8%8A%E0%B8%B2%E0%B8%81%E0%B8%A3%20%20%E0%B8%84%E0%B8%99%E0%B9%84%E0%B8%97%E0%B8%A2"
+    "avatarUrl": "/นายวิชากร คนไทย.JPG"
   },
   {
-    "id": "u10",
+    "id": "u9",
     "name": "นายไกรสิทธิ์  แสงจันทร์",
     "role": "Electrical Production",
     "department": "Production",
-    "avatarUrl": "/api/avatar?name=%E0%B8%99%E0%B8%B2%E0%B8%A2%E0%B9%84%E0%B8%81%E0%B8%A3%E0%B8%AA%E0%B8%B4%E0%B8%97%E0%B8%98%E0%B8%B4%E0%B9%8C%20%20%E0%B9%81%E0%B8%AA%E0%B8%87%E0%B8%88%E0%B8%B1%E0%B8%99%E0%B8%97%E0%B8%A3%E0%B9%8C"
+    "avatarUrl": "/นายไกรสิทธิ์ แสงจันทร์.jpg"
   },
   {
-    "id": "u11",
+    "id": "u10",
     "name": "นายศุภวัฒน์ ไชยชาญ",
     "role": "Electrical Production",
     "department": "Production",
-    "avatarUrl": "/api/avatar?name=%E0%B8%99%E0%B8%B2%E0%B8%A2%E0%B8%A8%E0%B8%B8%E0%B8%A0%E0%B8%A7%E0%B8%B1%E0%B8%92%E0%B8%99%E0%B9%8C%20%E0%B9%84%E0%B8%8A%E0%B8%A2%E0%B8%8A%E0%B8%B2%E0%B8%8D"
+    "avatarUrl": "/นายศุภวัฒน์ ไชยชาญ.jpg"
   },
   {
-    "id": "u12",
+    "id": "u11",
     "name": "นายอัครพงษ์  ขุมเงิน",
     "role": "Programmer",
     "department": "Engineering",
-    "avatarUrl": "/api/avatar?name=%E0%B8%99%E0%B8%B2%E0%B8%A2%E0%B8%AD%E0%B8%B1%E0%B8%84%E0%B8%A3%E0%B8%9E%E0%B8%87%E0%B8%A9%E0%B9%8C%20%20%E0%B8%82%E0%B8%B8%E0%B8%A1%E0%B9%80%E0%B8%87%E0%B8%B4%E0%B8%99"
+    "avatarUrl": "/นายอัครพงษ์  ขุมเงิน.png"
   },
   {
-    "id": "u13",
+    "id": "u12",
     "name": "นายชุมพล มังคละเสถียร",
     "role": "Electrical Production",
     "department": "Production",
-    "avatarUrl": "/api/avatar?name=%E0%B8%99%E0%B8%B2%E0%B8%A2%E0%B8%8A%E0%B8%B8%E0%B8%A1%E0%B8%9E%E0%B8%A5%20%E0%B8%A1%E0%B8%B1%E0%B8%87%E0%B8%84%E0%B8%A5%E0%B8%B0%E0%B9%80%E0%B8%AA%E0%B8%96%E0%B8%B5%E0%B8%A2%E0%B8%A3"
+    "avatarUrl": "/นายชุมพล มังคละเสถียร.jpg"
   },
   {
-    "id": "u14",
+    "id": "u13",
     "name": "นายสันติสุข บุตรจันทร์",
     "role": "Electrical Production",
     "department": "Production",
-    "avatarUrl": "/api/avatar?name=%E0%B8%99%E0%B8%B2%E0%B8%A2%E0%B8%AA%E0%B8%B1%E0%B8%99%E0%B8%95%E0%B8%B4%E0%B8%AA%E0%B8%B8%E0%B8%82%20%E0%B8%9A%E0%B8%B8%E0%B8%95%E0%B8%A3%E0%B8%88%E0%B8%B1%E0%B8%99%E0%B8%97%E0%B8%A3%E0%B9%8C"
+    "avatarUrl": "/นายสันติสุข บุตรจันทร์.jpg"
   },
   {
-    "id": "u15",
+    "id": "u14",
     "name": "นายวันเฉลิม เนื่องนาคา",
     "role": "Electrical Production",
     "department": "Production",
-    "avatarUrl": "/api/avatar?name=%E0%B8%99%E0%B8%B2%E0%B8%A2%E0%B8%A7%E0%B8%B1%E0%B8%99%E0%B9%80%E0%B8%89%E0%B8%A5%E0%B8%B4%E0%B8%A1%20%E0%B9%80%E0%B8%99%E0%B8%B7%E0%B9%88%E0%B8%AD%E0%B8%87%E0%B8%99%E0%B8%B2%E0%B8%84%E0%B8%B2"
+    "avatarUrl": "/นายวันเฉลิม เนื่องนาคา.JPG"
   },
   {
-    "id": "u16",
+    "id": "u15",
     "name": "นายอภิชาติ  ไพศาลสิทธิ์",
     "role": "Electrical Production",
     "department": "Production",
-    "avatarUrl": "/api/avatar?name=%E0%B8%99%E0%B8%B2%E0%B8%A2%E0%B8%AD%E0%B8%A0%E0%B8%B4%E0%B8%8A%E0%B8%B2%E0%B8%95%E0%B8%B4%20%20%E0%B9%84%E0%B8%9E%E0%B8%A8%E0%B8%B2%E0%B8%A5%E0%B8%AA%E0%B8%B4%E0%B8%97%E0%B8%98%E0%B8%B4%E0%B9%8C"
+    "avatarUrl": "/นายอภิชาติ ไพศาลสิทธิ์.jpg"
   },
   {
-    "id": "u17",
+    "id": "u16",
     "name": "นายศิกษกะ  ปุ้งโพธิ์",
     "role": "Programmer",
     "department": "Engineering",
-    "avatarUrl": "/api/avatar?name=%E0%B8%99%E0%B8%B2%E0%B8%A2%E0%B8%A8%E0%B8%B4%E0%B8%81%E0%B8%A9%E0%B8%81%E0%B8%B0%20%20%E0%B8%9B%E0%B8%B8%E0%B9%89%E0%B8%87%E0%B9%82%E0%B8%9E%E0%B8%98%E0%B8%B4%E0%B9%8C"
+    "avatarUrl": "/นายศิกษกะ ปุ้งโพธิ์.jpg"
   },
   {
-    "id": "u18",
+    "id": "u17",
     "name": "นายจรณินท์ ถินประสาท",
     "role": "Programmer",
     "department": "Engineering",
-    "avatarUrl": "/api/avatar?name=%E0%B8%99%E0%B8%B2%E0%B8%A2%E0%B8%88%E0%B8%A3%E0%B8%93%E0%B8%B4%E0%B8%99%E0%B8%97%E0%B9%8C%20%E0%B8%96%E0%B8%B4%E0%B8%99%E0%B8%9B%E0%B8%A3%E0%B8%B0%E0%B8%AA%E0%B8%B2%E0%B8%97"
+    "avatarUrl": "/นายจรณินท์ ถินประสาท.jpg"
   },
   {
-    "id": "u19",
+    "id": "u18",
     "name": "นายศุภมิตร ไทยแท้",
     "role": "Electrical Production",
     "department": "Production",
-    "avatarUrl": "/api/avatar?name=%E0%B8%99%E0%B8%B2%E0%B8%A2%E0%B8%A8%E0%B8%B8%E0%B8%A0%E0%B8%A1%E0%B8%B4%E0%B8%95%E0%B8%A3%20%E0%B9%84%E0%B8%97%E0%B8%A2%E0%B9%81%E0%B8%97%E0%B9%89"
+    "avatarUrl": "/นายศุภมิตร ไทยแท้.jpg"
   },
   {
-    "id": "u20",
+    "id": "u19",
     "name": "น.ส.ณิชกานต์  วัฒนธรรม",
     "role": "Programmer",
     "department": "Engineering",
-    "avatarUrl": "/api/avatar?name=%E0%B8%99.%E0%B8%AA.%E0%B8%93%E0%B8%B4%E0%B8%8A%E0%B8%81%E0%B8%B2%E0%B8%99%E0%B8%95%E0%B9%8C%20%20%E0%B8%A7%E0%B8%B1%E0%B8%92%E0%B8%99%E0%B8%98%E0%B8%A3%E0%B8%A3%E0%B8%A1"
+    "avatarUrl": "/นายณิชกานต์ วัฒนธรรม.jpg"
   },
   {
-    "id": "u21",
+    "id": "u20",
     "name": "นายสันติ แป้นคง",
     "role": "Electrical Production",
     "department": "Production",
-    "avatarUrl": "/api/avatar?name=%E0%B8%99%E0%B8%B2%E0%B8%A2%E0%B8%AA%E0%B8%B1%E0%B8%99%E0%B8%95%E0%B8%B4%20%E0%B9%81%E0%B8%9B%E0%B9%89%E0%B8%99%E0%B8%84%E0%B8%87"
+    "avatarUrl": "/นายสันติ แป้นคง.jpg"
   }
 ];
 
@@ -193,23 +192,17 @@ export const mockProjects: Project[] = [
     "colorCode": "var(--proj-a)",
     "responsibilities": {
       "design": {
-        "userIds": [
-          "u1"
-        ],
+        "userIds": [],
         "plannedCost": 0,
         "actualCost": 0
       },
       "program": {
-        "userIds": [
-          "u1"
-        ],
+        "userIds": [],
         "plannedCost": 0,
         "actualCost": 0
       },
       "production": {
-        "userIds": [
-          "u1"
-        ],
+        "userIds": [],
         "plannedCost": 0,
         "actualCost": 0
       }
@@ -227,23 +220,17 @@ export const mockProjects: Project[] = [
     "colorCode": "var(--proj-b)",
     "responsibilities": {
       "design": {
-        "userIds": [
-          "u1"
-        ],
+        "userIds": [],
         "plannedCost": 0,
         "actualCost": 0
       },
       "program": {
-        "userIds": [
-          "u1"
-        ],
+        "userIds": [],
         "plannedCost": 0,
         "actualCost": 0
       },
       "production": {
-        "userIds": [
-          "u1"
-        ],
+        "userIds": [],
         "plannedCost": 0,
         "actualCost": 0
       }
@@ -261,23 +248,17 @@ export const mockProjects: Project[] = [
     "colorCode": "var(--proj-c)",
     "responsibilities": {
       "design": {
-        "userIds": [
-          "u1"
-        ],
+        "userIds": [],
         "plannedCost": 0,
         "actualCost": 0
       },
       "program": {
-        "userIds": [
-          "u1"
-        ],
+        "userIds": [],
         "plannedCost": 0,
         "actualCost": 0
       },
       "production": {
-        "userIds": [
-          "u1"
-        ],
+        "userIds": [],
         "plannedCost": 0,
         "actualCost": 0
       }
@@ -300,9 +281,7 @@ export const mockProjects: Project[] = [
         "actualCost": 0
       },
       "program": {
-        "userIds": [
-          "u1"
-        ],
+        "userIds": [],
         "plannedCost": 0,
         "actualCost": 0
       },
@@ -325,23 +304,17 @@ export const mockProjects: Project[] = [
     "colorCode": "var(--proj-a)",
     "responsibilities": {
       "design": {
-        "userIds": [
-          "u1"
-        ],
+        "userIds": [],
         "plannedCost": 0,
         "actualCost": 0
       },
       "program": {
-        "userIds": [
-          "u1"
-        ],
+        "userIds": [],
         "plannedCost": 0,
         "actualCost": 0
       },
       "production": {
-        "userIds": [
-          "u1"
-        ],
+        "userIds": [],
         "plannedCost": 0,
         "actualCost": 0
       }
@@ -359,23 +332,17 @@ export const mockProjects: Project[] = [
     "colorCode": "var(--proj-b)",
     "responsibilities": {
       "design": {
-        "userIds": [
-          "u1"
-        ],
+        "userIds": [],
         "plannedCost": 0,
         "actualCost": 0
       },
       "program": {
-        "userIds": [
-          "u1"
-        ],
+        "userIds": [],
         "plannedCost": 0,
         "actualCost": 0
       },
       "production": {
-        "userIds": [
-          "u1"
-        ],
+        "userIds": [],
         "plannedCost": 0,
         "actualCost": 0
       }
@@ -393,24 +360,19 @@ export const mockProjects: Project[] = [
     "colorCode": "var(--proj-c)",
     "responsibilities": {
       "design": {
-        "userIds": [
-          "u1"
-        ],
+        "userIds": [],
         "plannedCost": 0,
         "actualCost": 0
       },
       "program": {
         "userIds": [
-          "u1",
-          "u2"
+          "u1"
         ],
         "plannedCost": 0,
         "actualCost": 0
       },
       "production": {
-        "userIds": [
-          "u1"
-        ],
+        "userIds": [],
         "plannedCost": 0,
         "actualCost": 0
       }
@@ -428,23 +390,17 @@ export const mockProjects: Project[] = [
     "colorCode": "var(--proj-d)",
     "responsibilities": {
       "design": {
-        "userIds": [
-          "u1"
-        ],
+        "userIds": [],
         "plannedCost": 0,
         "actualCost": 0
       },
       "program": {
-        "userIds": [
-          "u1"
-        ],
+        "userIds": [],
         "plannedCost": 0,
         "actualCost": 0
       },
       "production": {
-        "userIds": [
-          "u1"
-        ],
+        "userIds": [],
         "plannedCost": 0,
         "actualCost": 0
       }
@@ -462,9 +418,7 @@ export const mockProjects: Project[] = [
     "colorCode": "var(--proj-a)",
     "responsibilities": {
       "design": {
-        "userIds": [
-          "u1"
-        ],
+        "userIds": [],
         "plannedCost": 0,
         "actualCost": 0
       },
@@ -474,9 +428,7 @@ export const mockProjects: Project[] = [
         "actualCost": 0
       },
       "production": {
-        "userIds": [
-          "u1"
-        ],
+        "userIds": [],
         "plannedCost": 0,
         "actualCost": 0
       }
@@ -494,23 +446,17 @@ export const mockProjects: Project[] = [
     "colorCode": "var(--proj-b)",
     "responsibilities": {
       "design": {
-        "userIds": [
-          "u1"
-        ],
+        "userIds": [],
         "plannedCost": 0,
         "actualCost": 0
       },
       "program": {
-        "userIds": [
-          "u1"
-        ],
+        "userIds": [],
         "plannedCost": 0,
         "actualCost": 0
       },
       "production": {
-        "userIds": [
-          "u1"
-        ],
+        "userIds": [],
         "plannedCost": 0,
         "actualCost": 0
       }
@@ -528,23 +474,17 @@ export const mockProjects: Project[] = [
     "colorCode": "var(--proj-c)",
     "responsibilities": {
       "design": {
-        "userIds": [
-          "u1"
-        ],
+        "userIds": [],
         "plannedCost": 0,
         "actualCost": 0
       },
       "program": {
-        "userIds": [
-          "u1"
-        ],
+        "userIds": [],
         "plannedCost": 0,
         "actualCost": 0
       },
       "production": {
-        "userIds": [
-          "u1"
-        ],
+        "userIds": [],
         "plannedCost": 0,
         "actualCost": 0
       }
@@ -562,16 +502,12 @@ export const mockProjects: Project[] = [
     "colorCode": "var(--proj-d)",
     "responsibilities": {
       "design": {
-        "userIds": [
-          "u1"
-        ],
+        "userIds": [],
         "plannedCost": 0,
         "actualCost": 0
       },
       "program": {
-        "userIds": [
-          "u1"
-        ],
+        "userIds": [],
         "plannedCost": 0,
         "actualCost": 0
       },
@@ -594,23 +530,17 @@ export const mockProjects: Project[] = [
     "colorCode": "var(--proj-a)",
     "responsibilities": {
       "design": {
-        "userIds": [
-          "u1"
-        ],
+        "userIds": [],
         "plannedCost": 0,
         "actualCost": 0
       },
       "program": {
-        "userIds": [
-          "u1"
-        ],
+        "userIds": [],
         "plannedCost": 0,
         "actualCost": 0
       },
       "production": {
-        "userIds": [
-          "u1"
-        ],
+        "userIds": [],
         "plannedCost": 0,
         "actualCost": 0
       }
@@ -633,9 +563,7 @@ export const mockProjects: Project[] = [
         "actualCost": 0
       },
       "program": {
-        "userIds": [
-          "u1"
-        ],
+        "userIds": [],
         "plannedCost": 0,
         "actualCost": 0
       },
@@ -658,23 +586,17 @@ export const mockProjects: Project[] = [
     "colorCode": "var(--proj-c)",
     "responsibilities": {
       "design": {
-        "userIds": [
-          "u1"
-        ],
+        "userIds": [],
         "plannedCost": 0,
         "actualCost": 0
       },
       "program": {
-        "userIds": [
-          "u1"
-        ],
+        "userIds": [],
         "plannedCost": 0,
         "actualCost": 0
       },
       "production": {
-        "userIds": [
-          "u1"
-        ],
+        "userIds": [],
         "plannedCost": 0,
         "actualCost": 0
       }
@@ -692,23 +614,17 @@ export const mockProjects: Project[] = [
     "colorCode": "var(--proj-d)",
     "responsibilities": {
       "design": {
-        "userIds": [
-          "u1"
-        ],
+        "userIds": [],
         "plannedCost": 0,
         "actualCost": 0
       },
       "program": {
-        "userIds": [
-          "u1"
-        ],
+        "userIds": [],
         "plannedCost": 0,
         "actualCost": 0
       },
       "production": {
-        "userIds": [
-          "u1"
-        ],
+        "userIds": [],
         "plannedCost": 0,
         "actualCost": 0
       }
@@ -726,23 +642,17 @@ export const mockProjects: Project[] = [
     "colorCode": "var(--proj-a)",
     "responsibilities": {
       "design": {
-        "userIds": [
-          "u1"
-        ],
+        "userIds": [],
         "plannedCost": 0,
         "actualCost": 0
       },
       "program": {
-        "userIds": [
-          "u1"
-        ],
+        "userIds": [],
         "plannedCost": 0,
         "actualCost": 0
       },
       "production": {
-        "userIds": [
-          "u1"
-        ],
+        "userIds": [],
         "plannedCost": 0,
         "actualCost": 0
       }
@@ -770,9 +680,7 @@ export const mockProjects: Project[] = [
         "actualCost": 0
       },
       "production": {
-        "userIds": [
-          "u1"
-        ],
+        "userIds": [],
         "plannedCost": 0,
         "actualCost": 0
       }
@@ -790,23 +698,17 @@ export const mockProjects: Project[] = [
     "colorCode": "var(--proj-c)",
     "responsibilities": {
       "design": {
-        "userIds": [
-          "u1"
-        ],
+        "userIds": [],
         "plannedCost": 0,
         "actualCost": 0
       },
       "program": {
-        "userIds": [
-          "u1"
-        ],
+        "userIds": [],
         "plannedCost": 0,
         "actualCost": 0
       },
       "production": {
-        "userIds": [
-          "u1"
-        ],
+        "userIds": [],
         "plannedCost": 0,
         "actualCost": 0
       }
@@ -824,23 +726,17 @@ export const mockProjects: Project[] = [
     "colorCode": "var(--proj-d)",
     "responsibilities": {
       "design": {
-        "userIds": [
-          "u1"
-        ],
+        "userIds": [],
         "plannedCost": 0,
         "actualCost": 0
       },
       "program": {
-        "userIds": [
-          "u1"
-        ],
+        "userIds": [],
         "plannedCost": 0,
         "actualCost": 0
       },
       "production": {
-        "userIds": [
-          "u1"
-        ],
+        "userIds": [],
         "plannedCost": 0,
         "actualCost": 0
       }
@@ -858,23 +754,17 @@ export const mockProjects: Project[] = [
     "colorCode": "var(--proj-a)",
     "responsibilities": {
       "design": {
-        "userIds": [
-          "u1"
-        ],
+        "userIds": [],
         "plannedCost": 0,
         "actualCost": 0
       },
       "program": {
-        "userIds": [
-          "u1"
-        ],
+        "userIds": [],
         "plannedCost": 0,
         "actualCost": 0
       },
       "production": {
-        "userIds": [
-          "u1"
-        ],
+        "userIds": [],
         "plannedCost": 0,
         "actualCost": 0
       }
@@ -892,9 +782,7 @@ export const mockProjects: Project[] = [
     "colorCode": "var(--proj-b)",
     "responsibilities": {
       "design": {
-        "userIds": [
-          "u1"
-        ],
+        "userIds": [],
         "plannedCost": 0,
         "actualCost": 0
       },
@@ -922,9 +810,7 @@ export const mockProjects: Project[] = [
     "colorCode": "var(--proj-c)",
     "responsibilities": {
       "design": {
-        "userIds": [
-          "u1"
-        ],
+        "userIds": [],
         "plannedCost": 0,
         "actualCost": 0
       },
@@ -934,9 +820,7 @@ export const mockProjects: Project[] = [
         "actualCost": 0
       },
       "production": {
-        "userIds": [
-          "u1"
-        ],
+        "userIds": [],
         "plannedCost": 0,
         "actualCost": 0
       }
@@ -954,23 +838,17 @@ export const mockProjects: Project[] = [
     "colorCode": "var(--proj-d)",
     "responsibilities": {
       "design": {
-        "userIds": [
-          "u1"
-        ],
+        "userIds": [],
         "plannedCost": 0,
         "actualCost": 0
       },
       "program": {
-        "userIds": [
-          "u1"
-        ],
+        "userIds": [],
         "plannedCost": 0,
         "actualCost": 0
       },
       "production": {
-        "userIds": [
-          "u1"
-        ],
+        "userIds": [],
         "plannedCost": 0,
         "actualCost": 0
       }
@@ -988,23 +866,17 @@ export const mockProjects: Project[] = [
     "colorCode": "var(--proj-a)",
     "responsibilities": {
       "design": {
-        "userIds": [
-          "u1"
-        ],
+        "userIds": [],
         "plannedCost": 0,
         "actualCost": 0
       },
       "program": {
-        "userIds": [
-          "u1"
-        ],
+        "userIds": [],
         "plannedCost": 0,
         "actualCost": 0
       },
       "production": {
-        "userIds": [
-          "u1"
-        ],
+        "userIds": [],
         "plannedCost": 0,
         "actualCost": 0
       }
@@ -1022,23 +894,17 @@ export const mockProjects: Project[] = [
     "colorCode": "var(--proj-b)",
     "responsibilities": {
       "design": {
-        "userIds": [
-          "u1"
-        ],
+        "userIds": [],
         "plannedCost": 0,
         "actualCost": 0
       },
       "program": {
-        "userIds": [
-          "u1"
-        ],
+        "userIds": [],
         "plannedCost": 0,
         "actualCost": 0
       },
       "production": {
-        "userIds": [
-          "u1"
-        ],
+        "userIds": [],
         "plannedCost": 0,
         "actualCost": 0
       }
@@ -1066,9 +932,7 @@ export const mockProjects: Project[] = [
         "actualCost": 0
       },
       "production": {
-        "userIds": [
-          "u1"
-        ],
+        "userIds": [],
         "plannedCost": 0,
         "actualCost": 0
       }
@@ -1086,23 +950,17 @@ export const mockProjects: Project[] = [
     "colorCode": "var(--proj-d)",
     "responsibilities": {
       "design": {
-        "userIds": [
-          "u1"
-        ],
+        "userIds": [],
         "plannedCost": 0,
         "actualCost": 0
       },
       "program": {
-        "userIds": [
-          "u1"
-        ],
+        "userIds": [],
         "plannedCost": 0,
         "actualCost": 0
       },
       "production": {
-        "userIds": [
-          "u1"
-        ],
+        "userIds": [],
         "plannedCost": 0,
         "actualCost": 0
       }
@@ -1120,22 +978,18 @@ export const mockProjects: Project[] = [
     "colorCode": "var(--proj-a)",
     "responsibilities": {
       "design": {
-        "userIds": [
-          "u1"
-        ],
+        "userIds": [],
         "plannedCost": 0,
         "actualCost": 0
       },
       "program": {
-        "userIds": [
-          "u1"
-        ],
+        "userIds": [],
         "plannedCost": 0,
         "actualCost": 0
       },
       "production": {
         "userIds": [
-          "u3"
+          "u2"
         ],
         "plannedCost": 0,
         "actualCost": 0
@@ -1154,22 +1008,18 @@ export const mockProjects: Project[] = [
     "colorCode": "var(--proj-b)",
     "responsibilities": {
       "design": {
-        "userIds": [
-          "u1"
-        ],
+        "userIds": [],
         "plannedCost": 0,
         "actualCost": 0
       },
       "program": {
-        "userIds": [
-          "u1"
-        ],
+        "userIds": [],
         "plannedCost": 0,
         "actualCost": 0
       },
       "production": {
         "userIds": [
-          "u3"
+          "u2"
         ],
         "plannedCost": 0,
         "actualCost": 0
@@ -1188,22 +1038,18 @@ export const mockProjects: Project[] = [
     "colorCode": "var(--proj-c)",
     "responsibilities": {
       "design": {
-        "userIds": [
-          "u1"
-        ],
+        "userIds": [],
         "plannedCost": 0,
         "actualCost": 0
       },
       "program": {
-        "userIds": [
-          "u1"
-        ],
+        "userIds": [],
         "plannedCost": 0,
         "actualCost": 0
       },
       "production": {
         "userIds": [
-          "u4"
+          "u3"
         ],
         "plannedCost": 0,
         "actualCost": 0
@@ -1222,22 +1068,18 @@ export const mockProjects: Project[] = [
     "colorCode": "var(--proj-d)",
     "responsibilities": {
       "design": {
-        "userIds": [
-          "u1"
-        ],
+        "userIds": [],
         "plannedCost": 0,
         "actualCost": 0
       },
       "program": {
-        "userIds": [
-          "u1"
-        ],
+        "userIds": [],
         "plannedCost": 0,
         "actualCost": 0
       },
       "production": {
         "userIds": [
-          "u5"
+          "u4"
         ],
         "plannedCost": 0,
         "actualCost": 0
@@ -1256,22 +1098,18 @@ export const mockProjects: Project[] = [
     "colorCode": "var(--proj-a)",
     "responsibilities": {
       "design": {
-        "userIds": [
-          "u1"
-        ],
+        "userIds": [],
         "plannedCost": 0,
         "actualCost": 0
       },
       "program": {
-        "userIds": [
-          "u1"
-        ],
+        "userIds": [],
         "plannedCost": 0,
         "actualCost": 0
       },
       "production": {
         "userIds": [
-          "u4"
+          "u3"
         ],
         "plannedCost": 0,
         "actualCost": 0
@@ -1290,22 +1128,18 @@ export const mockProjects: Project[] = [
     "colorCode": "var(--proj-b)",
     "responsibilities": {
       "design": {
-        "userIds": [
-          "u1"
-        ],
+        "userIds": [],
         "plannedCost": 0,
         "actualCost": 0
       },
       "program": {
-        "userIds": [
-          "u1"
-        ],
+        "userIds": [],
         "plannedCost": 0,
         "actualCost": 0
       },
       "production": {
         "userIds": [
-          "u4"
+          "u3"
         ],
         "plannedCost": 0,
         "actualCost": 0
@@ -1324,22 +1158,20 @@ export const mockProjects: Project[] = [
     "colorCode": "var(--proj-c)",
     "responsibilities": {
       "design": {
-        "userIds": [
-          "u1"
-        ],
+        "userIds": [],
         "plannedCost": 0,
         "actualCost": 0
       },
       "program": {
         "userIds": [
-          "u6"
+          "u5"
         ],
         "plannedCost": 0,
         "actualCost": 0
       },
       "production": {
         "userIds": [
-          "u4"
+          "u3"
         ],
         "plannedCost": 0,
         "actualCost": 0
@@ -1358,16 +1190,12 @@ export const mockProjects: Project[] = [
     "colorCode": "var(--proj-d)",
     "responsibilities": {
       "design": {
-        "userIds": [
-          "u1"
-        ],
+        "userIds": [],
         "plannedCost": 0,
         "actualCost": 0
       },
       "program": {
-        "userIds": [
-          "u1"
-        ],
+        "userIds": [],
         "plannedCost": 0,
         "actualCost": 0
       },
@@ -1396,15 +1224,13 @@ export const mockProjects: Project[] = [
       },
       "program": {
         "userIds": [
-          "u7"
+          "u6"
         ],
         "plannedCost": 0,
         "actualCost": 0
       },
       "production": {
-        "userIds": [
-          "u1"
-        ],
+        "userIds": [],
         "plannedCost": 0,
         "actualCost": 0
       }
@@ -1422,23 +1248,17 @@ export const mockProjects: Project[] = [
     "colorCode": "var(--proj-b)",
     "responsibilities": {
       "design": {
-        "userIds": [
-          "u1"
-        ],
+        "userIds": [],
         "plannedCost": 0,
         "actualCost": 0
       },
       "program": {
-        "userIds": [
-          "u1"
-        ],
+        "userIds": [],
         "plannedCost": 0,
         "actualCost": 0
       },
       "production": {
-        "userIds": [
-          "u1"
-        ],
+        "userIds": [],
         "plannedCost": 0,
         "actualCost": 0
       }
@@ -1456,23 +1276,17 @@ export const mockProjects: Project[] = [
     "colorCode": "var(--proj-c)",
     "responsibilities": {
       "design": {
-        "userIds": [
-          "u1"
-        ],
+        "userIds": [],
         "plannedCost": 0,
         "actualCost": 0
       },
       "program": {
-        "userIds": [
-          "u1"
-        ],
+        "userIds": [],
         "plannedCost": 0,
         "actualCost": 0
       },
       "production": {
-        "userIds": [
-          "u1"
-        ],
+        "userIds": [],
         "plannedCost": 0,
         "actualCost": 0
       }
@@ -1490,23 +1304,17 @@ export const mockProjects: Project[] = [
     "colorCode": "var(--proj-d)",
     "responsibilities": {
       "design": {
-        "userIds": [
-          "u1"
-        ],
+        "userIds": [],
         "plannedCost": 0,
         "actualCost": 0
       },
       "program": {
-        "userIds": [
-          "u1"
-        ],
+        "userIds": [],
         "plannedCost": 0,
         "actualCost": 0
       },
       "production": {
-        "userIds": [
-          "u1"
-        ],
+        "userIds": [],
         "plannedCost": 0,
         "actualCost": 0
       }
@@ -1524,23 +1332,17 @@ export const mockProjects: Project[] = [
     "colorCode": "var(--proj-a)",
     "responsibilities": {
       "design": {
-        "userIds": [
-          "u1"
-        ],
+        "userIds": [],
         "plannedCost": 0,
         "actualCost": 0
       },
       "program": {
-        "userIds": [
-          "u1"
-        ],
+        "userIds": [],
         "plannedCost": 0,
         "actualCost": 0
       },
       "production": {
-        "userIds": [
-          "u1"
-        ],
+        "userIds": [],
         "plannedCost": 0,
         "actualCost": 0
       }
@@ -1558,23 +1360,17 @@ export const mockProjects: Project[] = [
     "colorCode": "var(--proj-b)",
     "responsibilities": {
       "design": {
-        "userIds": [
-          "u1"
-        ],
+        "userIds": [],
         "plannedCost": 0,
         "actualCost": 0
       },
       "program": {
-        "userIds": [
-          "u1"
-        ],
+        "userIds": [],
         "plannedCost": 0,
         "actualCost": 0
       },
       "production": {
-        "userIds": [
-          "u1"
-        ],
+        "userIds": [],
         "plannedCost": 0,
         "actualCost": 0
       }
@@ -1592,23 +1388,17 @@ export const mockProjects: Project[] = [
     "colorCode": "var(--proj-c)",
     "responsibilities": {
       "design": {
-        "userIds": [
-          "u1"
-        ],
+        "userIds": [],
         "plannedCost": 0,
         "actualCost": 0
       },
       "program": {
-        "userIds": [
-          "u1"
-        ],
+        "userIds": [],
         "plannedCost": 0,
         "actualCost": 0
       },
       "production": {
-        "userIds": [
-          "u1"
-        ],
+        "userIds": [],
         "plannedCost": 0,
         "actualCost": 0
       }
@@ -1626,23 +1416,17 @@ export const mockProjects: Project[] = [
     "colorCode": "var(--proj-d)",
     "responsibilities": {
       "design": {
-        "userIds": [
-          "u1"
-        ],
+        "userIds": [],
         "plannedCost": 0,
         "actualCost": 0
       },
       "program": {
-        "userIds": [
-          "u1"
-        ],
+        "userIds": [],
         "plannedCost": 0,
         "actualCost": 0
       },
       "production": {
-        "userIds": [
-          "u1"
-        ],
+        "userIds": [],
         "plannedCost": 0,
         "actualCost": 0
       }
@@ -1660,23 +1444,19 @@ export const mockProjects: Project[] = [
     "colorCode": "var(--proj-a)",
     "responsibilities": {
       "design": {
-        "userIds": [
-          "u1"
-        ],
+        "userIds": [],
         "plannedCost": 0,
         "actualCost": 0
       },
       "program": {
         "userIds": [
-          "u8"
+          "u7"
         ],
         "plannedCost": 0,
         "actualCost": 0
       },
       "production": {
-        "userIds": [
-          "u1"
-        ],
+        "userIds": [],
         "plannedCost": 0,
         "actualCost": 0
       }
@@ -1694,23 +1474,17 @@ export const mockProjects: Project[] = [
     "colorCode": "var(--proj-b)",
     "responsibilities": {
       "design": {
-        "userIds": [
-          "u1"
-        ],
+        "userIds": [],
         "plannedCost": 0,
         "actualCost": 0
       },
       "program": {
-        "userIds": [
-          "u1"
-        ],
+        "userIds": [],
         "plannedCost": 0,
         "actualCost": 0
       },
       "production": {
-        "userIds": [
-          "u1"
-        ],
+        "userIds": [],
         "plannedCost": 0,
         "actualCost": 0
       }
@@ -1728,23 +1502,17 @@ export const mockProjects: Project[] = [
     "colorCode": "var(--proj-c)",
     "responsibilities": {
       "design": {
-        "userIds": [
-          "u1"
-        ],
+        "userIds": [],
         "plannedCost": 0,
         "actualCost": 0
       },
       "program": {
-        "userIds": [
-          "u1"
-        ],
+        "userIds": [],
         "plannedCost": 0,
         "actualCost": 0
       },
       "production": {
-        "userIds": [
-          "u1"
-        ],
+        "userIds": [],
         "plannedCost": 0,
         "actualCost": 0
       }
@@ -1762,23 +1530,17 @@ export const mockProjects: Project[] = [
     "colorCode": "var(--proj-d)",
     "responsibilities": {
       "design": {
-        "userIds": [
-          "u1"
-        ],
+        "userIds": [],
         "plannedCost": 0,
         "actualCost": 0
       },
       "program": {
-        "userIds": [
-          "u1"
-        ],
+        "userIds": [],
         "plannedCost": 0,
         "actualCost": 0
       },
       "production": {
-        "userIds": [
-          "u1"
-        ],
+        "userIds": [],
         "plannedCost": 0,
         "actualCost": 0
       }
@@ -1796,23 +1558,17 @@ export const mockProjects: Project[] = [
     "colorCode": "var(--proj-a)",
     "responsibilities": {
       "design": {
-        "userIds": [
-          "u1"
-        ],
+        "userIds": [],
         "plannedCost": 0,
         "actualCost": 0
       },
       "program": {
-        "userIds": [
-          "u1"
-        ],
+        "userIds": [],
         "plannedCost": 0,
         "actualCost": 0
       },
       "production": {
-        "userIds": [
-          "u1"
-        ],
+        "userIds": [],
         "plannedCost": 0,
         "actualCost": 0
       }
@@ -1830,23 +1586,17 @@ export const mockProjects: Project[] = [
     "colorCode": "var(--proj-b)",
     "responsibilities": {
       "design": {
-        "userIds": [
-          "u1"
-        ],
+        "userIds": [],
         "plannedCost": 0,
         "actualCost": 0
       },
       "program": {
-        "userIds": [
-          "u1"
-        ],
+        "userIds": [],
         "plannedCost": 0,
         "actualCost": 0
       },
       "production": {
-        "userIds": [
-          "u1"
-        ],
+        "userIds": [],
         "plannedCost": 0,
         "actualCost": 0
       }
@@ -1869,16 +1619,12 @@ export const mockProjects: Project[] = [
         "actualCost": 0
       },
       "program": {
-        "userIds": [
-          "u1"
-        ],
+        "userIds": [],
         "plannedCost": 0,
         "actualCost": 0
       },
       "production": {
-        "userIds": [
-          "u1"
-        ],
+        "userIds": [],
         "plannedCost": 0,
         "actualCost": 0
       }
@@ -1896,23 +1642,17 @@ export const mockProjects: Project[] = [
     "colorCode": "var(--proj-d)",
     "responsibilities": {
       "design": {
-        "userIds": [
-          "u1"
-        ],
+        "userIds": [],
         "plannedCost": 0,
         "actualCost": 0
       },
       "program": {
-        "userIds": [
-          "u1"
-        ],
+        "userIds": [],
         "plannedCost": 0,
         "actualCost": 0
       },
       "production": {
-        "userIds": [
-          "u1"
-        ],
+        "userIds": [],
         "plannedCost": 0,
         "actualCost": 0
       }
@@ -1930,23 +1670,17 @@ export const mockProjects: Project[] = [
     "colorCode": "var(--proj-a)",
     "responsibilities": {
       "design": {
-        "userIds": [
-          "u1"
-        ],
+        "userIds": [],
         "plannedCost": 0,
         "actualCost": 0
       },
       "program": {
-        "userIds": [
-          "u1"
-        ],
+        "userIds": [],
         "plannedCost": 0,
         "actualCost": 0
       },
       "production": {
-        "userIds": [
-          "u1"
-        ],
+        "userIds": [],
         "plannedCost": 0,
         "actualCost": 0
       }
@@ -1964,23 +1698,19 @@ export const mockProjects: Project[] = [
     "colorCode": "var(--proj-b)",
     "responsibilities": {
       "design": {
-        "userIds": [
-          "u1"
-        ],
+        "userIds": [],
         "plannedCost": 0,
         "actualCost": 0
       },
       "program": {
         "userIds": [
-          "u9"
+          "u8"
         ],
         "plannedCost": 0,
         "actualCost": 0
       },
       "production": {
-        "userIds": [
-          "u1"
-        ],
+        "userIds": [],
         "plannedCost": 0,
         "actualCost": 0
       }
@@ -1998,22 +1728,20 @@ export const mockProjects: Project[] = [
     "colorCode": "var(--proj-c)",
     "responsibilities": {
       "design": {
-        "userIds": [
-          "u1"
-        ],
+        "userIds": [],
         "plannedCost": 0,
         "actualCost": 0
       },
       "program": {
         "userIds": [
-          "u9"
+          "u8"
         ],
         "plannedCost": 0,
         "actualCost": 0
       },
       "production": {
         "userIds": [
-          "u10"
+          "u9"
         ],
         "plannedCost": 0,
         "actualCost": 0
@@ -2032,23 +1760,17 @@ export const mockProjects: Project[] = [
     "colorCode": "var(--proj-d)",
     "responsibilities": {
       "design": {
-        "userIds": [
-          "u1"
-        ],
+        "userIds": [],
         "plannedCost": 0,
         "actualCost": 0
       },
       "program": {
-        "userIds": [
-          "u1"
-        ],
+        "userIds": [],
         "plannedCost": 0,
         "actualCost": 0
       },
       "production": {
-        "userIds": [
-          "u1"
-        ],
+        "userIds": [],
         "plannedCost": 0,
         "actualCost": 0
       }
@@ -2066,23 +1788,17 @@ export const mockProjects: Project[] = [
     "colorCode": "var(--proj-a)",
     "responsibilities": {
       "design": {
-        "userIds": [
-          "u1"
-        ],
+        "userIds": [],
         "plannedCost": 0,
         "actualCost": 0
       },
       "program": {
-        "userIds": [
-          "u1"
-        ],
+        "userIds": [],
         "plannedCost": 0,
         "actualCost": 0
       },
       "production": {
-        "userIds": [
-          "u1"
-        ],
+        "userIds": [],
         "plannedCost": 0,
         "actualCost": 0
       }
@@ -2100,9 +1816,7 @@ export const mockProjects: Project[] = [
     "colorCode": "var(--proj-b)",
     "responsibilities": {
       "design": {
-        "userIds": [
-          "u1"
-        ],
+        "userIds": [],
         "plannedCost": 0,
         "actualCost": 0
       },
@@ -2112,9 +1826,7 @@ export const mockProjects: Project[] = [
         "actualCost": 0
       },
       "production": {
-        "userIds": [
-          "u1"
-        ],
+        "userIds": [],
         "plannedCost": 0,
         "actualCost": 0
       }
@@ -2132,23 +1844,17 @@ export const mockProjects: Project[] = [
     "colorCode": "var(--proj-c)",
     "responsibilities": {
       "design": {
-        "userIds": [
-          "u1"
-        ],
+        "userIds": [],
         "plannedCost": 0,
         "actualCost": 0
       },
       "program": {
-        "userIds": [
-          "u1"
-        ],
+        "userIds": [],
         "plannedCost": 0,
         "actualCost": 0
       },
       "production": {
-        "userIds": [
-          "u1"
-        ],
+        "userIds": [],
         "plannedCost": 0,
         "actualCost": 0
       }
@@ -2166,16 +1872,12 @@ export const mockProjects: Project[] = [
     "colorCode": "var(--proj-d)",
     "responsibilities": {
       "design": {
-        "userIds": [
-          "u1"
-        ],
+        "userIds": [],
         "plannedCost": 0,
         "actualCost": 0
       },
       "program": {
-        "userIds": [
-          "u1"
-        ],
+        "userIds": [],
         "plannedCost": 0,
         "actualCost": 0
       },
@@ -2198,22 +1900,18 @@ export const mockProjects: Project[] = [
     "colorCode": "var(--proj-a)",
     "responsibilities": {
       "design": {
-        "userIds": [
-          "u1"
-        ],
+        "userIds": [],
         "plannedCost": 0,
         "actualCost": 0
       },
       "program": {
-        "userIds": [
-          "u1"
-        ],
+        "userIds": [],
         "plannedCost": 0,
         "actualCost": 0
       },
       "production": {
         "userIds": [
-          "u11"
+          "u10"
         ],
         "plannedCost": 0,
         "actualCost": 0
@@ -2232,23 +1930,17 @@ export const mockProjects: Project[] = [
     "colorCode": "var(--proj-b)",
     "responsibilities": {
       "design": {
-        "userIds": [
-          "u1"
-        ],
+        "userIds": [],
         "plannedCost": 0,
         "actualCost": 0
       },
       "program": {
-        "userIds": [
-          "u1"
-        ],
+        "userIds": [],
         "plannedCost": 0,
         "actualCost": 0
       },
       "production": {
-        "userIds": [
-          "u1"
-        ],
+        "userIds": [],
         "plannedCost": 0,
         "actualCost": 0
       }
@@ -2266,23 +1958,17 @@ export const mockProjects: Project[] = [
     "colorCode": "var(--proj-c)",
     "responsibilities": {
       "design": {
-        "userIds": [
-          "u1"
-        ],
+        "userIds": [],
         "plannedCost": 0,
         "actualCost": 0
       },
       "program": {
-        "userIds": [
-          "u1"
-        ],
+        "userIds": [],
         "plannedCost": 0,
         "actualCost": 0
       },
       "production": {
-        "userIds": [
-          "u1"
-        ],
+        "userIds": [],
         "plannedCost": 0,
         "actualCost": 0
       }
@@ -2305,9 +1991,7 @@ export const mockProjects: Project[] = [
         "actualCost": 0
       },
       "program": {
-        "userIds": [
-          "u1"
-        ],
+        "userIds": [],
         "plannedCost": 0,
         "actualCost": 0
       },
@@ -2330,23 +2014,17 @@ export const mockProjects: Project[] = [
     "colorCode": "var(--proj-a)",
     "responsibilities": {
       "design": {
-        "userIds": [
-          "u1"
-        ],
+        "userIds": [],
         "plannedCost": 0,
         "actualCost": 0
       },
       "program": {
-        "userIds": [
-          "u1"
-        ],
+        "userIds": [],
         "plannedCost": 0,
         "actualCost": 0
       },
       "production": {
-        "userIds": [
-          "u1"
-        ],
+        "userIds": [],
         "plannedCost": 0,
         "actualCost": 0
       }
@@ -2364,23 +2042,20 @@ export const mockProjects: Project[] = [
     "colorCode": "var(--proj-b)",
     "responsibilities": {
       "design": {
-        "userIds": [
-          "u1"
-        ],
+        "userIds": [],
         "plannedCost": 0,
         "actualCost": 0
       },
       "program": {
         "userIds": [
-          "u1",
-          "u12"
+          "u11"
         ],
         "plannedCost": 0,
         "actualCost": 0
       },
       "production": {
         "userIds": [
-          "u13"
+          "u12"
         ],
         "plannedCost": 0,
         "actualCost": 0
@@ -2399,23 +2074,20 @@ export const mockProjects: Project[] = [
     "colorCode": "var(--proj-c)",
     "responsibilities": {
       "design": {
-        "userIds": [
-          "u1"
-        ],
+        "userIds": [],
         "plannedCost": 0,
         "actualCost": 0
       },
       "program": {
         "userIds": [
-          "u1",
-          "u12"
+          "u11"
         ],
         "plannedCost": 0,
         "actualCost": 0
       },
       "production": {
         "userIds": [
-          "u14"
+          "u13"
         ],
         "plannedCost": 0,
         "actualCost": 0
@@ -2434,23 +2106,17 @@ export const mockProjects: Project[] = [
     "colorCode": "var(--proj-d)",
     "responsibilities": {
       "design": {
-        "userIds": [
-          "u1"
-        ],
+        "userIds": [],
         "plannedCost": 0,
         "actualCost": 0
       },
       "program": {
-        "userIds": [
-          "u1"
-        ],
+        "userIds": [],
         "plannedCost": 0,
         "actualCost": 0
       },
       "production": {
-        "userIds": [
-          "u1"
-        ],
+        "userIds": [],
         "plannedCost": 0,
         "actualCost": 0
       }
@@ -2468,23 +2134,17 @@ export const mockProjects: Project[] = [
     "colorCode": "var(--proj-a)",
     "responsibilities": {
       "design": {
-        "userIds": [
-          "u1"
-        ],
+        "userIds": [],
         "plannedCost": 0,
         "actualCost": 0
       },
       "program": {
-        "userIds": [
-          "u1"
-        ],
+        "userIds": [],
         "plannedCost": 0,
         "actualCost": 0
       },
       "production": {
-        "userIds": [
-          "u1"
-        ],
+        "userIds": [],
         "plannedCost": 0,
         "actualCost": 0
       }
@@ -2502,23 +2162,17 @@ export const mockProjects: Project[] = [
     "colorCode": "var(--proj-b)",
     "responsibilities": {
       "design": {
-        "userIds": [
-          "u1"
-        ],
+        "userIds": [],
         "plannedCost": 0,
         "actualCost": 0
       },
       "program": {
-        "userIds": [
-          "u1"
-        ],
+        "userIds": [],
         "plannedCost": 0,
         "actualCost": 0
       },
       "production": {
-        "userIds": [
-          "u1"
-        ],
+        "userIds": [],
         "plannedCost": 0,
         "actualCost": 0
       }
@@ -2536,23 +2190,17 @@ export const mockProjects: Project[] = [
     "colorCode": "var(--proj-c)",
     "responsibilities": {
       "design": {
-        "userIds": [
-          "u1"
-        ],
+        "userIds": [],
         "plannedCost": 0,
         "actualCost": 0
       },
       "program": {
-        "userIds": [
-          "u1"
-        ],
+        "userIds": [],
         "plannedCost": 0,
         "actualCost": 0
       },
       "production": {
-        "userIds": [
-          "u1"
-        ],
+        "userIds": [],
         "plannedCost": 0,
         "actualCost": 0
       }
@@ -2570,23 +2218,17 @@ export const mockProjects: Project[] = [
     "colorCode": "var(--proj-d)",
     "responsibilities": {
       "design": {
-        "userIds": [
-          "u1"
-        ],
+        "userIds": [],
         "plannedCost": 0,
         "actualCost": 0
       },
       "program": {
-        "userIds": [
-          "u1"
-        ],
+        "userIds": [],
         "plannedCost": 0,
         "actualCost": 0
       },
       "production": {
-        "userIds": [
-          "u1"
-        ],
+        "userIds": [],
         "plannedCost": 0,
         "actualCost": 0
       }
@@ -2604,23 +2246,17 @@ export const mockProjects: Project[] = [
     "colorCode": "var(--proj-a)",
     "responsibilities": {
       "design": {
-        "userIds": [
-          "u1"
-        ],
+        "userIds": [],
         "plannedCost": 0,
         "actualCost": 0
       },
       "program": {
-        "userIds": [
-          "u1"
-        ],
+        "userIds": [],
         "plannedCost": 0,
         "actualCost": 0
       },
       "production": {
-        "userIds": [
-          "u1"
-        ],
+        "userIds": [],
         "plannedCost": 0,
         "actualCost": 0
       }
@@ -2638,23 +2274,17 @@ export const mockProjects: Project[] = [
     "colorCode": "var(--proj-b)",
     "responsibilities": {
       "design": {
-        "userIds": [
-          "u1"
-        ],
+        "userIds": [],
         "plannedCost": 0,
         "actualCost": 0
       },
       "program": {
-        "userIds": [
-          "u1"
-        ],
+        "userIds": [],
         "plannedCost": 0,
         "actualCost": 0
       },
       "production": {
-        "userIds": [
-          "u1"
-        ],
+        "userIds": [],
         "plannedCost": 0,
         "actualCost": 0
       }
@@ -2672,23 +2302,17 @@ export const mockProjects: Project[] = [
     "colorCode": "var(--proj-c)",
     "responsibilities": {
       "design": {
-        "userIds": [
-          "u1"
-        ],
+        "userIds": [],
         "plannedCost": 0,
         "actualCost": 0
       },
       "program": {
-        "userIds": [
-          "u1"
-        ],
+        "userIds": [],
         "plannedCost": 0,
         "actualCost": 0
       },
       "production": {
-        "userIds": [
-          "u1"
-        ],
+        "userIds": [],
         "plannedCost": 0,
         "actualCost": 0
       }
@@ -2706,23 +2330,17 @@ export const mockProjects: Project[] = [
     "colorCode": "var(--proj-d)",
     "responsibilities": {
       "design": {
-        "userIds": [
-          "u1"
-        ],
+        "userIds": [],
         "plannedCost": 0,
         "actualCost": 0
       },
       "program": {
-        "userIds": [
-          "u1"
-        ],
+        "userIds": [],
         "plannedCost": 0,
         "actualCost": 0
       },
       "production": {
-        "userIds": [
-          "u1"
-        ],
+        "userIds": [],
         "plannedCost": 0,
         "actualCost": 0
       }
@@ -2740,23 +2358,19 @@ export const mockProjects: Project[] = [
     "colorCode": "var(--proj-a)",
     "responsibilities": {
       "design": {
-        "userIds": [
-          "u1"
-        ],
+        "userIds": [],
         "plannedCost": 0,
         "actualCost": 0
       },
       "program": {
-        "userIds": [
-          "u1"
-        ],
+        "userIds": [],
         "plannedCost": 0,
         "actualCost": 0
       },
       "production": {
         "userIds": [
-          "u15",
-          "u16"
+          "u14",
+          "u15"
         ],
         "plannedCost": 0,
         "actualCost": 0
@@ -2775,24 +2389,19 @@ export const mockProjects: Project[] = [
     "colorCode": "var(--proj-b)",
     "responsibilities": {
       "design": {
-        "userIds": [
-          "u1"
-        ],
+        "userIds": [],
         "plannedCost": 0,
         "actualCost": 0
       },
       "program": {
         "userIds": [
-          "u1",
-          "u17"
+          "u16"
         ],
         "plannedCost": 0,
         "actualCost": 0
       },
       "production": {
-        "userIds": [
-          "u1"
-        ],
+        "userIds": [],
         "plannedCost": 0,
         "actualCost": 0
       }
@@ -2810,23 +2419,17 @@ export const mockProjects: Project[] = [
     "colorCode": "var(--proj-c)",
     "responsibilities": {
       "design": {
-        "userIds": [
-          "u1"
-        ],
+        "userIds": [],
         "plannedCost": 0,
         "actualCost": 0
       },
       "program": {
-        "userIds": [
-          "u1"
-        ],
+        "userIds": [],
         "plannedCost": 0,
         "actualCost": 0
       },
       "production": {
-        "userIds": [
-          "u1"
-        ],
+        "userIds": [],
         "plannedCost": 0,
         "actualCost": 0
       }
@@ -2844,23 +2447,20 @@ export const mockProjects: Project[] = [
     "colorCode": "var(--proj-d)",
     "responsibilities": {
       "design": {
-        "userIds": [
-          "u1"
-        ],
+        "userIds": [],
         "plannedCost": 0,
         "actualCost": 0
       },
       "program": {
         "userIds": [
-          "u18"
+          "u17"
         ],
         "plannedCost": 0,
         "actualCost": 0
       },
       "production": {
         "userIds": [
-          "u1",
-          "u11"
+          "u10"
         ],
         "plannedCost": 0,
         "actualCost": 0
@@ -2879,22 +2479,20 @@ export const mockProjects: Project[] = [
     "colorCode": "var(--proj-a)",
     "responsibilities": {
       "design": {
-        "userIds": [
-          "u1"
-        ],
+        "userIds": [],
         "plannedCost": 0,
         "actualCost": 0
       },
       "program": {
         "userIds": [
-          "u9"
+          "u8"
         ],
         "plannedCost": 0,
         "actualCost": 0
       },
       "production": {
         "userIds": [
-          "u15"
+          "u14"
         ],
         "plannedCost": 0,
         "actualCost": 0
@@ -2913,24 +2511,20 @@ export const mockProjects: Project[] = [
     "colorCode": "var(--proj-b)",
     "responsibilities": {
       "design": {
-        "userIds": [
-          "u1"
-        ],
+        "userIds": [],
         "plannedCost": 0,
         "actualCost": 0
       },
       "program": {
         "userIds": [
-          "u9",
-          "u2"
+          "u8",
+          "u1"
         ],
         "plannedCost": 0,
         "actualCost": 0
       },
       "production": {
-        "userIds": [
-          "u1"
-        ],
+        "userIds": [],
         "plannedCost": 0,
         "actualCost": 0
       }
@@ -2948,22 +2542,20 @@ export const mockProjects: Project[] = [
     "colorCode": "var(--proj-c)",
     "responsibilities": {
       "design": {
+        "userIds": [],
+        "plannedCost": 0,
+        "actualCost": 0
+      },
+      "program": {
         "userIds": [
           "u1"
         ],
         "plannedCost": 0,
         "actualCost": 0
       },
-      "program": {
-        "userIds": [
-          "u2"
-        ],
-        "plannedCost": 0,
-        "actualCost": 0
-      },
       "production": {
         "userIds": [
-          "u19"
+          "u18"
         ],
         "plannedCost": 0,
         "actualCost": 0
@@ -2982,23 +2574,17 @@ export const mockProjects: Project[] = [
     "colorCode": "var(--proj-d)",
     "responsibilities": {
       "design": {
-        "userIds": [
-          "u1"
-        ],
+        "userIds": [],
         "plannedCost": 0,
         "actualCost": 0
       },
       "program": {
-        "userIds": [
-          "u1"
-        ],
+        "userIds": [],
         "plannedCost": 0,
         "actualCost": 0
       },
       "production": {
-        "userIds": [
-          "u1"
-        ],
+        "userIds": [],
         "plannedCost": 0,
         "actualCost": 0
       }
@@ -3016,23 +2602,20 @@ export const mockProjects: Project[] = [
     "colorCode": "var(--proj-a)",
     "responsibilities": {
       "design": {
-        "userIds": [
-          "u1"
-        ],
+        "userIds": [],
         "plannedCost": 0,
         "actualCost": 0
       },
       "program": {
         "userIds": [
-          "u20"
+          "u19"
         ],
         "plannedCost": 0,
         "actualCost": 0
       },
       "production": {
         "userIds": [
-          "u1",
-          "u21"
+          "u20"
         ],
         "plannedCost": 0,
         "actualCost": 0
@@ -3051,9 +2634,7 @@ export const mockProjects: Project[] = [
     "colorCode": "var(--proj-b)",
     "responsibilities": {
       "design": {
-        "userIds": [
-          "u1"
-        ],
+        "userIds": [],
         "plannedCost": 0,
         "actualCost": 0
       },
@@ -3063,9 +2644,7 @@ export const mockProjects: Project[] = [
         "actualCost": 0
       },
       "production": {
-        "userIds": [
-          "u1"
-        ],
+        "userIds": [],
         "plannedCost": 0,
         "actualCost": 0
       }
@@ -3077,1011 +2656,1112 @@ export const mockTasks: Task[] = [
   {
     "id": "t1",
     "projectId": "p7",
-    "userId": "u2",
+    "userId": "u1",
     "title": "Auto movement",
     "startDate": "2026-02-18",
     "endDate": "2026-02-20",
     "workloadPercentage": 100,
-    "hideOnTimeline": false
+    "hideOnTimeline": false,
+    "department": "Engineering"
   },
   {
     "id": "t2",
     "projectId": "p7",
-    "userId": "u2",
+    "userId": "u1",
     "title": "Quality check",
     "startDate": "2026-02-23",
     "endDate": "2026-02-27",
     "workloadPercentage": 100,
-    "hideOnTimeline": false
+    "hideOnTimeline": false,
+    "department": "Engineering"
   },
   {
     "id": "t3",
     "projectId": "p29",
-    "userId": "u3",
+    "userId": "u2",
     "title": "Panel wiring (Board layout)",
     "startDate": "2026-03-02",
     "endDate": "2026-03-06",
     "workloadPercentage": 100,
-    "hideOnTimeline": false
+    "hideOnTimeline": false,
+    "department": "Production"
   },
   {
     "id": "t4",
     "projectId": "p29",
-    "userId": "u3",
+    "userId": "u2",
     "title": "MC Wiring Equipment",
     "startDate": "2026-03-09",
     "endDate": "2026-03-13",
     "workloadPercentage": 100,
-    "hideOnTimeline": false
+    "hideOnTimeline": false,
+    "department": "Production"
   },
   {
     "id": "t5",
     "projectId": "p30",
-    "userId": "u3",
+    "userId": "u2",
     "title": "Panel wiring (Board layout)",
     "startDate": "2026-03-16",
     "endDate": "2026-03-27",
     "workloadPercentage": 100,
-    "hideOnTimeline": false
+    "hideOnTimeline": false,
+    "department": "Production"
   },
   {
     "id": "t6",
     "projectId": "p30",
+    "userId": "u2",
+    "title": "MC Wiring Equipment",
+    "startDate": "2026-03-30",
+    "endDate": "2026-03-31",
+    "workloadPercentage": 100,
+    "hideOnTimeline": false,
+    "department": "Production"
+  },
+  {
+    "id": "t7",
+    "projectId": "p31",
+    "userId": "u3",
+    "title": "Panel wiring (Board layout)",
+    "startDate": "2026-03-02",
+    "endDate": "2026-03-06",
+    "workloadPercentage": 100,
+    "hideOnTimeline": false,
+    "department": "Production"
+  },
+  {
+    "id": "t8",
+    "projectId": "p31",
+    "userId": "u3",
+    "title": "MC Wiring Equipment",
+    "startDate": "2026-03-09",
+    "endDate": "2026-03-13",
+    "workloadPercentage": 100,
+    "hideOnTimeline": false,
+    "department": "Production"
+  },
+  {
+    "id": "t9",
+    "projectId": "p32",
+    "userId": "u4",
+    "title": "Panel wiring (Board layout)",
+    "startDate": "2026-02-20",
+    "endDate": "2026-02-27",
+    "workloadPercentage": 100,
+    "hideOnTimeline": false,
+    "department": "Production"
+  },
+  {
+    "id": "t10",
+    "projectId": "p32",
+    "userId": "u4",
+    "title": "Assembly (OP+CB)",
+    "startDate": "2026-03-02",
+    "endDate": "2026-03-06",
+    "workloadPercentage": 100,
+    "hideOnTimeline": false,
+    "department": "Production"
+  },
+  {
+    "id": "t11",
+    "projectId": "p32",
+    "userId": "u4",
+    "title": "Install  Control & Operation",
+    "startDate": "2026-03-09",
+    "endDate": "2026-03-13",
+    "workloadPercentage": 100,
+    "hideOnTimeline": false,
+    "department": "Production"
+  },
+  {
+    "id": "t12",
+    "projectId": "p32",
+    "userId": "u4",
+    "title": "MC Wiring Equipment",
+    "startDate": "2026-03-16",
+    "endDate": "2026-03-27",
+    "workloadPercentage": 100,
+    "hideOnTimeline": false,
+    "department": "Production"
+  },
+  {
+    "id": "t13",
+    "projectId": "p32",
+    "userId": "u4",
+    "title": "IO Check & Correct",
+    "startDate": "2026-03-30",
+    "endDate": "2026-03-31",
+    "workloadPercentage": 100,
+    "hideOnTimeline": false,
+    "department": "Production"
+  },
+  {
+    "id": "t14",
+    "projectId": "p33",
+    "userId": "u3",
+    "title": "MC Wiring Equipment",
+    "startDate": "2026-03-16",
+    "endDate": "2026-03-27",
+    "workloadPercentage": 100,
+    "hideOnTimeline": false,
+    "department": "Production"
+  },
+  {
+    "id": "t15",
+    "projectId": "p34",
     "userId": "u3",
     "title": "MC Wiring Equipment",
     "startDate": "2026-03-30",
     "endDate": "2026-03-31",
     "workloadPercentage": 100,
-    "hideOnTimeline": false
-  },
-  {
-    "id": "t7",
-    "projectId": "p31",
-    "userId": "u4",
-    "title": "Panel wiring (Board layout)",
-    "startDate": "2026-03-02",
-    "endDate": "2026-03-06",
-    "workloadPercentage": 100,
-    "hideOnTimeline": false
-  },
-  {
-    "id": "t8",
-    "projectId": "p31",
-    "userId": "u4",
-    "title": "MC Wiring Equipment",
-    "startDate": "2026-03-09",
-    "endDate": "2026-03-13",
-    "workloadPercentage": 100,
-    "hideOnTimeline": false
-  },
-  {
-    "id": "t9",
-    "projectId": "p32",
-    "userId": "u5",
-    "title": "Panel wiring (Board layout)",
-    "startDate": "2026-02-20",
-    "endDate": "2026-02-27",
-    "workloadPercentage": 100,
-    "hideOnTimeline": false
-  },
-  {
-    "id": "t10",
-    "projectId": "p32",
-    "userId": "u5",
-    "title": "Assembly (OP+CB)",
-    "startDate": "2026-03-02",
-    "endDate": "2026-03-06",
-    "workloadPercentage": 100,
-    "hideOnTimeline": false
-  },
-  {
-    "id": "t11",
-    "projectId": "p32",
-    "userId": "u5",
-    "title": "Install  Control & Operation",
-    "startDate": "2026-03-09",
-    "endDate": "2026-03-13",
-    "workloadPercentage": 100,
-    "hideOnTimeline": false
-  },
-  {
-    "id": "t12",
-    "projectId": "p32",
-    "userId": "u5",
-    "title": "MC Wiring Equipment",
-    "startDate": "2026-03-16",
-    "endDate": "2026-03-27",
-    "workloadPercentage": 100,
-    "hideOnTimeline": false
-  },
-  {
-    "id": "t13",
-    "projectId": "p32",
-    "userId": "u5",
-    "title": "IO Check & Correct",
-    "startDate": "2026-03-30",
-    "endDate": "2026-03-31",
-    "workloadPercentage": 100,
-    "hideOnTimeline": false
-  },
-  {
-    "id": "t14",
-    "projectId": "p33",
-    "userId": "u4",
-    "title": "MC Wiring Equipment",
-    "startDate": "2026-03-16",
-    "endDate": "2026-03-27",
-    "workloadPercentage": 100,
-    "hideOnTimeline": false
-  },
-  {
-    "id": "t15",
-    "projectId": "p34",
-    "userId": "u4",
-    "title": "MC Wiring Equipment",
-    "startDate": "2026-03-30",
-    "endDate": "2026-03-31",
-    "workloadPercentage": 100,
-    "hideOnTimeline": false
+    "hideOnTimeline": false,
+    "department": "Production"
   },
   {
     "id": "t16",
     "projectId": "p35",
-    "userId": "u6",
+    "userId": "u5",
     "title": "Program offline",
     "startDate": "2026-03-02",
     "endDate": "2026-03-06",
     "workloadPercentage": 100,
-    "hideOnTimeline": false
+    "hideOnTimeline": false,
+    "department": "Engineering"
   },
   {
     "id": "t17",
     "projectId": "p35",
-    "userId": "u6",
+    "userId": "u5",
     "title": "Manual movement",
     "startDate": "2026-03-09",
     "endDate": "2026-03-13",
     "workloadPercentage": 100,
-    "hideOnTimeline": false
+    "hideOnTimeline": false,
+    "department": "Engineering"
   },
   {
     "id": "t18",
     "projectId": "p35",
-    "userId": "u6",
+    "userId": "u5",
     "title": "Auto movement",
     "startDate": "2026-03-16",
     "endDate": "2026-03-20",
     "workloadPercentage": 100,
-    "hideOnTimeline": false
+    "hideOnTimeline": false,
+    "department": "Engineering"
   },
   {
     "id": "t19",
     "projectId": "p35",
-    "userId": "u6",
+    "userId": "u5",
     "title": "Quality check",
     "startDate": "2026-03-23",
     "endDate": "2026-03-27",
     "workloadPercentage": 100,
-    "hideOnTimeline": false
+    "hideOnTimeline": false,
+    "department": "Engineering"
   },
   {
     "id": "t20",
     "projectId": "p35",
-    "userId": "u4",
+    "userId": "u3",
     "title": "Panel wiring (Board layout)",
     "startDate": "2026-02-20",
     "endDate": "2026-02-27",
     "workloadPercentage": 100,
-    "hideOnTimeline": false
+    "hideOnTimeline": false,
+    "department": "Production"
   },
   {
     "id": "t21",
     "projectId": "p35",
-    "userId": "u4",
+    "userId": "u3",
     "title": "Assembly (OP+CB)",
     "startDate": "2026-03-02",
     "endDate": "2026-03-06",
     "workloadPercentage": 100,
-    "hideOnTimeline": false
+    "hideOnTimeline": false,
+    "department": "Production"
   },
   {
     "id": "t22",
     "projectId": "p35",
-    "userId": "u4",
+    "userId": "u3",
     "title": "Install  Control & Operation",
     "startDate": "2026-03-09",
     "endDate": "2026-03-13",
     "workloadPercentage": 100,
-    "hideOnTimeline": false
+    "hideOnTimeline": false,
+    "department": "Production"
   },
   {
     "id": "t23",
     "projectId": "p35",
-    "userId": "u4",
+    "userId": "u3",
     "title": "MC Wiring Equipment",
     "startDate": "2026-03-16",
     "endDate": "2026-03-27",
     "workloadPercentage": 100,
-    "hideOnTimeline": false
+    "hideOnTimeline": false,
+    "department": "Production"
   },
   {
     "id": "t24",
     "projectId": "p35",
-    "userId": "u4",
+    "userId": "u3",
     "title": "IO Check & Correct",
     "startDate": "2026-03-30",
     "endDate": "2026-03-31",
     "workloadPercentage": 100,
-    "hideOnTimeline": false
+    "hideOnTimeline": false,
+    "department": "Production"
   },
   {
     "id": "t25",
     "projectId": "p45",
-    "userId": "u8",
+    "userId": "u7",
     "title": "Program offline",
     "startDate": "2026-03-02",
     "endDate": "2026-03-06",
     "workloadPercentage": 100,
-    "hideOnTimeline": false
+    "hideOnTimeline": false,
+    "department": "Engineering"
   },
   {
     "id": "t26",
     "projectId": "p45",
-    "userId": "u8",
+    "userId": "u7",
     "title": "Manual movement",
     "startDate": "2026-03-09",
     "endDate": "2026-03-13",
     "workloadPercentage": 100,
-    "hideOnTimeline": false
+    "hideOnTimeline": false,
+    "department": "Engineering"
   },
   {
     "id": "t27",
     "projectId": "p45",
-    "userId": "u8",
+    "userId": "u7",
     "title": "Auto movement",
     "startDate": "2026-03-16",
     "endDate": "2026-03-20",
     "workloadPercentage": 100,
-    "hideOnTimeline": false
+    "hideOnTimeline": false,
+    "department": "Engineering"
   },
   {
     "id": "t28",
     "projectId": "p45",
-    "userId": "u8",
+    "userId": "u7",
     "title": "Quality check",
     "startDate": "2026-03-23",
     "endDate": "2026-03-27",
     "workloadPercentage": 100,
-    "hideOnTimeline": false
+    "hideOnTimeline": false,
+    "department": "Engineering"
   },
   {
     "id": "t29",
     "projectId": "p54",
-    "userId": "u9",
+    "userId": "u8",
     "title": "Program offline",
     "startDate": "2026-03-02",
     "endDate": "2026-03-03",
     "workloadPercentage": 100,
-    "hideOnTimeline": false
+    "hideOnTimeline": false,
+    "department": "Engineering"
   },
   {
     "id": "t30",
     "projectId": "p55",
-    "userId": "u9",
+    "userId": "u8",
     "title": "Program offline",
     "startDate": "2026-03-04",
     "endDate": "2026-03-06",
     "workloadPercentage": 100,
-    "hideOnTimeline": false
+    "hideOnTimeline": false,
+    "department": "Engineering"
   },
   {
     "id": "t31",
     "projectId": "p55",
-    "userId": "u9",
+    "userId": "u8",
     "title": "Manual movement",
     "startDate": "2026-03-09",
     "endDate": "2026-03-10",
     "workloadPercentage": 100,
-    "hideOnTimeline": false
+    "hideOnTimeline": false,
+    "department": "Engineering"
   },
   {
     "id": "t32",
     "projectId": "p55",
-    "userId": "u9",
+    "userId": "u8",
     "title": "Auto movement",
     "startDate": "2026-03-11",
     "endDate": "2026-03-13",
     "workloadPercentage": 100,
-    "hideOnTimeline": false
+    "hideOnTimeline": false,
+    "department": "Engineering"
   },
   {
     "id": "t33",
     "projectId": "p55",
-    "userId": "u9",
+    "userId": "u8",
     "title": "Quality check",
     "startDate": "2026-03-16",
     "endDate": "2026-03-16",
     "workloadPercentage": 100,
-    "hideOnTimeline": false
+    "hideOnTimeline": false,
+    "department": "Engineering"
   },
   {
     "id": "t34",
     "projectId": "p55",
-    "userId": "u10",
+    "userId": "u9",
     "title": "Panel wiring (Board layout)",
     "startDate": "2026-03-02",
     "endDate": "2026-03-06",
     "workloadPercentage": 100,
-    "hideOnTimeline": false
+    "hideOnTimeline": false,
+    "department": "Production"
   },
   {
     "id": "t35",
     "projectId": "p55",
-    "userId": "u10",
+    "userId": "u9",
     "title": "Assembly (OP+CB)",
     "startDate": "2026-03-09",
     "endDate": "2026-03-11",
     "workloadPercentage": 100,
-    "hideOnTimeline": false
+    "hideOnTimeline": false,
+    "department": "Production"
   },
   {
     "id": "t36",
     "projectId": "p55",
-    "userId": "u10",
+    "userId": "u9",
     "title": "Install  Control & Operation",
     "startDate": "2026-03-12",
     "endDate": "2026-03-13",
     "workloadPercentage": 100,
-    "hideOnTimeline": false
+    "hideOnTimeline": false,
+    "department": "Production"
   },
   {
     "id": "t37",
     "projectId": "p55",
-    "userId": "u10",
+    "userId": "u9",
     "title": "MC Wiring Equipment",
     "startDate": "2026-03-16",
     "endDate": "2026-03-27",
     "workloadPercentage": 100,
-    "hideOnTimeline": false
+    "hideOnTimeline": false,
+    "department": "Production"
   },
   {
     "id": "t38",
     "projectId": "p55",
+    "userId": "u9",
+    "title": "IO Check & Correct",
+    "startDate": "2026-03-30",
+    "endDate": "2026-03-31",
+    "workloadPercentage": 100,
+    "hideOnTimeline": false,
+    "department": "Production"
+  },
+  {
+    "id": "t39",
+    "projectId": "p61",
+    "userId": "u10",
+    "title": "Panel wiring (Board layout)",
+    "startDate": "2026-02-20",
+    "endDate": "2026-02-27",
+    "workloadPercentage": 100,
+    "hideOnTimeline": false,
+    "department": "Production"
+  },
+  {
+    "id": "t40",
+    "projectId": "p61",
+    "userId": "u10",
+    "title": "Assembly (OP+CB)",
+    "startDate": "2026-03-02",
+    "endDate": "2026-03-06",
+    "workloadPercentage": 100,
+    "hideOnTimeline": false,
+    "department": "Production"
+  },
+  {
+    "id": "t41",
+    "projectId": "p61",
+    "userId": "u10",
+    "title": "Install  Control & Operation",
+    "startDate": "2026-03-09",
+    "endDate": "2026-03-13",
+    "workloadPercentage": 100,
+    "hideOnTimeline": false,
+    "department": "Production"
+  },
+  {
+    "id": "t42",
+    "projectId": "p61",
+    "userId": "u10",
+    "title": "MC Wiring Equipment",
+    "startDate": "2026-03-16",
+    "endDate": "2026-03-27",
+    "workloadPercentage": 100,
+    "hideOnTimeline": false,
+    "department": "Production"
+  },
+  {
+    "id": "t43",
+    "projectId": "p61",
     "userId": "u10",
     "title": "IO Check & Correct",
     "startDate": "2026-03-30",
     "endDate": "2026-03-31",
     "workloadPercentage": 100,
-    "hideOnTimeline": false
-  },
-  {
-    "id": "t39",
-    "projectId": "p61",
-    "userId": "u11",
-    "title": "Panel wiring (Board layout)",
-    "startDate": "2026-02-20",
-    "endDate": "2026-02-27",
-    "workloadPercentage": 100,
-    "hideOnTimeline": false
-  },
-  {
-    "id": "t40",
-    "projectId": "p61",
-    "userId": "u11",
-    "title": "Assembly (OP+CB)",
-    "startDate": "2026-03-02",
-    "endDate": "2026-03-06",
-    "workloadPercentage": 100,
-    "hideOnTimeline": false
-  },
-  {
-    "id": "t41",
-    "projectId": "p61",
-    "userId": "u11",
-    "title": "Install  Control & Operation",
-    "startDate": "2026-03-09",
-    "endDate": "2026-03-13",
-    "workloadPercentage": 100,
-    "hideOnTimeline": false
-  },
-  {
-    "id": "t42",
-    "projectId": "p61",
-    "userId": "u11",
-    "title": "MC Wiring Equipment",
-    "startDate": "2026-03-16",
-    "endDate": "2026-03-27",
-    "workloadPercentage": 100,
-    "hideOnTimeline": false
-  },
-  {
-    "id": "t43",
-    "projectId": "p61",
-    "userId": "u11",
-    "title": "IO Check & Correct",
-    "startDate": "2026-03-30",
-    "endDate": "2026-03-31",
-    "workloadPercentage": 100,
-    "hideOnTimeline": false
+    "hideOnTimeline": false,
+    "department": "Production"
   },
   {
     "id": "t44",
     "projectId": "p66",
-    "userId": "u12",
+    "userId": "u11",
     "title": "Manual movement",
     "startDate": "2026-03-02",
     "endDate": "2026-03-06",
     "workloadPercentage": 100,
-    "hideOnTimeline": false
+    "hideOnTimeline": false,
+    "department": "Engineering"
   },
   {
     "id": "t45",
     "projectId": "p66",
-    "userId": "u12",
+    "userId": "u11",
     "title": "Auto movement",
     "startDate": "2026-03-09",
     "endDate": "2026-03-20",
     "workloadPercentage": 100,
-    "hideOnTimeline": false
+    "hideOnTimeline": false,
+    "department": "Engineering"
   },
   {
     "id": "t46",
     "projectId": "p66",
-    "userId": "u12",
+    "userId": "u11",
     "title": "Quality check",
     "startDate": "2026-03-23",
     "endDate": "2026-03-27",
     "workloadPercentage": 100,
-    "hideOnTimeline": false
+    "hideOnTimeline": false,
+    "department": "Engineering"
   },
   {
     "id": "t47",
     "projectId": "p66",
-    "userId": "u13",
+    "userId": "u12",
     "title": "Panel wiring (Board layout)",
     "startDate": "2026-02-20",
     "endDate": "2026-02-27",
     "workloadPercentage": 100,
-    "hideOnTimeline": false
+    "hideOnTimeline": false,
+    "department": "Production"
   },
   {
     "id": "t48",
     "projectId": "p66",
-    "userId": "u13",
+    "userId": "u12",
     "title": "Assembly (OP+CB)",
     "startDate": "2026-03-02",
     "endDate": "2026-03-06",
     "workloadPercentage": 100,
-    "hideOnTimeline": false
+    "hideOnTimeline": false,
+    "department": "Production"
   },
   {
     "id": "t49",
     "projectId": "p66",
-    "userId": "u13",
+    "userId": "u12",
     "title": "Install  Control & Operation",
     "startDate": "2026-03-09",
     "endDate": "2026-03-13",
     "workloadPercentage": 100,
-    "hideOnTimeline": false
+    "hideOnTimeline": false,
+    "department": "Production"
   },
   {
     "id": "t50",
     "projectId": "p66",
-    "userId": "u13",
+    "userId": "u12",
     "title": "MC Wiring Equipment",
     "startDate": "2026-03-16",
     "endDate": "2026-03-27",
     "workloadPercentage": 100,
-    "hideOnTimeline": false
+    "hideOnTimeline": false,
+    "department": "Production"
   },
   {
     "id": "t51",
     "projectId": "p66",
+    "userId": "u12",
+    "title": "IO Check & Correct",
+    "startDate": "2026-03-30",
+    "endDate": "2026-03-31",
+    "workloadPercentage": 100,
+    "hideOnTimeline": false,
+    "department": "Production"
+  },
+  {
+    "id": "t52",
+    "projectId": "p67",
+    "userId": "u11",
+    "title": "Manual movement",
+    "startDate": "2026-03-30",
+    "endDate": "2026-03-31",
+    "workloadPercentage": 100,
+    "hideOnTimeline": false,
+    "department": "Engineering"
+  },
+  {
+    "id": "t53",
+    "projectId": "p67",
+    "userId": "u11",
+    "title": "Auto movement",
+    "startDate": "2026-04-01",
+    "endDate": "2026-04-10",
+    "workloadPercentage": 100,
+    "hideOnTimeline": false,
+    "department": "Engineering"
+  },
+  {
+    "id": "t54",
+    "projectId": "p67",
+    "userId": "u11",
+    "title": "Quality check",
+    "startDate": "2026-04-20",
+    "endDate": "2026-04-24",
+    "workloadPercentage": 100,
+    "hideOnTimeline": false,
+    "department": "Engineering"
+  },
+  {
+    "id": "t55",
+    "projectId": "p67",
+    "userId": "u13",
+    "title": "Panel wiring (Board layout)",
+    "startDate": "2026-02-20",
+    "endDate": "2026-02-27",
+    "workloadPercentage": 100,
+    "hideOnTimeline": false,
+    "department": "Production"
+  },
+  {
+    "id": "t56",
+    "projectId": "p67",
+    "userId": "u13",
+    "title": "Assembly (OP+CB)",
+    "startDate": "2026-03-02",
+    "endDate": "2026-03-06",
+    "workloadPercentage": 100,
+    "hideOnTimeline": false,
+    "department": "Production"
+  },
+  {
+    "id": "t57",
+    "projectId": "p67",
+    "userId": "u13",
+    "title": "Install  Control & Operation",
+    "startDate": "2026-03-09",
+    "endDate": "2026-03-13",
+    "workloadPercentage": 100,
+    "hideOnTimeline": false,
+    "department": "Production"
+  },
+  {
+    "id": "t58",
+    "projectId": "p67",
+    "userId": "u13",
+    "title": "MC Wiring Equipment",
+    "startDate": "2026-03-16",
+    "endDate": "2026-03-27",
+    "workloadPercentage": 100,
+    "hideOnTimeline": false,
+    "department": "Production"
+  },
+  {
+    "id": "t59",
+    "projectId": "p67",
     "userId": "u13",
     "title": "IO Check & Correct",
     "startDate": "2026-03-30",
     "endDate": "2026-03-31",
     "workloadPercentage": 100,
-    "hideOnTimeline": false
-  },
-  {
-    "id": "t52",
-    "projectId": "p67",
-    "userId": "u12",
-    "title": "Manual movement",
-    "startDate": "2026-03-30",
-    "endDate": "2026-03-31",
-    "workloadPercentage": 100,
-    "hideOnTimeline": false
-  },
-  {
-    "id": "t53",
-    "projectId": "p67",
-    "userId": "u12",
-    "title": "Auto movement",
-    "startDate": "2026-04-01",
-    "endDate": "2026-04-10",
-    "workloadPercentage": 100,
-    "hideOnTimeline": false
-  },
-  {
-    "id": "t54",
-    "projectId": "p67",
-    "userId": "u12",
-    "title": "Quality check",
-    "startDate": "2026-04-20",
-    "endDate": "2026-04-24",
-    "workloadPercentage": 100,
-    "hideOnTimeline": false
-  },
-  {
-    "id": "t55",
-    "projectId": "p67",
-    "userId": "u14",
-    "title": "Panel wiring (Board layout)",
-    "startDate": "2026-02-20",
-    "endDate": "2026-02-27",
-    "workloadPercentage": 100,
-    "hideOnTimeline": false
-  },
-  {
-    "id": "t56",
-    "projectId": "p67",
-    "userId": "u14",
-    "title": "Assembly (OP+CB)",
-    "startDate": "2026-03-02",
-    "endDate": "2026-03-06",
-    "workloadPercentage": 100,
-    "hideOnTimeline": false
-  },
-  {
-    "id": "t57",
-    "projectId": "p67",
-    "userId": "u14",
-    "title": "Install  Control & Operation",
-    "startDate": "2026-03-09",
-    "endDate": "2026-03-13",
-    "workloadPercentage": 100,
-    "hideOnTimeline": false
-  },
-  {
-    "id": "t58",
-    "projectId": "p67",
-    "userId": "u14",
-    "title": "MC Wiring Equipment",
-    "startDate": "2026-03-16",
-    "endDate": "2026-03-27",
-    "workloadPercentage": 100,
-    "hideOnTimeline": false
-  },
-  {
-    "id": "t59",
-    "projectId": "p67",
-    "userId": "u14",
-    "title": "IO Check & Correct",
-    "startDate": "2026-03-30",
-    "endDate": "2026-03-31",
-    "workloadPercentage": 100,
-    "hideOnTimeline": false
+    "hideOnTimeline": false,
+    "department": "Production"
   },
   {
     "id": "t60",
     "projectId": "p77",
-    "userId": "u15",
+    "userId": "u14",
     "title": "Assembly (OP+CB)",
     "startDate": "2026-02-26",
     "endDate": "2026-02-27",
     "workloadPercentage": 100,
-    "hideOnTimeline": false
+    "hideOnTimeline": false,
+    "department": "Production"
   },
   {
     "id": "t61",
     "projectId": "p77",
-    "userId": "u16",
+    "userId": "u15",
     "title": "Install  Control & Operation",
     "startDate": "2026-03-02",
     "endDate": "2026-03-13",
     "workloadPercentage": 100,
-    "hideOnTimeline": false
+    "hideOnTimeline": false,
+    "department": "Production"
   },
   {
     "id": "t62",
     "projectId": "p77",
-    "userId": "u16",
+    "userId": "u15",
     "title": "MC Wiring Equipment",
     "startDate": "2026-03-16",
     "endDate": "2026-03-20",
     "workloadPercentage": 100,
-    "hideOnTimeline": false
+    "hideOnTimeline": false,
+    "department": "Production"
   },
   {
     "id": "t63",
     "projectId": "p77",
-    "userId": "u16",
+    "userId": "u15",
     "title": "IO Check & Correct",
     "startDate": "2026-03-23",
     "endDate": "2026-03-31",
     "workloadPercentage": 100,
-    "hideOnTimeline": false
+    "hideOnTimeline": false,
+    "department": "Production"
   },
   {
     "id": "t64",
     "projectId": "p77",
-    "userId": "u15",
+    "userId": "u14",
     "title": "[Completed] Panel wiring (Board layout)",
     "startDate": "2026-02-18",
     "endDate": "2026-02-25",
     "workloadPercentage": 100,
-    "hideOnTimeline": false
+    "hideOnTimeline": false,
+    "department": "Production"
   },
   {
     "id": "t65",
     "projectId": "p78",
-    "userId": "u17",
+    "userId": "u16",
     "title": "Manual movement",
     "startDate": "2026-02-20",
     "endDate": "2026-02-27",
     "workloadPercentage": 100,
-    "hideOnTimeline": false
+    "hideOnTimeline": false,
+    "department": "Engineering"
   },
   {
     "id": "t66",
     "projectId": "p78",
-    "userId": "u17",
+    "userId": "u16",
     "title": "Auto movement",
     "startDate": "2026-03-02",
     "endDate": "2026-03-13",
     "workloadPercentage": 100,
-    "hideOnTimeline": false
+    "hideOnTimeline": false,
+    "department": "Engineering"
   },
   {
     "id": "t67",
     "projectId": "p78",
-    "userId": "u17",
+    "userId": "u16",
     "title": "Quality check",
     "startDate": "2026-03-16",
     "endDate": "2026-03-31",
     "workloadPercentage": 100,
-    "hideOnTimeline": false
+    "hideOnTimeline": false,
+    "department": "Engineering"
   },
   {
     "id": "t68",
     "projectId": "p80",
-    "userId": "u18",
+    "userId": "u17",
     "title": "Program offline",
     "startDate": "2026-03-02",
     "endDate": "2026-03-06",
     "workloadPercentage": 100,
-    "hideOnTimeline": false
+    "hideOnTimeline": false,
+    "department": "Engineering"
   },
   {
     "id": "t69",
     "projectId": "p80",
-    "userId": "u18",
+    "userId": "u17",
     "title": "Manual movement",
     "startDate": "2026-03-09",
     "endDate": "2026-03-13",
     "workloadPercentage": 100,
-    "hideOnTimeline": false
+    "hideOnTimeline": false,
+    "department": "Engineering"
   },
   {
     "id": "t70",
     "projectId": "p80",
-    "userId": "u18",
+    "userId": "u17",
     "title": "Auto movement",
     "startDate": "2026-03-16",
     "endDate": "2026-03-20",
     "workloadPercentage": 100,
-    "hideOnTimeline": false
+    "hideOnTimeline": false,
+    "department": "Engineering"
   },
   {
     "id": "t71",
     "projectId": "p80",
-    "userId": "u18",
+    "userId": "u17",
     "title": "Quality check",
     "startDate": "2026-03-23",
     "endDate": "2026-03-27",
     "workloadPercentage": 100,
-    "hideOnTimeline": false
+    "hideOnTimeline": false,
+    "department": "Engineering"
   },
   {
     "id": "t72",
     "projectId": "p80",
-    "userId": "u11",
+    "userId": "u10",
     "title": "MC Wiring Equipment",
     "startDate": "2026-02-25",
     "endDate": "2026-02-28",
     "workloadPercentage": 100,
-    "hideOnTimeline": false
+    "hideOnTimeline": false,
+    "department": "Production"
   },
   {
     "id": "t73",
     "projectId": "p81",
-    "userId": "u9",
+    "userId": "u8",
     "title": "Program offline",
     "startDate": "2026-03-17",
     "endDate": "2026-03-18",
     "workloadPercentage": 100,
-    "hideOnTimeline": false
+    "hideOnTimeline": false,
+    "department": "Engineering"
   },
   {
     "id": "t74",
     "projectId": "p81",
-    "userId": "u9",
+    "userId": "u8",
     "title": "Manual movement",
     "startDate": "2026-03-19",
     "endDate": "2026-03-20",
     "workloadPercentage": 100,
-    "hideOnTimeline": false
+    "hideOnTimeline": false,
+    "department": "Engineering"
   },
   {
     "id": "t75",
     "projectId": "p81",
-    "userId": "u9",
+    "userId": "u8",
     "title": "Auto movement",
     "startDate": "2026-03-23",
     "endDate": "2026-03-24",
     "workloadPercentage": 100,
-    "hideOnTimeline": false
+    "hideOnTimeline": false,
+    "department": "Engineering"
   },
   {
     "id": "t76",
     "projectId": "p81",
-    "userId": "u9",
+    "userId": "u8",
     "title": "Quality check",
     "startDate": "2026-03-25",
     "endDate": "2026-03-27",
     "workloadPercentage": 100,
-    "hideOnTimeline": false
+    "hideOnTimeline": false,
+    "department": "Engineering"
   },
   {
     "id": "t77",
     "projectId": "p81",
-    "userId": "u15",
+    "userId": "u14",
     "title": "Panel wiring (Board layout)",
     "startDate": "2026-03-02",
     "endDate": "2026-03-06",
     "workloadPercentage": 100,
-    "hideOnTimeline": false
+    "hideOnTimeline": false,
+    "department": "Production"
   },
   {
     "id": "t78",
     "projectId": "p81",
-    "userId": "u15",
+    "userId": "u14",
     "title": "Assembly (OP+CB)",
     "startDate": "2026-03-09",
     "endDate": "2026-03-11",
     "workloadPercentage": 100,
-    "hideOnTimeline": false
+    "hideOnTimeline": false,
+    "department": "Production"
   },
   {
     "id": "t79",
     "projectId": "p81",
-    "userId": "u15",
+    "userId": "u14",
     "title": "Install  Control & Operation",
     "startDate": "2026-03-12",
     "endDate": "2026-03-13",
     "workloadPercentage": 100,
-    "hideOnTimeline": false
+    "hideOnTimeline": false,
+    "department": "Production"
   },
   {
     "id": "t80",
     "projectId": "p81",
-    "userId": "u15",
+    "userId": "u14",
     "title": "MC Wiring Equipment",
     "startDate": "2026-03-16",
     "endDate": "2026-03-20",
     "workloadPercentage": 100,
-    "hideOnTimeline": false
+    "hideOnTimeline": false,
+    "department": "Production"
   },
   {
     "id": "t81",
     "projectId": "p81",
-    "userId": "u15",
+    "userId": "u14",
     "title": "IO Check & Correct",
     "startDate": "2026-03-23",
     "endDate": "2026-03-31",
     "workloadPercentage": 100,
-    "hideOnTimeline": false
+    "hideOnTimeline": false,
+    "department": "Production"
   },
   {
     "id": "t82",
     "projectId": "p82",
-    "userId": "u9",
+    "userId": "u8",
     "title": "Program offline",
     "startDate": "2026-03-30",
     "endDate": "2026-03-31",
     "workloadPercentage": 100,
-    "hideOnTimeline": false
+    "hideOnTimeline": false,
+    "department": "Engineering"
   },
   {
     "id": "t83",
     "projectId": "p82",
-    "userId": "u2",
+    "userId": "u1",
     "title": "Manual movement",
     "startDate": "2026-03-11",
     "endDate": "2026-03-13",
     "workloadPercentage": 100,
-    "hideOnTimeline": false
+    "hideOnTimeline": false,
+    "department": "Engineering"
   },
   {
     "id": "t84",
     "projectId": "p82",
-    "userId": "u2",
+    "userId": "u1",
     "title": "Auto movement",
     "startDate": "2026-03-16",
     "endDate": "2026-03-16",
     "workloadPercentage": 100,
-    "hideOnTimeline": false
+    "hideOnTimeline": false,
+    "department": "Engineering"
   },
   {
     "id": "t85",
     "projectId": "p82",
-    "userId": "u2",
+    "userId": "u1",
     "title": "Quality check",
     "startDate": "2026-03-17",
     "endDate": "2026-03-18",
     "workloadPercentage": 100,
-    "hideOnTimeline": false
+    "hideOnTimeline": false,
+    "department": "Engineering"
   },
   {
     "id": "t86",
     "projectId": "p83",
-    "userId": "u2",
+    "userId": "u1",
     "title": "Program offline",
     "startDate": "2026-03-19",
     "endDate": "2026-03-20",
     "workloadPercentage": 100,
-    "hideOnTimeline": false
+    "hideOnTimeline": false,
+    "department": "Engineering"
   },
   {
     "id": "t87",
     "projectId": "p83",
-    "userId": "u2",
+    "userId": "u1",
     "title": "Manual movement",
     "startDate": "2026-03-23",
     "endDate": "2026-03-24",
     "workloadPercentage": 100,
-    "hideOnTimeline": false
+    "hideOnTimeline": false,
+    "department": "Engineering"
   },
   {
     "id": "t88",
     "projectId": "p83",
-    "userId": "u2",
+    "userId": "u1",
     "title": "Auto movement",
     "startDate": "2026-03-25",
     "endDate": "2026-03-27",
     "workloadPercentage": 100,
-    "hideOnTimeline": false
+    "hideOnTimeline": false,
+    "department": "Engineering"
   },
   {
     "id": "t89",
     "projectId": "p83",
-    "userId": "u2",
+    "userId": "u1",
     "title": "Quality check",
     "startDate": "2026-03-30",
     "endDate": "2026-03-31",
     "workloadPercentage": 100,
-    "hideOnTimeline": false
+    "hideOnTimeline": false,
+    "department": "Engineering"
   },
   {
     "id": "t90",
     "projectId": "p83",
-    "userId": "u19",
+    "userId": "u18",
     "title": "Panel wiring (Board layout)",
     "startDate": "2026-02-20",
     "endDate": "2026-02-27",
     "workloadPercentage": 100,
-    "hideOnTimeline": false
+    "hideOnTimeline": false,
+    "department": "Production"
   },
   {
     "id": "t91",
     "projectId": "p83",
-    "userId": "u19",
+    "userId": "u18",
     "title": "Assembly (OP+CB)",
     "startDate": "2026-03-02",
     "endDate": "2026-03-05",
     "workloadPercentage": 100,
-    "hideOnTimeline": false
+    "hideOnTimeline": false,
+    "department": "Production"
   },
   {
     "id": "t92",
     "projectId": "p83",
-    "userId": "u19",
+    "userId": "u18",
     "title": "Install  Control & Operation",
     "startDate": "2026-03-06",
     "endDate": "2026-03-06",
     "workloadPercentage": 100,
-    "hideOnTimeline": false
+    "hideOnTimeline": false,
+    "department": "Production"
   },
   {
     "id": "t93",
     "projectId": "p83",
-    "userId": "u19",
+    "userId": "u18",
     "title": "MC Wiring Equipment",
     "startDate": "2026-03-06",
     "endDate": "2026-03-09",
     "workloadPercentage": 100,
-    "hideOnTimeline": false
+    "hideOnTimeline": false,
+    "department": "Production"
   },
   {
     "id": "t94",
     "projectId": "p83",
-    "userId": "u19",
+    "userId": "u18",
     "title": "IO Check & Correct",
     "startDate": "2026-03-10",
     "endDate": "2026-03-13",
     "workloadPercentage": 100,
-    "hideOnTimeline": false
+    "hideOnTimeline": false,
+    "department": "Production"
   },
   {
     "id": "t95",
     "projectId": "p85",
-    "userId": "u20",
+    "userId": "u19",
     "title": "Program offline",
     "startDate": "2026-03-02",
     "endDate": "2026-03-06",
     "workloadPercentage": 100,
-    "hideOnTimeline": false
+    "hideOnTimeline": false,
+    "department": "Engineering"
   },
   {
     "id": "t96",
     "projectId": "p85",
-    "userId": "u20",
+    "userId": "u19",
     "title": "Manual movement",
     "startDate": "2026-03-09",
     "endDate": "2026-03-13",
     "workloadPercentage": 100,
-    "hideOnTimeline": false
+    "hideOnTimeline": false,
+    "department": "Engineering"
   },
   {
     "id": "t97",
     "projectId": "p85",
-    "userId": "u20",
+    "userId": "u19",
     "title": "Auto movement",
     "startDate": "2026-03-16",
     "endDate": "2026-03-20",
     "workloadPercentage": 100,
-    "hideOnTimeline": false
+    "hideOnTimeline": false,
+    "department": "Engineering"
   },
   {
     "id": "t98",
     "projectId": "p85",
-    "userId": "u20",
+    "userId": "u19",
     "title": "Quality check",
     "startDate": "2026-03-23",
     "endDate": "2026-03-27",
     "workloadPercentage": 100,
-    "hideOnTimeline": false
+    "hideOnTimeline": false,
+    "department": "Engineering"
   },
   {
     "id": "t99",
     "projectId": "p85",
-    "userId": "u21",
+    "userId": "u20",
     "title": "Install  Control & Operation",
     "startDate": "2026-02-18",
     "endDate": "2026-02-20",
     "workloadPercentage": 100,
-    "hideOnTimeline": false
+    "hideOnTimeline": false,
+    "department": "Production"
   },
   {
     "id": "t100",
     "projectId": "p85",
-    "userId": "u21",
+    "userId": "u20",
     "title": "MC Wiring Equipment",
     "startDate": "2026-02-23",
     "endDate": "2026-02-24",
     "workloadPercentage": 100,
-    "hideOnTimeline": false
+    "hideOnTimeline": false,
+    "department": "Production"
   },
   {
     "id": "t101",
     "projectId": "p85",
-    "userId": "u21",
+    "userId": "u20",
     "title": "IO Check & Correct",
     "startDate": "2026-02-25",
     "endDate": "2026-02-27",
     "workloadPercentage": 100,
-    "hideOnTimeline": false
+    "hideOnTimeline": false,
+    "department": "Production"
   }
 ];

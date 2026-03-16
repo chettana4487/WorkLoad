@@ -51,26 +51,17 @@ export default function TopHeader() {
         <div style={{ 
           display: 'flex', 
           alignItems: 'center', 
+          justifyContent: 'center',
           backgroundColor: 'var(--bg-tertiary)', 
           padding: '8px 16px', 
           borderRadius: 'var(--radius-full)', 
           width: isMobile ? '100%' : '300px',
-          maxWidth: isMobile ? '200px' : '300px'
+          maxWidth: isMobile ? '200px' : '300px',
+          fontSize: '0.8rem',
+          color: 'var(--text-primary)',
+          fontWeight: 'bold'
         }}>
-          <Search size={18} color="var(--text-tertiary)" style={{ flexShrink: 0 }} />
-          <input 
-            type="text" 
-            placeholder={isMobile ? "Search..." : "Search projects or members..."} 
-            style={{ 
-              border: 'none', 
-              background: 'transparent', 
-              marginLeft: '8px',
-              outline: 'none',
-              color: 'var(--text-primary)',
-              width: '100%',
-              fontSize: '0.9rem'
-            }} 
-          />
+          ELECTRICAL ENGINEERING (PPNs)
         </div>
       </div>
 

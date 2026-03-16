@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import fs from 'fs';
+import fsPromises from 'fs/promises';
 import path from 'path';
 
 function blankSvg() {
@@ -30,7 +31,7 @@ export async function GET(req: Request) {
   }
 
   try {
-    const files = fs.readdirSync(publicDir);
+    const files = await fsPromises.readdir(publicDir);
     
     // Clean up queried name for comparison
     const cleanName = name.replace(/^(นาย|นางสาว|นาง|น\.ส\.)\s*/, '').replace(/[\s\u200B-\u200D\uFEFF]+/g, '').trim();
@@ -51,7 +52,7 @@ export async function GET(req: Request) {
 
     if (matchedFile) {
       const filePath = path.join(publicDir, matchedFile);
-      const fileBuffer = fs.readFileSync(filePath);
+      const fileBuffer = await fsPromises.readFile(filePath);
       
       const ext = path.extname(matchedFile).toLowerCase();
       let contentType = 'image/jpeg';
@@ -62,7 +63,7 @@ export async function GET(req: Request) {
       return new NextResponse(fileBuffer, {
         headers: {
           'Content-Type': contentType,
-          'Cache-Control': 'no-store, no-cache, must-revalidate, proxy-revalidate'
+          'Cache-Control': 'public, max-age=86400, stale-while-revalidate=43200'
         }
       });
     }

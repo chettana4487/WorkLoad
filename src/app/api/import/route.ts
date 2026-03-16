@@ -9,6 +9,49 @@ function excelDateToJSDate(serial: number) {
   return date_info.toISOString().split('T')[0];
 }
 
+function generateAvatar(name: string) {
+  const initial = name ? name.charAt(0).toUpperCase() : '?';
+  const colors = ['#ef4444', '#f97316', '#f59e0b', '#84cc16', '#10b981', '#06b6d4', '#3b82f6', '#6366f1', '#8b5cf6', '#d946ef', '#f43f5e'];
+  let hash = 0;
+  for (let i = 0; i < name.length; i++) {
+    hash = name.charCodeAt(i) + ((hash << 5) - hash);
+  }
+  const color = colors[Math.abs(hash) % colors.length];
+  const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><rect width="100" height="100" fill="${color}"/><text x="50" y="55" font-family="sans-serif" font-size="45" fill="white" text-anchor="middle" dominant-baseline="middle">${initial}</text></svg>`;
+  return `data:image/svg+xml;charset=utf-8,${encodeURIComponent(svg)}`;
+}
+
+function findUserAvatar(name: string) {
+  if (!name) return null;
+  
+  try {
+    const publicPath = path.join(process.cwd(), 'public');
+    const files = fs.readdirSync(publicPath);
+    
+    // Normalize input name: remove Thai titles and all whitespace
+    const normalizedName = name.replace(/^(นาย|นางสาว|นาง|น\.ส\.)\s*/, '')
+                               .replace(/[\s\u200B-\u200D\uFEFF]+/g, '')
+                               .trim();
+                               
+    for (const file of files) {
+      if (!/\.(jpg|jpeg|png|svg)$/i.test(file)) continue;
+      
+      const fileNameWithoutExt = file.replace(/\.[^/.]+$/, "");
+      const normalizedFileName = fileNameWithoutExt.replace(/^(นาย|นางสาว|นาง|น\.ส\.)\s*/, '')
+                                                   .replace(/[\s\u200B-\u200D\uFEFF]+/g, '')
+                                                   .trim();
+      
+      if (normalizedFileName === normalizedName) {
+        return `/${file}`;
+      }
+    }
+  } catch (err) {
+    console.error('Error finding avatar:', err);
+  }
+  
+  return null;
+}
+
 export async function POST(req: Request) {
   try {
     const formData = await req.formData();
@@ -85,12 +128,13 @@ export async function POST(req: Request) {
         
         if (!userId) {
           userId = `u${usersMap.size + 1}`;
+          const avatarFile = findUserAvatar(assigneeName);
           usersMap.set(userId, {
             id: userId,
             name: assigneeName,
             role: Number(taskNum) === 2100 ? 'Electrical Designer' : Number(taskNum) === 2400 ? 'Programmer' : 'Electrical Production',
             department: Number(taskNum) === 2100 ? 'Design' : Number(taskNum) === 2400 ? 'Engineering' : 'Production',
-            avatarUrl: `/api/avatar?name=\${encodeURIComponent(assigneeName)}`
+            avatarUrl: avatarFile || generateAvatar(assigneeName)
           });
         }
       }

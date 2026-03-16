@@ -346,12 +346,48 @@ function ResponsibilityCard({ title, icon, data, users, formatCurrency }: any) {
 function ProjectTimeline({ projectId }: { projectId: string }) {
   const projectTasks = useMemo(() => mockTasks.filter(t => t.projectId === projectId), [projectId]);
   
-  // Use a fixed range for March 2026 for consistency with Dashboard
-  const baseDate = parseISO('2026-03-01');
-  const monthStart = startOfMonth(baseDate);
-  const monthEnd = endOfMonth(baseDate);
-  const days = eachDayOfInterval({ start: monthStart, end: monthEnd });
-  
+  const { monthStart, monthEnd, days, months } = useMemo(() => {
+    if (projectTasks.length === 0) {
+      const baseDate = parseISO('2026-03-01');
+      return { monthStart: startOfMonth(baseDate), monthEnd: endOfMonth(baseDate), days: [], months: [] };
+    }
+    
+    const startDates = projectTasks.map(t => parseISO(t.startDate).getTime());
+    const endDates = projectTasks.map(t => parseISO(t.endDate).getTime());
+    
+    const minDate = new Date(Math.min(...startDates));
+    const maxDate = new Date(Math.max(...endDates));
+    
+    const mStart = startOfMonth(minDate);
+    const mEnd = endOfMonth(maxDate);
+    const d = eachDayOfInterval({ start: mStart, end: mEnd });
+    
+    const m: { name: string, count: number }[] = [];
+    let currentMonth = '';
+    let currentMonthCount = 0;
+    
+    d.forEach(day => {
+      const monthName = format(day, 'MMMM yyyy');
+      if (monthName !== currentMonth) {
+        if (currentMonth) m.push({ name: currentMonth, count: currentMonthCount });
+        currentMonth = monthName;
+        currentMonthCount = 1;
+      } else {
+        currentMonthCount++;
+      }
+    });
+    if (currentMonth) m.push({ name: currentMonth, count: currentMonthCount });
+
+    return { monthStart: mStart, monthEnd: mEnd, days: d, months: m };
+  }, [projectTasks]);
+
+  const todayOffset = useMemo(() => {
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    if (today < monthStart || today > monthEnd) return -1;
+    return differenceInDays(today, monthStart) * 24; // 24 is colWidth
+  }, [monthStart, monthEnd]);
+
   if (projectTasks.length === 0) {
     return (
       <div style={{ padding: '20px', textAlign: 'center', color: 'var(--text-tertiary)', background: 'var(--bg-secondary)', borderRadius: '12px', fontSize: '0.9rem', border: '1px dashed var(--border-light)' }}>
@@ -365,10 +401,47 @@ function ProjectTimeline({ projectId }: { projectId: string }) {
   return (
     <div style={{ background: 'var(--bg-secondary)', borderRadius: '12px', border: '1px solid var(--border-light)', overflow: 'hidden' }}>
       <div style={{ overflowX: 'auto', padding: '16px' }}>
-        <div style={{ minWidth: 'fit-content' }}>
+        <div style={{ minWidth: 'fit-content', position: 'relative' }}>
           
+          {/* Today Indicator Line */}
+          {todayOffset >= 0 && (
+            <div 
+              style={{
+                position: 'absolute',
+                left: `${450 + todayOffset + (colWidth / 2)}px`,
+                top: '50px',
+                bottom: 0,
+                borderLeft: '2px dashed var(--danger, #ef4444)',
+                opacity: 0.4,
+                zIndex: 5,
+                pointerEvents: 'none'
+              }}
+              title="Today"
+            />
+          )}
+
+          {/* Timeline Header - Months */}
+          <div style={{ display: 'flex', marginBottom: '4px' }}>
+            <div style={{ width: '450px', flexShrink: 0, position: 'sticky', left: 0, background: 'var(--bg-secondary)', zIndex: 10, borderRight: '1px solid var(--border-light)' }}></div>
+            {months.map((m, idx) => (
+              <div key={idx} style={{ 
+                width: `${m.count * colWidth}px`,
+                flexShrink: 0,
+                textAlign: 'center', 
+                fontSize: '0.75rem', 
+                fontWeight: 600,
+                color: 'var(--text-secondary)',
+                borderBottom: '1px solid var(--border-light)',
+                paddingBottom: '4px'
+              }}>
+                {m.name}
+              </div>
+            ))}
+          </div>
+
           {/* Timeline Header - Dates */}
-          <div style={{ display: 'flex', marginBottom: '8px', paddingLeft: '450px' }}>
+          <div style={{ display: 'flex', marginBottom: '8px' }}>
+            <div style={{ width: '450px', flexShrink: 0, position: 'sticky', left: 0, background: 'var(--bg-secondary)', zIndex: 10, borderRight: '1px solid var(--border-light)' }}></div>
             {days.map((day, idx) => {
               const isWeekend = day.getDay() === 0 || day.getDay() === 6;
               return (
@@ -449,7 +522,7 @@ function ProjectTimeline({ projectId }: { projectId: string }) {
         </div>
       </div>
       <div style={{ padding: '8px 16px', background: 'var(--bg-tertiary)', borderTop: '1px solid var(--border-light)', fontSize: '0.7rem', color: 'var(--text-tertiary)', textAlign: 'right' }}>
-        Viewing Schedule for {format(monthStart, 'MMMM yyyy')}
+        Viewing Schedule from {format(monthStart, 'd MMM yyyy')} to {format(monthEnd, 'd MMM yyyy')}
       </div>
     </div>
   );
