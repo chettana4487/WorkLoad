@@ -183,11 +183,21 @@ export default function TimelinePage() {
                 <AreaChart 
                   data={timeSpans.map(spanDate => {
                     let name = '';
-                    if (viewMode === 'Day') name = format(spanDate, 'd MMM');
-                    if (viewMode === 'Week') name = `W${format(spanDate, 'ww')}`;
-                    if (viewMode === 'Month') name = format(spanDate, 'MMM yyyy');
+                    let fullDateRange = '';
               
-                    const dataPoint: any = { name };
+                    if (viewMode === 'Day') {
+                      name = format(spanDate, 'd MMM');
+                      fullDateRange = format(spanDate, 'EEEE, d MMM yyyy');
+                    } else if (viewMode === 'Week') {
+                      name = `W${format(spanDate, 'ww')}`;
+                      const weekEnd = endOfWeek(spanDate, { weekStartsOn: 1 });
+                      fullDateRange = `Week ${format(spanDate, 'ww')} (${format(spanDate, 'd MMM')} - ${format(weekEnd, 'd MMM yyyy')})`;
+                    } else if (viewMode === 'Month') {
+                      name = format(spanDate, 'MMM yyyy');
+                      fullDateRange = format(spanDate, 'MMMM yyyy');
+                    }
+              
+                    const dataPoint: any = { name, fullDateRange };
                     
                     activeDepartments.forEach(dept => {
                       const deptUsers = mockUsers.filter(u => u.department === dept);
@@ -205,7 +215,13 @@ export default function TimelinePage() {
                       });
 
                       let peakLoadTasks = 0;
+                      let totalLoadTasks = 0;
+                      let workingDaysCount = 0;
+                      
                       daysInSpan.forEach(day => {
+                        const isWeekend = day.getDay() === 0 || day.getDay() === 6;
+                        if (!isWeekend) workingDaysCount++;
+
                         let dayLoadTasks = 0;
                         deptTasks.forEach(task => {
                           const tStart = new Date(task.startDate + 'T00:00:00');
@@ -214,11 +230,26 @@ export default function TimelinePage() {
                             dayLoadTasks += 1;
                           }
                         });
+                        
+                        // รวมยอดเฉพาะวันทำงาน (ตัดเสาร์-อาทิตย์)
+                        if (!isWeekend) {
+                          totalLoadTasks += dayLoadTasks;
+                        }
                         if (dayLoadTasks > peakLoadTasks) peakLoadTasks = dayLoadTasks;
                       });
               
-                      // Convert absolute task count to a percentage relative to this department's specific daily limit
-                      const percentage = Math.round((peakLoadTasks / deptLimit) * 100);
+                      let percentage = 0;
+                      if (viewMode === 'Week') {
+                        // คำนวณ Capacity รายสัปดาห์: (จำนวนงานที่ทำในแต่ละวันรวมกัน / (ลิมิตต่อวัน * 5 วัน)) * 100
+                        percentage = Math.round((totalLoadTasks / (deptLimit * 5)) * 100);
+                      } else if (viewMode === 'Month') {
+                        // คำนวณ Capacity รายเดือน: (จำนวนงานทั้งหมดในวันทำงาน / (ลิมิตต่อวัน * จำนวนวันทำงานในเดือนนั้น)) * 100
+                        const monthlyLimit = deptLimit * (workingDaysCount > 0 ? workingDaysCount : 1);
+                        percentage = Math.round((totalLoadTasks / monthlyLimit) * 100);
+                      } else {
+                        // มุมมองแบบ Day ยังคงใช้ Peak Load 
+                        percentage = Math.round((peakLoadTasks / deptLimit) * 100);
+                      }
                       dataPoint[dept] = percentage;
                     });
                     return dataPoint;
@@ -233,6 +264,12 @@ export default function TimelinePage() {
                     itemStyle={{ fontSize: '0.85rem', fontWeight: 500 }}
                     labelStyle={{ color: 'var(--text-secondary)', marginBottom: '8px' }}
                     formatter={(value: any, name: any) => [`${value}% Capacity`, name === 'Design' ? 'Elec. Design' : name === 'Engineering' ? 'Programmer' : 'Production']}
+                    labelFormatter={(label, payload) => {
+                      if (payload && payload.length > 0 && payload[0].payload.fullDateRange) {
+                        return payload[0].payload.fullDateRange;
+                      }
+                      return label;
+                    }}
                   />
                   <Legend verticalAlign="top" height={36} iconType="circle" wrapperStyle={{ fontSize: '0.85rem' }} formatter={(value) => value === 'Design' ? 'Elec. Design' : value === 'Engineering' ? 'Programmer' : 'Production'} />
                   <ReferenceLine y={100} stroke="#ef4444" strokeDasharray="3 3" strokeWidth={2} label={{ position: 'insideBottomLeft', value: `100% Capacity Limit`, fill: '#ef4444', fontSize: 12, offset: 10, fontWeight: 600 }} />
