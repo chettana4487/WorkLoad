@@ -11,6 +11,8 @@ export const metadata: Metadata = {
   description: 'Track department and individual workload across projects',
 };
 
+import { SidebarProvider } from '@/components/SidebarContext';
+
 export default function RootLayout({
   children,
 }: {
@@ -19,15 +21,17 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={inter.variable}>
-        <div className="app-container">
-          <Sidebar />
-          <div className="main-content">
-            <TopHeader />
-            <main className="page-container animate-fade-in">
-              {children}
-            </main>
+        <SidebarProvider>
+          <div className="app-container">
+            <Sidebar />
+            <div className="main-content">
+              <TopHeader />
+              <main className="page-container animate-fade-in">
+                {children}
+              </main>
+            </div>
           </div>
-        </div>
+        </SidebarProvider>
       </body>
     </html>
   );
