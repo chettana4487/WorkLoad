@@ -41,6 +41,7 @@ export interface Task {
   startDate: string; 
   endDate: string;
   workloadPercentage: number;
+  department?: Department;
   hideOnTimeline?: boolean;
 }
 

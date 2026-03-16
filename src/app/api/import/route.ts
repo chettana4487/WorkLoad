@@ -237,7 +237,16 @@ export const mockTasks: Task[] = ${JSON.stringify(tasks, null, 2)};
 `;
 
     const mockDataFilepath = path.join(process.cwd(), 'src', 'lib', 'mockData.ts');
-    fs.writeFileSync(mockDataFilepath, newMockDataContent);
+    try {
+      fs.writeFileSync(mockDataFilepath, newMockDataContent);
+    } catch (e: any) {
+      if (e.code === 'EROFS') {
+        return NextResponse.json({ 
+          error: 'EROFS: Read-only file system. This feature only works in local development (npm run dev). For the website on Vercel, a database is required to save data.' 
+        }, { status: 500 });
+      }
+      throw e;
+    }
 
     return NextResponse.json({ success: true });
 
