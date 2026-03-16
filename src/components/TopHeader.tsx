@@ -1,6 +1,6 @@
 'use client';
 
-import { Search, Sun, Moon, Menu } from 'lucide-react';
+import { Sun, Moon, Menu } from 'lucide-react';
 import { useState, useEffect } from 'react';
 import { useSidebar } from './SidebarContext';
 
@@ -52,14 +52,17 @@ export default function TopHeader() {
           display: 'flex', 
           alignItems: 'center', 
           justifyContent: 'center',
-          backgroundColor: 'var(--bg-tertiary)', 
-          padding: '8px 16px', 
-          borderRadius: 'var(--radius-full)', 
-          width: isMobile ? '100%' : '300px',
-          maxWidth: isMobile ? '200px' : '300px',
-          fontSize: '0.8rem',
-          color: 'var(--text-primary)',
-          fontWeight: 'bold'
+          backgroundColor: 'var(--brand-primary)', 
+          padding: '8px 20px', 
+          borderRadius: 'var(--radius-lg)', 
+          width: isMobile ? '100%' : 'auto',
+          minWidth: isMobile ? '200px' : '300px',
+          fontSize: '0.9rem',
+          color: 'white',
+          fontWeight: '700',
+          letterSpacing: '0.5px',
+          boxShadow: 'var(--shadow-sm)',
+          textShadow: '0 1px 2px rgba(0,0,0,0.1)'
         }}>
           ELECTRICAL ENGINEERING (PPNs)
         </div>
