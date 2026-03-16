@@ -8,6 +8,9 @@ import { format, parseISO, differenceInDays, startOfMonth, endOfMonth, eachDayOf
 
 export default function ProjectsPage() {
   const [isDarkMode, setIsDarkMode] = useState(false);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 10;
 
   useEffect(() => {
     // Check initial state
@@ -20,6 +23,48 @@ export default function ProjectsPage() {
     return () => mediaQuery.removeEventListener('change', handler);
   }, []);
 
+  const getResponsibleUsers = (userIds: string[]) => {
+    return userIds.map(id => mockUsers.find(u => u.id === id)).filter(Boolean);
+  };
+
+  const filteredProjects = useMemo(() => {
+    if (!searchQuery) {
+      return mockProjects;
+    }
+    return mockProjects.filter(project => {
+      const responsibleUsers = getResponsibleUsers([
+        ...project.responsibilities.design.userIds,
+        ...project.responsibilities.program.userIds,
+        ...project.responsibilities.production.userIds
+      ]);
+      const responsibleUsersNames = responsibleUsers.map(user => user?.name.toLowerCase()).join(' ');
+      
+      return (
+        project.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        project.projectNumber.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        responsibleUsersNames.includes(searchQuery.toLowerCase())
+      );
+    });
+  }, [searchQuery]);
+
+  const paginatedProjects = useMemo(() => {
+    const startIndex = (currentPage - 1) * itemsPerPage;
+    return filteredProjects.slice(startIndex, startIndex + itemsPerPage);
+  }, [filteredProjects, currentPage]);
+
+  const totalPages = Math.ceil(filteredProjects.length / itemsPerPage);
+
+  const handlePageChange = (newPage: number) => {
+    if (newPage > 0 && newPage <= totalPages) {
+      setCurrentPage(newPage);
+    }
+  };
+
+  // Scroll to top when page or search changes
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }, [currentPage, searchQuery]);
+
   const formatCurrency = (amount: number) => {
     return new Intl.NumberFormat('th-TH', { 
       style: 'currency', 
@@ -28,24 +73,40 @@ export default function ProjectsPage() {
     }).format(amount);
   };
 
-  const getResponsibleUsers = (userIds: string[]) => {
-    return userIds.map(id => mockUsers.find(u => u.id === id)).filter(Boolean);
-  };
-
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
       
       {/* Header */}
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end' }}>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', flexWrap: 'wrap', gap: '16px' }}>
         <div>
           <h1 style={{ fontSize: '2rem', fontWeight: 600, marginBottom: '8px' }}>Projects Portfolio</h1>
           <p style={{ color: 'var(--text-secondary)' }}>Track project construction responsibilities and budget allocations across Design, Program, and Production.</p>
+        </div>
+        <div style={{ display: 'flex', gap: '16px', alignItems: 'center' }}>
+            <input 
+                type="text" 
+                placeholder="Search by project, number, or assignee..."
+                value={searchQuery}
+                onChange={(e) => {
+                    setSearchQuery(e.target.value);
+                    setCurrentPage(1); // Reset to first page on new search
+                }}
+                style={{
+                    padding: '10px 16px',
+                    fontSize: '0.9rem',
+                    borderRadius: '8px',
+                    border: '1px solid var(--border-light)',
+                    background: 'var(--bg-secondary)',
+                    color: 'var(--text-primary)',
+                    minWidth: '300px'
+                }}
+            />
         </div>
       </div>
 
       {/* Projects Grid */}
       <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
-        {mockProjects.map(project => {
+        {paginatedProjects.map(project => {
           const totalPlan = project.responsibilities.design.plannedCost + project.responsibilities.program.plannedCost + project.responsibilities.production.plannedCost;
           const totalActual = project.responsibilities.design.actualCost + project.responsibilities.program.actualCost + project.responsibilities.production.actualCost;
           const isOverBudgetOverall = totalActual > totalPlan;
@@ -180,7 +241,51 @@ export default function ProjectsPage() {
             </div>
           );
         })}
+
+        {filteredProjects.length === 0 && (
+            <div style={{ textAlign: 'center', padding: '40px', background: 'var(--bg-secondary)', borderRadius: '12px', border: '1px dashed var(--border-light)' }}>
+                <h3 style={{ fontSize: '1.2rem', fontWeight: 600 }}>No Projects Found</h3>
+                <p style={{ color: 'var(--text-secondary)', marginTop: '8px' }}>Try adjusting your search query.</p>
+            </div>
+        )}
       </div>
+
+       {/* Pagination Controls */}
+      {totalPages > 1 && (
+        <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '16px', padding: '24px 0' }}>
+            <button 
+                onClick={() => handlePageChange(currentPage - 1)} 
+                disabled={currentPage === 1}
+                style={{ 
+                    padding: '8px 16px', 
+                    borderRadius: '8px', 
+                    border: '1px solid var(--border-light)', 
+                    background: 'var(--bg-secondary)', 
+                    cursor: 'pointer',
+                    opacity: currentPage === 1 ? 0.5 : 1
+                }}
+            >
+                Previous
+            </button>
+            <span style={{ color: 'var(--text-secondary)' }}>
+                Page {currentPage} of {totalPages}
+            </span>
+            <button 
+                onClick={() => handlePageChange(currentPage + 1)} 
+                disabled={currentPage === totalPages}
+                style={{ 
+                    padding: '8px 16px', 
+                    borderRadius: '8px', 
+                    border: '1px solid var(--border-light)', 
+                    background: 'var(--bg-secondary)', 
+                    cursor: 'pointer',
+                    opacity: currentPage === totalPages ? 0.5 : 1
+                }}
+            >
+                Next
+            </button>
+        </div>
+      )}
     </div>
   );
 }
@@ -263,7 +368,7 @@ function ProjectTimeline({ projectId }: { projectId: string }) {
         <div style={{ minWidth: 'fit-content' }}>
           
           {/* Timeline Header - Dates */}
-          <div style={{ display: 'flex', marginBottom: '8px', paddingLeft: '200px' }}>
+          <div style={{ display: 'flex', marginBottom: '8px', paddingLeft: '450px' }}>
             {days.map((day, idx) => {
               const isWeekend = day.getDay() === 0 || day.getDay() === 6;
               return (
@@ -299,7 +404,8 @@ function ProjectTimeline({ projectId }: { projectId: string }) {
                 <div key={task.id} style={{ display: 'flex', alignItems: 'center', height: '32px' }}>
                   {/* Task Label / Assignee */}
                   <div style={{ 
-                    width: '200px', 
+                    width: '450px',
+                    flexShrink: 0,
                     fontSize: '0.8rem', 
                     color: 'var(--text-secondary)', 
                     display: 'flex', 
@@ -308,10 +414,17 @@ function ProjectTimeline({ projectId }: { projectId: string }) {
                     paddingRight: '12px',
                     overflow: 'hidden',
                     textOverflow: 'ellipsis',
-                    whiteSpace: 'nowrap'
+                    whiteSpace: 'nowrap',
+                    position: 'sticky',
+                    left: 0,
+                    background: 'var(--bg-secondary)',
+                    zIndex: 10,
+                    borderRight: '1px solid var(--border-light)'
                   }}>
                     <img src={user?.avatarUrl} alt="" style={{ width: '18px', height: '18px', borderRadius: '50%' }} />
-                    <span style={{ fontWeight: 500, color: 'var(--text-primary)' }}>{user?.name.split(' ')[1] || 'User'}</span>: {task.title}
+                    <span style={{ fontWeight: 500, color: 'var(--text-primary)' }}>{user?.name || 'User'}</span>
+                    <span style={{ color: 'var(--text-tertiary)', margin: '0 4px' }}>:</span>
+                    <span style={{ overflow: 'hidden', textOverflow: 'ellipsis' }} title={task.title}>{task.title}</span>
                   </div>
                   
                   {/* Timeline Bar Container */}
