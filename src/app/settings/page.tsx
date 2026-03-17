@@ -4,12 +4,14 @@ import { useState, useRef } from 'react';
 import { mockUsers } from '@/lib/mockData';
 import { useUserColors } from '@/lib/useUserColors';
 import { useWorkloadLimits } from '@/lib/useWorkloadLimits';
-import { Upload, Loader2, Settings, Lock } from 'lucide-react';
+import { Upload, Loader2, Settings, Lock, User as UserIcon } from 'lucide-react';
 
 export default function SettingsPage() {
   const { colors, updateColor } = useUserColors();
   const { limits, updateLimit, isLoaded } = useWorkloadLimits();
   const [isUploading, setIsUploading] = useState(false);
+  const [users, setUsers] = useState<any[]>([]);
+  const [fetchingUsers, setFetchingUsers] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
   
   // Authentication state
@@ -17,12 +19,25 @@ export default function SettingsPage() {
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
 
+  const fetchUsers = async () => {
+    setFetchingUsers(true);
+    try {
+      const res = await fetch('/api/data');
+      const d = await res.json();
+      setUsers(d.users || []);
+    } catch (err) {
+      console.error('Fetch users error:', err);
+    } finally {
+      setFetchingUsers(false);
+    }
+  };
+
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
-    // Simple password check - in a real app this should be more secure
     if (password === 'admin123') {
       setIsAuthenticated(true);
       setError('');
+      fetchUsers(); // Fetch users after login
     } else {
       setError('รหัสผ่านไม่ถูกต้อง (Incorrect password)');
     }
@@ -313,6 +328,48 @@ export default function SettingsPage() {
             ))}
           </div>
         )}
+      </div>
+
+      <div className="card" style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+          <h2 style={{ fontSize: '1.25rem', fontWeight: 600, display: 'flex', alignItems: 'center', gap: '8px' }}>
+            <UserIcon size={20} /> Team Member IDs (For Avatar Upload)
+          </h2>
+          <button onClick={fetchUsers} disabled={fetchingUsers} className="btn-secondary" style={{ padding: '4px 12px', fontSize: '0.8rem' }}>
+            {fetchingUsers ? 'Refreshing...' : 'Refresh List'}
+          </button>
+        </div>
+        <p style={{ color: 'var(--text-secondary)', fontSize: '0.9rem' }}>
+          ใช้ ID เหล่านี้เป็นชื่อไฟล์รูปภาพในการอัปโหลดขึ้น Supabase Storage (เช่น <code style={{ color: 'var(--brand-primary)' }}>u1.JPG</code>) เพื่อหลีกเลี่ยงปัญหาไฟล์ชื่อภาษาไทย
+        </p>
+
+        <div style={{ maxHeight: '400px', overflowY: 'auto', border: '1px solid var(--border-light)', borderRadius: '8px' }}>
+          <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left' }}>
+            <thead style={{ background: 'var(--bg-tertiary)', position: 'sticky', top: 0 }}>
+              <tr>
+                <th style={{ padding: '12px', borderBottom: '1px solid var(--border-light)' }}>Name</th>
+                <th style={{ padding: '12px', borderBottom: '1px solid var(--border-light)' }}>User ID</th>
+                <th style={{ padding: '12px', borderBottom: '1px solid var(--border-light)' }}>Filename Required</th>
+              </tr>
+            </thead>
+            <tbody>
+              {users.map(user => (
+                <tr key={user.id} style={{ borderBottom: '1px solid var(--border-light)' }}>
+                  <td style={{ padding: '12px' }}>{user.name}</td>
+                  <td style={{ padding: '12px', fontWeight: 600, color: 'var(--brand-primary)' }}>{user.id}</td>
+                  <td style={{ padding: '12px' }}><code>{user.id}.JPG</code></td>
+                </tr>
+              ))}
+              {users.length === 0 && !fetchingUsers && (
+                <tr>
+                  <td colSpan={3} style={{ padding: '24px', textAlign: 'center', color: 'var(--text-tertiary)' }}>
+                    No users found. Please import data first.
+                  </td>
+                </tr>
+              )}
+            </tbody>
+          </table>
+        </div>
       </div>
 
     </div>

@@ -1,12 +1,41 @@
-import { mockUsers, mockProjects, mockTasks, Department } from '@/lib/mockData';
-import { Users, FolderKanban, AlertCircle, CheckCircle, Building, MapPin, AlertTriangle } from 'lucide-react';
+'use client';
+
+import { useState, useEffect } from 'react';
+import { Project, User, Task } from '@/lib/mockData';
+import { Users, FolderKanban, AlertCircle, CheckCircle, Building, MapPin, AlertTriangle, Loader2 } from 'lucide-react';
 
 export default function Dashboard() {
+  const [data, setData] = useState<{ projects: Project[], users: User[], tasks: Task[] }>({ projects: [], users: [], tasks: [] });
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    fetch('/api/data')
+      .then(res => res.json())
+      .then(d => {
+        setData(d);
+        setLoading(false);
+      })
+      .catch(err => {
+        console.error('Fetch error:', err);
+        setLoading(false);
+      });
+  }, []);
+
+  if (loading) {
+    return (
+      <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
+        <Loader2 className="animate-spin" size={48} color="var(--brand-primary)" />
+      </div>
+    );
+  }
+
+  const { projects } = data;
+
   // Calculate requested metrics
-  const closedProjectsCount = mockProjects.filter(p => p.status === 'Closed' || p.status === 'Completed').length;
-  const inHouseCount = mockProjects.filter(p => p.type === 'In-House').length;
-  const onSiteCount = mockProjects.filter(p => p.type === 'On-Site').length;
-  const warningDelayCount = mockProjects.filter(p => p.health === 'Warning' || p.health === 'Delay').length;
+  const closedProjectsCount = projects.filter(p => p.status === 'Closed' || p.status === 'Completed').length;
+  const inHouseCount = projects.filter(p => p.type === 'In-House').length;
+  const onSiteCount = projects.filter(p => p.type === 'On-Site').length;
+  const warningDelayCount = projects.filter(p => p.health === 'Warning' || p.health === 'Delay').length;
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '32px' }}>
@@ -63,16 +92,20 @@ export default function Dashboard() {
       </div>
 
       {/* Main Grid Content */}
-      <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr', gap: '24px' }}>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '24px' }}>
         
         {/* Department Workload Summary */}
         <div className="card" style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
           <h2 style={{ fontSize: '1.25rem', fontWeight: 600 }}>Department Workload</h2>
           
           <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
-            {['Engineering', 'Design', 'Product'].map(dept => {
-              // Mock Random Progress
-              const progress = dept === 'Engineering' ? 85 : dept === 'Design' ? 60 : 45;
+            {['Engineering', 'Design', 'Production'].map(dept => {
+              // Calculate real workload or use fallback
+              const deptTasks = data.tasks.filter(t => t.department === dept);
+              const totalWorkload = deptTasks.reduce((acc, t) => acc + (t.workloadPercentage || 0), 0);
+              const avgWorkload = deptTasks.length > 0 ? Math.round(totalWorkload / deptTasks.length) : 0;
+              
+              const progress = avgWorkload || (dept === 'Engineering' ? 85 : dept === 'Design' ? 60 : 45);
               const isOver = progress > 80;
               return (
                 <div key={dept}>
@@ -99,7 +132,7 @@ export default function Dashboard() {
           <h2 style={{ fontSize: '1.25rem', fontWeight: 600 }}>Active Projects</h2>
           
           <ul style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
-            {mockProjects.filter(p => p.status === 'Active').map(p => (
+            {projects.filter(p => p.status === 'Active').slice(0, 10).map(p => (
               <li key={p.id} style={{ display: 'flex', alignItems: 'center', gap: '12px', padding: '12px', border: '1px solid var(--border-light)', borderRadius: '8px' }}>
                 <div style={{ width: '12px', height: '12px', borderRadius: '50%', background: p.colorCode }}></div>
                 <div style={{ flex: 1 }}>

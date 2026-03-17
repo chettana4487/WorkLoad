@@ -1,22 +1,38 @@
 'use client';
 
-import { mockUsers, mockTasks, mockProjects } from '@/lib/mockData';
+import { Project, User, Task } from '@/lib/mockData';
 import { format, eachDayOfInterval, eachWeekOfInterval, eachMonthOfInterval, startOfWeek, endOfWeek, parseISO, addDays, addWeeks, addMonths, startOfMonth, endOfMonth, differenceInDays } from 'date-fns';
-import { useState, useRef, useMemo } from 'react';
-import { ChevronLeft, ChevronRight, Calendar, Layout, Activity } from 'lucide-react';
+import { useState, useRef, useMemo, useEffect } from 'react';
+import { ChevronLeft, ChevronRight, Calendar, Layout, Activity, Loader2 } from 'lucide-react';
 import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, ReferenceLine, Legend } from 'recharts';
 import { useUserColors } from '@/lib/useUserColors';
 import { useWorkloadLimits } from '@/lib/useWorkloadLimits';
+import UserAvatar from '@/components/UserAvatar';
 
 type ViewMode = 'Day' | 'Week' | 'Month';
 
 export default function TimelinePage() {
+  const [data, setData] = useState<{ projects: Project[], users: User[], tasks: Task[] }>({ projects: [], users: [], tasks: [] });
+  const [loading, setLoading] = useState(true);
   const [viewMode, setViewMode] = useState<ViewMode>('Day');
   const [displayType, setDisplayType] = useState<'timeline' | 'capacity'>('capacity');
-  const [baseDate, setBaseDate] = useState(parseISO('2026-03-01'));
+  const [baseDate, setBaseDate] = useState(startOfMonth(new Date()));
   const [departmentFilter, setDepartmentFilter] = useState<string>('All');
   const { getColor } = useUserColors();
   const { limits, isLoaded } = useWorkloadLimits();
+
+  useEffect(() => {
+    fetch('/api/data')
+      .then(res => res.json())
+      .then(d => {
+        setData(d);
+        setLoading(false);
+      })
+      .catch(err => {
+        console.error('Fetch error:', err);
+        setLoading(false);
+      });
+  }, []);
 
   // Determine the timespan and column width based on ViewMode
   let timeSpans: Date[] = [];
@@ -38,15 +54,23 @@ export default function TimelinePage() {
   }
 
   const filteredUsers = useMemo(() => {
-    if (departmentFilter === 'All') return mockUsers;
-    return mockUsers.filter(user => user.department === departmentFilter);
-  }, [departmentFilter, mockUsers]);
+    if (departmentFilter === 'All') return data.users;
+    return data.users.filter(user => user.department === departmentFilter);
+  }, [departmentFilter, data.users]);
 
   // Use the departments we're currently viewing
   const activeDepartments = useMemo(() => {
     if (departmentFilter === 'All') return ['Design', 'Engineering', 'Production'] as const;
     return [departmentFilter] as const;
   }, [departmentFilter]);
+
+  if (loading) {
+    return (
+      <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
+        <Loader2 className="animate-spin" size={48} color="var(--brand-primary)" />
+      </div>
+    );
+  }
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '24px', height: '100%' }}>
@@ -200,7 +224,6 @@ export default function TimelinePage() {
                     const dataPoint: any = { name, fullDateRange };
                     
                     activeDepartments.forEach(dept => {
-                      const deptUsers = mockUsers.filter(u => u.department === dept);
                       const deptLimit = isLoaded ? limits[dept as keyof typeof limits] || 8 : 8;
 
                       let daysInSpan = [spanDate];
@@ -208,11 +231,7 @@ export default function TimelinePage() {
                       if (viewMode === 'Month') daysInSpan = eachDayOfInterval({ start: spanDate, end: endOfMonth(spanDate) });
               
                       // Gather tasks belonging to this department
-                      const deptTasks = mockTasks.filter(t => {
-                        if (t.department) return t.department === dept;
-                        const taskUser = mockUsers.find(u => u.id === t.userId);
-                        return taskUser && taskUser.department === dept;
-                      });
+                      const deptTasks = data.tasks.filter(t => t.department === dept);
 
                       let peakLoadTasks = 0;
                       let totalLoadTasks = 0;
@@ -224,14 +243,15 @@ export default function TimelinePage() {
 
                         let dayLoadTasks = 0;
                         deptTasks.forEach(task => {
-                          const tStart = new Date(task.startDate + 'T00:00:00');
-                          const tEnd = new Date(task.endDate + 'T23:59:59');
-                          if (day >= tStart && day <= tEnd) {
+                          const tStart = parseISO(task.startDate);
+                          const tEnd = parseISO(task.endDate);
+                          const currentDay = new Date(day);
+                          currentDay.setHours(12, 0, 0, 0); // Middle of day to avoid TZ issues
+                          if (currentDay >= tStart && currentDay <= tEnd) {
                             dayLoadTasks += 1;
                           }
                         });
                         
-                        // รวมยอดเฉพาะวันทำงาน (ตัดเสาร์-อาทิตย์)
                         if (!isWeekend) {
                           totalLoadTasks += dayLoadTasks;
                         }
@@ -240,14 +260,11 @@ export default function TimelinePage() {
               
                       let percentage = 0;
                       if (viewMode === 'Week') {
-                        // คำนวณ Capacity รายสัปดาห์: (จำนวนงานที่ทำในแต่ละวันรวมกัน / (ลิมิตต่อวัน * 5 วัน)) * 100
                         percentage = Math.round((totalLoadTasks / (deptLimit * 5)) * 100);
                       } else if (viewMode === 'Month') {
-                        // คำนวณ Capacity รายเดือน: (จำนวนงานทั้งหมดในวันทำงาน / (ลิมิตต่อวัน * จำนวนวันทำงานในเดือนนั้น)) * 100
                         const monthlyLimit = deptLimit * (workingDaysCount > 0 ? workingDaysCount : 1);
                         percentage = Math.round((totalLoadTasks / monthlyLimit) * 100);
                       } else {
-                        // มุมมองแบบ Day ยังคงใช้ Peak Load 
                         percentage = Math.round((peakLoadTasks / deptLimit) * 100);
                       }
                       dataPoint[dept] = percentage;
@@ -364,7 +381,7 @@ export default function TimelinePage() {
           {/* Rows for Users */}
           <div style={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
             {filteredUsers.map(user => {
-              const userTasks = mockTasks.filter(t => t.userId === user.id);
+              const userTasks = data.tasks.filter(t => t.userId === user.id);
               
               return (
                 <div key={user.id} style={{ 
@@ -387,7 +404,12 @@ export default function TimelinePage() {
                     left: 0,
                     zIndex: 20
                   }}>
-                    <img src={user.avatarUrl} alt={user.name} style={{ width: '36px', height: '36px', borderRadius: '50%', border: `2px solid ${getColor(user.id)}` }} />
+                    <UserAvatar 
+                      src={user.avatarUrl} 
+                      name={user.name} 
+                      size={36} 
+                      style={{ border: `2px solid ${getColor(user.id)}` }} 
+                    />
                     <div>
                       <div style={{ fontWeight: 600, fontSize: '0.9rem', color: getColor(user.id) }}>{user.name}</div>
                       <div style={{ fontSize: '0.75rem', color: 'var(--text-tertiary)' }}>{user.role}</div>
@@ -417,25 +439,21 @@ export default function TimelinePage() {
                     {userTasks.filter(t => !t.hideOnTimeline).map((task, idx) => {
                       const tStart = parseISO(task.startDate);
                       const tEnd = parseISO(task.endDate);
-                      const project = mockProjects.find(p => p.id === task.projectId);
+                      const project = data.projects.find(p => p.id === task.projectId);
                       
-                      // Calculate positions based on exact dates compared to the viewport start
                       const viewStartDate = timeSpans[0];
                       const viewEndDate = viewMode === 'Day' ? timeSpans[timeSpans.length - 1] 
                                         : viewMode === 'Week' ? endOfWeek(timeSpans[timeSpans.length - 1], { weekStartsOn: 1 })
                                         : endOfMonth(timeSpans[timeSpans.length - 1]);
                       
-                      // Completely out of view?
                       if (tEnd < viewStartDate || tStart > viewEndDate) return null;
 
-                      // Bound dates to view limits for drawing
                       const drawStart = tStart < viewStartDate ? viewStartDate : tStart;
                       const drawEnd = tEnd > viewEndDate ? viewEndDate : tEnd;
 
-                      // Calculate pixels
                       let pixelsPerDay = colWidth;
                       if (viewMode === 'Week') pixelsPerDay = colWidth / 7;
-                      if (viewMode === 'Month') pixelsPerDay = colWidth / 30; // Approx
+                      if (viewMode === 'Month') pixelsPerDay = colWidth / 30;
 
                       const daysFromStart = differenceInDays(drawStart, viewStartDate);
                       const durationDays = differenceInDays(drawEnd, drawStart) + 1;
@@ -443,17 +461,12 @@ export default function TimelinePage() {
                       const left = daysFromStart * pixelsPerDay;
                       const width = durationDays * pixelsPerDay;
                       
-                      // Calculate overlap level purely from overlapping dates
                       let overlapLevel = 0;
                       for (let i = 0; i < idx; i++) {
                         const otherTask = userTasks[i];
                         const otherStart = parseISO(otherTask.startDate);
                         const otherEnd = parseISO(otherTask.endDate);
-                        
-                        // If they overlap in dates, increment level
-                        if (tStart <= otherEnd && tEnd >= otherStart) {
-                           overlapLevel++;
-                        }
+                        if (tStart <= otherEnd && tEnd >= otherStart) overlapLevel++;
                       }
                       
                       const topOffset = 10 + (overlapLevel * 45); 

@@ -1,21 +1,37 @@
 'use client';
 
-import { useState, useMemo } from 'react';
-import { mockUsers, mockProjects } from '@/lib/mockData';
-import { Users, Briefcase, Activity, AlertCircle } from 'lucide-react';
+import { useState, useMemo, useEffect } from 'react';
+import { Project, User, Task } from '@/lib/mockData';
+import { Users, Briefcase, Activity, AlertCircle, Loader2 } from 'lucide-react';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, Cell } from 'recharts';
 import { useUserColors } from '@/lib/useUserColors';
+import UserAvatar from '@/components/UserAvatar';
 
 export default function UsersPage() {
   const { colors } = useUserColors();
+  const [data, setData] = useState<{ projects: Project[], users: User[], tasks: Task[] }>({ projects: [], users: [], tasks: [] });
+  const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
   const [departmentFilter, setDepartmentFilter] = useState<string>('All');
 
+  useEffect(() => {
+    fetch('/api/data')
+      .then(res => res.json())
+      .then(d => {
+        setData(d);
+        setLoading(false);
+      })
+      .catch(err => {
+        console.error('Fetch error:', err);
+        setLoading(false);
+      });
+  }, []);
+
   // Compute workload per user
   const userWorkloads = useMemo(() => {
-    return mockUsers.map(user => {
+    return data.users.map(user => {
       // Find all projects where this user is assigned in any responsibility area
-      const assignedProjects = mockProjects.filter(p => {
+      const assignedProjects = data.projects.filter(p => {
         const { design, program, production } = p.responsibilities;
         return design.userIds.includes(user.id) || 
                program.userIds.includes(user.id) || 
@@ -27,10 +43,7 @@ export default function UsersPage() {
         if (p.responsibilities.program.userIds.includes(user.id)) roles.push('Program');
         if (p.responsibilities.production.userIds.includes(user.id)) roles.push('Production');
         
-        return {
-          ...p,
-          assignedRoles: roles
-        };
+        return { ...p, assignedRoles: roles };
       });
 
       return {
@@ -39,7 +52,7 @@ export default function UsersPage() {
         totalProjects: assignedProjects.length
       };
     });
-  }, []);
+  }, [data.users, data.projects]);
 
   // Filter users based on search and department
   const filteredUsers = useMemo(() => {
@@ -62,9 +75,22 @@ export default function UsersPage() {
   }, [filteredUsers]);
 
   // Available departments for filter
-  const departments = ['All', ...Array.from(new Set(mockUsers.map(u => u.department)))];
+  const departments = useMemo(() => {
+      const depts = new Set(data.users.map(u => u.department));
+      return ['All', ...Array.from(depts)];
+  }, [data.users]);
 
-  const totalActiveProjects = new Set(userWorkloads.flatMap(u => u.assignedProjects.map(p => p.id))).size;
+  const totalActiveProjects = useMemo(() => 
+    new Set(userWorkloads.flatMap(u => u.assignedProjects.map(p => p.id))).size
+  , [userWorkloads]);
+
+  if (loading) {
+    return (
+      <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
+        <Loader2 className="animate-spin" size={48} color="var(--brand-primary)" />
+      </div>
+    );
+  }
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
@@ -83,7 +109,7 @@ export default function UsersPage() {
             </div>
             <div>
               <div style={{ fontSize: '0.85rem', color: 'var(--text-secondary)' }}>Total Team Members</div>
-              <div style={{ fontSize: '1.5rem', fontWeight: 700 }}>{mockUsers.length}</div>
+              <div style={{ fontSize: '1.5rem', fontWeight: 700 }}>{data.users.length}</div>
             </div>
           </div>
           
@@ -208,10 +234,11 @@ export default function UsersPage() {
                   backgroundColor: colors[user.id] || 'var(--brand-primary)'
                 }} />
                 
-                <img 
+                <UserAvatar 
                   src={user.avatarUrl} 
-                  alt={user.name} 
-                  style={{ width: '56px', height: '56px', borderRadius: '50%', border: '2px solid white', boxShadow: '0 2px 4px rgba(0,0,0,0.1)' }} 
+                  name={user.name} 
+                  size={56}
+                  style={{ border: '2px solid white', boxShadow: '0 2px 4px rgba(0,0,0,0.1)' }} 
                 />
                 
                 <div style={{ flex: 1 }}>

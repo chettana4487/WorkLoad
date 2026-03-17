@@ -1,7 +1,6 @@
 import { NextResponse } from 'next/server';
 import * as xlsx from 'xlsx';
-import fs from 'fs';
-import path from 'path';
+import { supabase } from '@/lib/supabase';
 
 function excelDateToJSDate(serial: number) {
   const utc_days  = Math.floor(serial - 25569);
@@ -21,37 +20,6 @@ function generateAvatar(name: string) {
   return `data:image/svg+xml;charset=utf-8,${encodeURIComponent(svg)}`;
 }
 
-function findUserAvatar(name: string) {
-  if (!name) return null;
-  
-  try {
-    const publicPath = path.join(process.cwd(), 'public');
-    const files = fs.readdirSync(publicPath);
-    
-    // Normalize input name: remove Thai titles and all whitespace
-    const normalizedName = name.replace(/^(นาย|นางสาว|นาง|น\.ส\.)\s*/, '')
-                               .replace(/[\s\u200B-\u200D\uFEFF]+/g, '')
-                               .trim();
-                               
-    for (const file of files) {
-      if (!/\.(jpg|jpeg|png|svg)$/i.test(file)) continue;
-      
-      const fileNameWithoutExt = file.replace(/\.[^/.]+$/, "");
-      const normalizedFileName = fileNameWithoutExt.replace(/^(นาย|นางสาว|นาง|น\.ส\.)\s*/, '')
-                                                   .replace(/[\s\u200B-\u200D\uFEFF]+/g, '')
-                                                   .trim();
-      
-      if (normalizedFileName === normalizedName) {
-        return `/${file}`;
-      }
-    }
-  } catch (err) {
-    console.error('Error finding avatar:', err);
-  }
-  
-  return null;
-}
-
 export async function POST(req: Request) {
   try {
     const formData = await req.formData();
@@ -63,45 +31,83 @@ export async function POST(req: Request) {
     const arrayBuffer = await file.arrayBuffer();
     const buffer = Buffer.from(arrayBuffer);
     
-    // Parse it with xlsx
     const workbook = xlsx.read(buffer, { type: 'buffer' });
     const firstSheetName = workbook.SheetNames[0];
     const worksheet = workbook.Sheets[firstSheetName];
-    // Read raw data
     const rawData = xlsx.utils.sheet_to_json(worksheet);
 
     if (!rawData || rawData.length === 0) {
        return NextResponse.json({ error: 'Excel file is empty' }, { status: 400 });
     }
 
+    // 1. Fetch current data to maintain consistency
+    const { data: existingUsers } = await supabase.from('users').select('*');
+    const { data: existingProjects } = await supabase.from('projects').select('*');
+    
     const usersMap = new Map();
-    const projectsMap = new Map();
-    const tasks: any[] = [];
+    // Pre-process all existing users to ensure they have the new ID-based URLs
+    existingUsers?.forEach(u => {
+      const filename = `${u.id}.JPG`;
+      const { data: { publicUrl } } = supabase.storage.from('avatars').getPublicUrl(filename);
+      // Update with cache-buster
+      u.avatar_url = `${publicUrl}?t=${Date.now()}`;
+      usersMap.set(u.name, u);
+    });
+    
+    // Counter for new users
+    let nextUserNum = (existingUsers?.length || 0) + 1;
 
+    const projectsMap = new Map();
+    existingProjects?.forEach(p => projectsMap.set(p.project_number, p));
+    
+    const tasks: any[] = [];
     const colorCodes = ['var(--proj-a)', 'var(--proj-b)', 'var(--proj-c)', 'var(--proj-d)'];
-    let colorIndex = 0;
+    let colorIndex = existingProjects?.length || 0;
     let taskIdCounter = 1;
 
-    rawData.forEach((row: any) => {
-      // Only process rows with relevant task_num
-      const taskNum = row['task_num'];
-      if (![2100, 2400, 4400].includes(Number(taskNum))) return;
+    // Helper to find a value in a row by checking multiple possible keys
+    const getValue = (row: any, keys: string[]) => {
+      for (const key of keys) {
+        if (row[key] !== undefined) return row[key];
+        // Also check lowercase and underscored versions
+        const lowerKey = key.toLowerCase();
+        for (const actualKey in row) {
+          if (actualKey.toLowerCase() === lowerKey || 
+              actualKey.toLowerCase().replace(/\s+/g, '_') === lowerKey.replace(/\s+/g, '_')) {
+            return row[actualKey];
+          }
+        }
+      }
+      return undefined;
+    };
 
-      // Project mapping
-      const projNum = row['proj_num'];
+    rawData.forEach((row: any) => {
+      const taskNumRaw = getValue(row, ['task_num', 'Task No.', 'Task No']);
+      // Extract digits in case it's "2100 - Design"
+      const taskNumMatch = String(taskNumRaw || '').match(/\d+/);
+      const taskNum = taskNumMatch ? Number(taskNumMatch[0]) : NaN;
+      
+      // Expanded to include all relevant task codes (excluding 7300 as per user request)
+      if (![2100, 2300, 2400, 4400].includes(taskNum)) return;
+
+      const projNum = getValue(row, ['proj_num', 'Project No.', 'Project No']);
       if (!projNum) return;
       
       if (!projectsMap.has(projNum)) {
+        const projectName = getValue(row, ['proj_name', 'Project Name']) || `Project ${projNum}`;
+        const customer = getValue(row, ['customer', 'Customer']) || '-';
+        
         projectsMap.set(projNum, {
-          id: `p${projectsMap.size + 1}`,
-          projectNumber: projNum,
-          name: `Project ${projNum}`,
+          id: `p${projectsMap.size + 1 + (existingProjects?.length || 0)}`,
+          project_number: String(projNum),
+          name: String(projectName),
+          customer: String(customer),
           status: 'Active',
           type: 'In-House',
           health: 'Good',
-          startDate: '', 
-          endDate: '', 
-          colorCode: colorCodes[colorIndex % colorCodes.length],
+          start_date: null, 
+          end_date: null, 
+          color_code: colorCodes[colorIndex % colorCodes.length],
           responsibilities: {
             design: { userIds: [], plannedCost: 0, actualCost: 0 },
             program: { userIds: [], plannedCost: 0, actualCost: 0 },
@@ -113,49 +119,46 @@ export async function POST(req: Request) {
 
       const project = projectsMap.get(projNum);
 
-      // User mapping
-      const assigneeName = row['Man_Power'];
-      const hasAssignee = !!assigneeName && assigneeName.trim() !== '';
+      const assigneeRaw = getValue(row, ['Man_Power', 'Assignee', 'Assignee Name']);
+      const assigneeName = String(assigneeRaw || '').trim();
+      const hasAssignee = !!assigneeName && assigneeName !== '' && assigneeName !== '0' && assigneeName !== '-';
       
       let userId = '';
       if (hasAssignee) {
-        for (const [id, u] of usersMap.entries()) {
-          if (u.name === assigneeName) {
-            userId = id;
-            break;
-          }
-        }
+        let currentUser = usersMap.get(assigneeName);
         
-        if (!userId) {
-          userId = `u${usersMap.size + 1}`;
-          const avatarFile = findUserAvatar(assigneeName);
-          usersMap.set(userId, {
+        if (!currentUser) {
+          userId = `u${nextUserNum++}`;
+          const filename = `${userId}.JPG`;
+          const { data: { publicUrl } } = supabase.storage.from('avatars').getPublicUrl(filename);
+          
+          currentUser = {
             id: userId,
             name: assigneeName,
-            role: Number(taskNum) === 2100 ? 'Electrical Designer' : Number(taskNum) === 2400 ? 'Programmer' : 'Electrical Production',
-            department: Number(taskNum) === 2100 ? 'Design' : Number(taskNum) === 2400 ? 'Engineering' : 'Production',
-            avatarUrl: avatarFile || generateAvatar(assigneeName)
-          });
+            role: taskNum === 2100 ? 'Electrical Designer' : taskNum === 2400 ? 'Programmer' : taskNum === 2300 ? 'Material Procurement' : 'Production',
+            department: taskNum === 2100 ? 'Design' : taskNum === 2400 ? 'Engineering' : taskNum === 2300 ? 'Materials' : 'Production',
+            avatar_url: `${publicUrl}?t=${Date.now()}`
+          };
+          usersMap.set(assigneeName, currentUser);
+        } else {
+          userId = currentUser.id;
         }
       }
 
-      // Add user to project responsibilities based on task_num (only if valid user)
       if (userId) {
-        if (Number(taskNum) === 2100 && !project.responsibilities.design.userIds.includes(userId)) {
+        if (taskNum === 2100 && !project.responsibilities.design.userIds.includes(userId)) {
           project.responsibilities.design.userIds.push(userId);
-        } else if (Number(taskNum) === 2400 && !project.responsibilities.program.userIds.includes(userId)) {
+        } else if (taskNum === 2400 && !project.responsibilities.program.userIds.includes(userId)) {
           project.responsibilities.program.userIds.push(userId);
-        } else if (Number(taskNum) === 4400 && !project.responsibilities.production.userIds.includes(userId)) {
+        } else if (taskNum === 4400 && !project.responsibilities.production.userIds.includes(userId)) {
           project.responsibilities.production.userIds.push(userId);
         }
       }
 
-      // Task mapping
-      const title = row['KPI_Detail'] || 'Task';
-      const startSerial = row['Plan_Start_Date']; 
-      const endSerial = row['Plan_End_Date'] || row[' Plan_End_Date'];
+      const title = getValue(row, ['KPI_Detail', 'Task Name', 'Task']) || 'Task';
+      const startSerial = getValue(row, ['Plan_Start_Date', 'Start', 'StartDate']); 
+      const endSerial = getValue(row, ['Plan_End_Date', 'End', 'EndDate', ' Plan_End_Date']);
 
-      // Skip rows that do not have a start date or end date
       if (startSerial === undefined || startSerial === null || String(startSerial).trim() === '' || 
           endSerial === undefined || endSerial === null || String(endSerial).trim() === '') {
         return;
@@ -164,88 +167,43 @@ export async function POST(req: Request) {
       const startDateStr = typeof startSerial === 'number' ? excelDateToJSDate(startSerial) : String(startSerial);
       const endDateStr = typeof endSerial === 'number' ? excelDateToJSDate(endSerial) : String(endSerial);
 
-      if (!project.startDate || startDateStr < project.startDate) project.startDate = startDateStr;
-      if (!project.endDate || endDateStr > project.endDate) project.endDate = endDateStr;
-
-      // Status tracking based on completed flag
-      const completedFlag = row['completed'];
-
-      // You can add more specific title modifications to Task if you wish to track completion status visually, 
-      // but strictly adhering to Task interface we modify the title conceptually to signify if it's done. 
-      const finalTitle = completedFlag == 1 ? `[Completed] ${title}` : title;
-      const taskDepartment = Number(taskNum) === 2100 ? 'Design' : Number(taskNum) === 2400 ? 'Engineering' : 'Production';
+      if (!project.start_date || startDateStr < project.start_date) project.start_date = startDateStr;
+      if (!project.end_date || endDateStr > project.end_date) project.end_date = endDateStr;
 
       tasks.push({
         id: `t${taskIdCounter++}`,
-        projectId: project.id,
-        userId: userId,
-        title: finalTitle,
-        startDate: startDateStr,
-        endDate: endDateStr,
-        workloadPercentage: row['Plan_Hours'] ? Math.min(100, (Number(row['Plan_Hours']) / 8) * 100) : 100,
-        hideOnTimeline: !hasAssignee,
-        department: taskDepartment
+        project_id: project.id,
+        user_id: userId || null,
+        title: String(title),
+        start_date: startDateStr,
+        end_date: endDateStr,
+        workload_percentage: row['Plan_Hours'] ? Math.min(100, (Number(row['Plan_Hours']) / 8) * 100) : 100,
+        department: taskNum === 2100 ? 'Design' : taskNum === 2400 ? 'Engineering' : taskNum === 2300 ? 'Materials' : 'Production',
+        hide_on_timeline: !hasAssignee
       });
     });
 
-    const mockUsers = Array.from(usersMap.values());
-    const mockProjects = Array.from(projectsMap.values());
+    // 1. Clear old tasks (since this is a full replacement import)
+    await supabase.from('tasks').delete().neq('id', '0');
 
-    const newMockDataContent = `export type Department = 'Engineering' | 'Design' | 'Marketing' | 'Product' | 'HR' | 'Production';
+    // 2. Upsert Users
+    const usersBatch = Array.from(usersMap.values());
+    if (usersBatch.length > 0) {
+        const { error: userError } = await supabase.from('users').upsert(usersBatch);
+        if (userError) throw userError;
+    }
 
-export interface User {
-  id: string;
-  name: string;
-  role: string;
-  department: Department;
-  avatarUrl: string;
-}
+    // 3. Upsert Projects
+    const projectsBatch = Array.from(projectsMap.values());
+    if (projectsBatch.length > 0) {
+        const { error: projError } = await supabase.from('projects').upsert(projectsBatch);
+        if (projError) throw projError;
+    }
 
-export interface Project {
-  id: string;
-  projectNumber: string;
-  name: string;
-  status: 'Planning' | 'Active' | 'On Hold' | 'Completed' | 'Closed';
-  type: 'In-House' | 'On-Site';
-  health: 'Good' | 'Warning' | 'Delay';
-  startDate: string;
-  endDate: string;
-  colorCode: string;
-  responsibilities: {
-    design: { userIds: string[]; plannedCost: number; actualCost: number };
-    program: { userIds: string[]; plannedCost: number; actualCost: number };
-    production: { userIds: string[]; plannedCost: number; actualCost: number };
-  };
-}
-
-export interface Task {
-  id: string;
-  projectId: string;
-  userId: string;
-  title: string;
-  startDate: string; 
-  endDate: string;
-  workloadPercentage: number;
-  hideOnTimeline?: boolean;
-}
-
-export const mockUsers: User[] = ${JSON.stringify(mockUsers, null, 2)};
-
-export const mockProjects: Project[] = ${JSON.stringify(mockProjects, null, 2)};
-
-export const mockTasks: Task[] = ${JSON.stringify(tasks, null, 2)};
-`;
-
-    const mockDataFilepath = path.join(process.cwd(), 'src', 'lib', 'mockData.ts');
-    try {
-      fs.writeFileSync(mockDataFilepath, newMockDataContent);
-    } catch (e: any) {
-      if (e.code === 'EROFS') {
-        return NextResponse.json({ 
-          error: 'EROFS: Read-only file system. This feature only works in local development (npm run dev). For the website on Vercel, a database is required to save data.' 
-        }, { status: 500 });
-      }
-      throw e;
+    // 4. Insert Tasks
+    if (tasks.length > 0) {
+        const { error: taskError } = await supabase.from('tasks').insert(tasks);
+        if (taskError) throw taskError;
     }
 
     return NextResponse.json({ success: true });
