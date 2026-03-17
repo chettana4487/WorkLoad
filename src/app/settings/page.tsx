@@ -12,7 +12,10 @@ export default function SettingsPage() {
   const [isUploading, setIsUploading] = useState(false);
   const [users, setUsers] = useState<any[]>([]);
   const [fetchingUsers, setFetchingUsers] = useState(false);
+  const [uploadingUserId, setUploadingUserId] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const userAvatarInputRef = useRef<HTMLInputElement>(null);
+  const [selectedUserId, setSelectedUserId] = useState<string | null>(null);
   
   // Authentication state
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -71,6 +74,41 @@ export default function SettingsPage() {
       setIsUploading(false);
       if (fileInputRef.current) {
         fileInputRef.current.value = '';
+      }
+    }
+  };
+
+  const handleUserAvatarUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    const userId = selectedUserId;
+    if (!file || !userId) return;
+
+    setUploadingUserId(userId);
+    const formData = new FormData();
+    formData.append('file', file);
+    formData.append('userId', userId);
+
+    try {
+      const response = await fetch('/api/upload/avatar', {
+        method: 'POST',
+        body: formData,
+      });
+
+      if (response.ok) {
+        alert('Avatar uploaded successfully!');
+        fetchUsers(); // Refresh the list to show new URLs if any
+      } else {
+        const errorData = await response.json();
+        alert('Failed to upload avatar: ' + (errorData.error || 'Unknown error'));
+      }
+    } catch (error) {
+      console.error('Avatar upload error:', error);
+      alert('An error occurred during avatar upload.');
+    } finally {
+      setUploadingUserId(null);
+      setSelectedUserId(null);
+      if (userAvatarInputRef.current) {
+        userAvatarInputRef.current.value = '';
       }
     }
   };
@@ -350,6 +388,7 @@ export default function SettingsPage() {
                 <th style={{ padding: '12px', borderBottom: '1px solid var(--border-light)' }}>Name</th>
                 <th style={{ padding: '12px', borderBottom: '1px solid var(--border-light)' }}>User ID</th>
                 <th style={{ padding: '12px', borderBottom: '1px solid var(--border-light)' }}>Filename Required</th>
+                <th style={{ padding: '12px', borderBottom: '1px solid var(--border-light)', textAlign: 'center' }}>Action</th>
               </tr>
             </thead>
             <tbody>
@@ -358,6 +397,38 @@ export default function SettingsPage() {
                   <td style={{ padding: '12px' }}>{user.name}</td>
                   <td style={{ padding: '12px', fontWeight: 600, color: 'var(--brand-primary)' }}>{user.id}</td>
                   <td style={{ padding: '12px' }}><code>{user.id}.JPG</code></td>
+                  <td style={{ padding: '12px', textAlign: 'center' }}>
+                    <input 
+                      type="file" 
+                      accept="image/*" 
+                      ref={selectedUserId === user.id ? userAvatarInputRef : null}
+                      style={{ display: 'none' }}
+                      onChange={handleUserAvatarUpload}
+                    />
+                    <button 
+                      onClick={() => {
+                        setSelectedUserId(user.id);
+                        setTimeout(() => userAvatarInputRef.current?.click(), 0);
+                      }}
+                      disabled={uploadingUserId === user.id}
+                      className="btn-secondary"
+                      style={{ 
+                        padding: '6px 12px', 
+                        fontSize: '0.8rem', 
+                        display: 'inline-flex', 
+                        alignItems: 'center', 
+                        gap: '4px',
+                        backgroundColor: uploadingUserId === user.id ? 'var(--bg-tertiary)' : 'var(--bg-primary)'
+                      }}
+                    >
+                      {uploadingUserId === user.id ? (
+                        <Loader2 size={14} className="animate-spin" />
+                      ) : (
+                        <Upload size={14} />
+                      )}
+                      {uploadingUserId === user.id ? 'Uploading...' : 'Upload'}
+                    </button>
+                  </td>
                 </tr>
               ))}
               {users.length === 0 && !fetchingUsers && (

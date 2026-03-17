@@ -13,7 +13,7 @@ export default function ProjectsPage() {
   const [isDarkMode, setIsDarkMode] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 10;
+  const itemsPerPage = 1;
 
   useEffect(() => {
     fetch('/api/data')
@@ -98,9 +98,34 @@ export default function ProjectsPage() {
           <p style={{ color: 'var(--text-secondary)' }}>Track project construction responsibilities and budget allocations across Design, Program, and Production.</p>
         </div>
         <div style={{ display: 'flex', gap: '16px', alignItems: 'center' }}>
+            <select
+                value={paginatedProjects[0]?.id || ''}
+                onChange={(e) => {
+                    const index = filteredProjects.findIndex(p => p.id === e.target.value);
+                    if (index !== -1) {
+                        setCurrentPage(index + 1);
+                    }
+                }}
+                style={{
+                    padding: '10px 16px',
+                    fontSize: '0.9rem',
+                    borderRadius: '8px',
+                    border: '1px solid var(--border-light)',
+                    background: 'var(--bg-secondary)',
+                    color: 'var(--text-primary)',
+                    minWidth: '250px',
+                    cursor: 'pointer'
+                }}
+            >
+                {filteredProjects.map((project, idx) => (
+                    <option key={project.id} value={project.id}>
+                        {idx + 1}. {project.projectNumber} - {project.name}
+                    </option>
+                ))}
+            </select>
             <input 
                 type="text" 
-                placeholder="Search by project, number, or assignee..."
+                placeholder="Search..."
                 value={searchQuery}
                 onChange={(e) => {
                     setSearchQuery(e.target.value);
@@ -113,7 +138,7 @@ export default function ProjectsPage() {
                     border: '1px solid var(--border-light)',
                     background: 'var(--bg-secondary)',
                     color: 'var(--text-primary)',
-                    minWidth: '300px'
+                    minWidth: '200px'
                 }}
             />
         </div>
@@ -324,13 +349,28 @@ export default function ProjectsPage() {
 
        {/* Pagination Controls */}
       {totalPages > 1 && (
-        <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '16px', padding: '48px 0' }}>
-            <button onClick={() => handlePageChange(currentPage - 1)} disabled={currentPage === 1} className="btn-secondary">
-                Previous
+        <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '24px', padding: '48px 0', borderTop: '1px solid var(--border-light)', marginTop: '24px' }}>
+            <button 
+              onClick={() => handlePageChange(currentPage - 1)} 
+              disabled={currentPage === 1} 
+              className="btn-secondary"
+              style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '10px 20px' }}
+            >
+                ← Previous Project
             </button>
-            <span style={{ fontWeight: 600 }}>Page {currentPage} of {totalPages}</span>
-            <button onClick={() => handlePageChange(currentPage + 1)} disabled={currentPage === totalPages} className="btn-secondary">
-                Next
+            
+            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '4px' }}>
+              <span style={{ fontWeight: 600, fontSize: '1.1rem' }}>Project {currentPage} of {totalPages}</span>
+              <span style={{ fontSize: '0.8rem', color: 'var(--text-secondary)' }}>{filteredProjects.length} total projects found</span>
+            </div>
+
+            <button 
+              onClick={() => handlePageChange(currentPage + 1)} 
+              disabled={currentPage === totalPages} 
+              className="btn-secondary"
+              style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '10px 20px' }}
+            >
+                Next Project →
             </button>
         </div>
       )}
