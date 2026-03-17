@@ -204,8 +204,13 @@ export default function ProjectsPage() {
                   </div>
                   <div>
                     <div style={{ fontSize: '0.75rem', color: 'var(--text-tertiary)', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Total Actual</div>
-                    <div style={{ fontSize: '1.25rem', fontWeight: 600, color: isOverBudgetOverall ? 'var(--danger)' : 'var(--success)' }}>
-                      {formatCurrency(totalActual)}
+                    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end' }}>
+                      <div style={{ fontSize: '1.25rem', fontWeight: 600, color: isOverBudgetOverall ? 'var(--danger)' : 'var(--success)' }}>
+                        {formatCurrency(totalActual)}
+                      </div>
+                      <div style={{ fontSize: '0.8rem', fontWeight: 500, color: isOverBudgetOverall ? 'var(--danger)' : 'var(--success)', opacity: 0.9 }}>
+                        {totalPlan > 0 ? `${((totalActual / totalPlan) * 100).toFixed(1)}%` : '0%'}
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -256,8 +261,13 @@ export default function ProjectsPage() {
                     <div style={{ fontWeight: 600, marginBottom: '4px' }}>Materials (2300)</div>
                     <div style={{ display: 'flex', justifyContent: 'space-between' }}>
                       <span>Plan: {formatCurrency(project.detailedCosts['2300'].plan)}</span>
-                      <span style={{ color: project.detailedCosts['2300'].actual > project.detailedCosts['2300'].plan ? 'var(--danger)' : 'var(--success)' }}>
-                        Actual: {formatCurrency(project.detailedCosts['2300'].actual)}
+                      <span style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
+                        <span style={{ fontSize: '0.75rem', fontWeight: 500, opacity: 0.8 }}>
+                          ({project.detailedCosts['2300'].plan > 0 ? ((project.detailedCosts['2300'].actual / project.detailedCosts['2300'].plan) * 100).toFixed(0) : 0}%)
+                        </span>
+                        <span style={{ color: project.detailedCosts['2300'].actual > project.detailedCosts['2300'].plan ? 'var(--danger)' : 'var(--success)' }}>
+                          Actual: {formatCurrency(project.detailedCosts['2300'].actual)}
+                        </span>
                       </span>
                     </div>
                   </div>
@@ -411,8 +421,13 @@ function ResponsibilityCard({ title, icon, data, users, formatCurrency }: any) {
         </div>
         <div>
           <div style={{ fontSize: '0.75rem', color: 'var(--text-tertiary)' }}>Actual Cost</div>
-          <div style={{ fontWeight: 600, fontSize: '0.95rem', color: isOverBudget ? 'var(--danger)' : 'var(--success)' }}>
-            {formatCurrency(data.actualCost)}
+          <div style={{ display: 'flex', alignItems: 'baseline', gap: '6px' }}>
+            <div style={{ fontWeight: 600, fontSize: '0.95rem', color: isOverBudget ? 'var(--danger)' : 'var(--success)' }}>
+              {formatCurrency(data.actualCost)}
+            </div>
+            <div style={{ fontSize: '0.75rem', fontWeight: 500, color: isOverBudget ? 'var(--danger)' : 'var(--success)', opacity: 0.8 }}>
+              {data.plannedCost > 0 ? `${((data.actualCost / data.plannedCost) * 100).toFixed(1)}%` : '0%'}
+            </div>
           </div>
         </div>
       </div>
