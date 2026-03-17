@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { supabase } from '@/lib/supabase';
+import { supabaseAdmin } from '@/lib/supabase';
 
 export async function POST(req: Request) {
   try {
@@ -11,13 +11,18 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: 'File and User ID are required' }, { status: 400 });
     }
 
+    if (!supabaseAdmin) {
+      return NextResponse.json({ 
+        error: 'Supabase Service Role Key is missing. Please add SUPABASE_SERVICE_ROLE_KEY to your .env.local file.' 
+      }, { status: 500 });
+    }
+
     // Standardize filename to [userId].JPG
     const fileExt = 'JPG';
     const fileName = `${userId}.${fileExt}`;
 
-    // 1. Upload to Supabase Storage (avatars bucket)
-    // We use upsert: true to overwrite if it exists
-    const { data: uploadData, error: uploadError } = await supabase.storage
+    // 1. Upload to Supabase Storage (avatars bucket) using Admin client to bypass RLS
+    const { data: uploadData, error: uploadError } = await supabaseAdmin.storage
       .from('avatars')
       .upload(fileName, file, {
         upsert: true,
@@ -26,16 +31,16 @@ export async function POST(req: Request) {
 
     if (uploadError) throw uploadError;
 
-    // 2. Get Public URL
-    const { data: { publicUrl } } = supabase.storage
+    // 2. Get Public URL (can use admin or anon client for public URLs)
+    const { data: { publicUrl } } = supabaseAdmin.storage
       .from('avatars')
       .getPublicUrl(fileName);
 
     // Add cache-buster to the URL to ensure frontend updates
     const avatarUrl = `${publicUrl}?t=${Date.now()}`;
 
-    // 3. Update User record in database
-    const { error: updateError } = await supabase
+    // 3. Update User record in database using Admin client to bypass RLS
+    const { error: updateError } = await supabaseAdmin
       .from('users')
       .update({ avatar_url: avatarUrl })
       .eq('id', userId);
