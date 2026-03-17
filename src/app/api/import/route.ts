@@ -108,6 +108,7 @@ export async function POST(req: Request) {
           start_date: null, 
           end_date: null, 
           color_code: colorCodes[colorIndex % colorCodes.length],
+          created_at: new Date().toISOString(),
           responsibilities: {
             design: { userIds: [], plannedCost: 0, actualCost: 0 },
             program: { userIds: [], plannedCost: 0, actualCost: 0 },
@@ -137,7 +138,8 @@ export async function POST(req: Request) {
             name: assigneeName,
             role: taskNum === 2100 ? 'Electrical Designer' : taskNum === 2400 ? 'Programmer' : taskNum === 2300 ? 'Material Procurement' : 'Production',
             department: taskNum === 2100 ? 'Design' : taskNum === 2400 ? 'Engineering' : taskNum === 2300 ? 'Materials' : 'Production',
-            avatar_url: `${publicUrl}?t=${Date.now()}`
+            avatar_url: `${publicUrl}?t=${Date.now()}`,
+            created_at: new Date().toISOString()
           };
           usersMap.set(assigneeName, currentUser);
         } else {
@@ -179,7 +181,8 @@ export async function POST(req: Request) {
         end_date: endDateStr,
         workload_percentage: row['Plan_Hours'] ? Math.min(100, (Number(row['Plan_Hours']) / 8) * 100) : 100,
         department: taskNum === 2100 ? 'Design' : taskNum === 2400 ? 'Engineering' : taskNum === 2300 ? 'Materials' : 'Production',
-        hide_on_timeline: !hasAssignee
+        hide_on_timeline: !hasAssignee,
+        created_at: new Date().toISOString()
       });
     });
 
