@@ -473,16 +473,16 @@ function ProjectTimeline({ projectId, tasks, users }: { projectId: string, tasks
     return { monthStart: mStart, monthEnd: mEnd, days: d, months: m };
   }, [projectTasks]);
 
+  if (projectTasks.length === 0) return null;
+
+  const colWidth = 32;
+
   const todayOffset = useMemo(() => {
     const today = new Date();
     today.setHours(0, 0, 0, 0);
     if (today < monthStart || today > monthEnd) return -1;
-    return differenceInDays(today, monthStart) * 24;
-  }, [monthStart, monthEnd]);
-
-  if (projectTasks.length === 0) return null;
-
-  const colWidth = 32;
+    return differenceInDays(today, monthStart) * colWidth;
+  }, [monthStart, monthEnd, colWidth]);
 
   return (
     <div style={{ background: 'var(--bg-secondary)', borderRadius: '12px', border: '1px solid var(--border-light)', overflow: 'hidden' }}>
