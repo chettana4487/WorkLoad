@@ -10,9 +10,9 @@ export type DepartmentLimits = {
 };
 
 const DEFAULT_LIMITS: DepartmentLimits = {
-  Design: 8,
-  Engineering: 8,
-  Production: 8
+  Design: 10,
+  Engineering: 10,
+  Production: 10
 };
 
 export function useWorkloadLimits() {

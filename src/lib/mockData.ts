@@ -30,8 +30,11 @@ export interface Project {
     '2400'?: { plan: number; actual: number };
     '4400'?: { plan: number; actual: number };
     '7300'?: { plan: number; actual: number };
+    '7301'?: { plan: number; actual: number };
+    '7302'?: { plan: number; actual: number };
+    '7303'?: { plan: number; actual: number };
   };
-}
+};
 
 export interface Task {
   id: string;
@@ -99,15 +102,15 @@ export const mockProjects: Project[] = [
         "userIds": [
           "u1"
         ],
-        "plannedCost": 0,
-        "actualCost": 0
+        "plannedCost": 50000,
+        "actualCost": 45000
       },
       "program": {
         "userIds": [
           "u2"
         ],
-        "plannedCost": 0,
-        "actualCost": 0
+        "plannedCost": 80000,
+        "actualCost": 85000
       },
       "production": {
         "userIds": [
@@ -115,9 +118,18 @@ export const mockProjects: Project[] = [
           "u4",
           "u5"
         ],
-        "plannedCost": 0,
-        "actualCost": 0
+        "plannedCost": 120000,
+        "actualCost": 115000
       }
+    },
+    "detailedCosts": {
+      "2100": { "plan": 50000, "actual": 45000 },
+      "2400": { "plan": 80000, "actual": 85000 },
+      "4400": { "plan": 120000, "actual": 115000 },
+      "2300": { "plan": 200000, "actual": 195000, "po": 180000 },
+      "7301": { "plan": 15000, "actual": 12000 },
+      "7302": { "plan": 25000, "actual": 28000 },
+      "7303": { "plan": 45000, "actual": 42000 }
     }
   }
 ];
@@ -286,6 +298,36 @@ export const mockTasks: Task[] = [
     "endDate": "2026-05-30",
     "workloadPercentage": 100,
     "hideOnTimeline": false,
+    "department": "Production"
+  },
+  {
+    "id": "t16",
+    "projectId": "p1",
+    "userId": "u1",
+    "title": "Install Design (7301)",
+    "startDate": "2026-07-01",
+    "endDate": "2026-07-05",
+    "workloadPercentage": 50,
+    "department": "Design"
+  },
+  {
+    "id": "t17",
+    "projectId": "p1",
+    "userId": "u2",
+    "title": "Install Programmer (7302)",
+    "startDate": "2026-07-06",
+    "endDate": "2026-07-15",
+    "workloadPercentage": 50,
+    "department": "Engineering"
+  },
+  {
+    "id": "t18",
+    "projectId": "p1",
+    "userId": "u3",
+    "title": "Install Production (7303)",
+    "startDate": "2026-07-16",
+    "endDate": "2026-07-30",
+    "workloadPercentage": 50,
     "department": "Production"
   }
 ];

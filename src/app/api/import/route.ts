@@ -87,8 +87,8 @@ export async function POST(req: Request) {
       const taskNumMatch = String(taskNumRaw || '').match(/\d+/);
       const taskNum = taskNumMatch ? Number(taskNumMatch[0]) : NaN;
       
-      // Expanded to include all relevant task codes (excluding 7300 as per user request)
-      if (![2100, 2300, 2400, 4400].includes(taskNum)) return;
+      // Expanded to include all relevant task codes
+      if (![2100, 2300, 2400, 4400, 7301, 7302, 7303].includes(taskNum)) return;
 
       const projNum = getValue(row, ['proj_num', 'Project No.', 'Project No']);
       if (!projNum) return;
@@ -133,11 +133,17 @@ export async function POST(req: Request) {
           const filename = `${userId}.JPG`;
           const { data: { publicUrl } } = supabase.storage.from('avatars').getPublicUrl(filename);
           
+          let resolvedRole = 'Production';
+          let resolvedDepartment = 'Production';
+          if (taskNum === 2100 || taskNum === 7301) { resolvedRole = 'Electrical Designer'; resolvedDepartment = 'Design'; }
+          else if (taskNum === 2400 || taskNum === 7302) { resolvedRole = 'Programmer'; resolvedDepartment = 'Engineering'; }
+          else if (taskNum === 2300) { resolvedRole = 'Material Procurement'; resolvedDepartment = 'Materials'; }
+
           currentUser = {
             id: userId,
             name: assigneeName,
-            role: taskNum === 2100 ? 'Electrical Designer' : taskNum === 2400 ? 'Programmer' : taskNum === 2300 ? 'Material Procurement' : 'Production',
-            department: taskNum === 2100 ? 'Design' : taskNum === 2400 ? 'Engineering' : taskNum === 2300 ? 'Materials' : 'Production',
+            role: resolvedRole,
+            department: resolvedDepartment,
             avatar_url: `${publicUrl}?t=${Date.now()}`,
             created_at: new Date().toISOString()
           };
@@ -148,11 +154,11 @@ export async function POST(req: Request) {
       }
 
       if (userId) {
-        if (taskNum === 2100 && !project.responsibilities.design.userIds.includes(userId)) {
+        if ((taskNum === 2100 || taskNum === 7301) && !project.responsibilities.design.userIds.includes(userId)) {
           project.responsibilities.design.userIds.push(userId);
-        } else if (taskNum === 2400 && !project.responsibilities.program.userIds.includes(userId)) {
+        } else if ((taskNum === 2400 || taskNum === 7302) && !project.responsibilities.program.userIds.includes(userId)) {
           project.responsibilities.program.userIds.push(userId);
-        } else if (taskNum === 4400 && !project.responsibilities.production.userIds.includes(userId)) {
+        } else if ((taskNum === 4400 || taskNum === 7303) && !project.responsibilities.production.userIds.includes(userId)) {
           project.responsibilities.production.userIds.push(userId);
         }
       }
@@ -180,7 +186,7 @@ export async function POST(req: Request) {
         start_date: startDateStr,
         end_date: endDateStr,
         workload_percentage: row['Plan_Hours'] ? Math.min(100, (Number(row['Plan_Hours']) / 8) * 100) : 100,
-        department: taskNum === 2100 ? 'Design' : taskNum === 2400 ? 'Engineering' : taskNum === 2300 ? 'Materials' : 'Production',
+        department: (taskNum === 2100 || taskNum === 7301) ? 'Design' : (taskNum === 2400 || taskNum === 7302) ? 'Engineering' : taskNum === 2300 ? 'Materials' : 'Production',
         hide_on_timeline: !hasAssignee,
         created_at: new Date().toISOString()
       });

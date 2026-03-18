@@ -150,12 +150,18 @@ export default function ProjectsPage() {
           const totalPlan = (project.detailedCosts?.['2100']?.plan || project.responsibilities.design.plannedCost) + 
                             (project.detailedCosts?.['2400']?.plan || project.responsibilities.program.plannedCost) + 
                             (project.detailedCosts?.['4400']?.plan || project.responsibilities.production.plannedCost) +
-                            (project.detailedCosts?.['2300']?.plan || 0);
+                            (project.detailedCosts?.['2300']?.plan || 0) +
+                            (project.detailedCosts?.['7301']?.plan || 0) +
+                            (project.detailedCosts?.['7302']?.plan || 0) +
+                            (project.detailedCosts?.['7303']?.plan || 0);
 
           const totalActual = (project.detailedCosts?.['2100']?.actual || project.responsibilities.design.actualCost) + 
                               (project.detailedCosts?.['2400']?.actual || project.responsibilities.program.actualCost) + 
                               (project.detailedCosts?.['4400']?.actual || project.responsibilities.production.actualCost) +
-                              (project.detailedCosts?.['2300']?.actual || 0);
+                              (project.detailedCosts?.['2300']?.actual || 0) +
+                              (project.detailedCosts?.['7301']?.actual || 0) +
+                              (project.detailedCosts?.['7302']?.actual || 0) +
+                              (project.detailedCosts?.['7303']?.actual || 0);
 
           const isOverBudgetOverall = totalActual > totalPlan;
 
@@ -171,6 +177,16 @@ export default function ProjectsPage() {
               Plan: project.detailedCosts['2300'].plan, 
               Actual: project.detailedCosts['2300'].actual 
             });
+          }
+
+          if (project.detailedCosts?.['7301']?.plan || project.detailedCosts?.['7301']?.actual) {
+            chartData.push({ name: 'Install Design', Plan: project.detailedCosts['7301']?.plan || 0, Actual: project.detailedCosts['7301']?.actual || 0 });
+          }
+          if (project.detailedCosts?.['7302']?.plan || project.detailedCosts?.['7302']?.actual) {
+            chartData.push({ name: 'Install Program', Plan: project.detailedCosts['7302']?.plan || 0, Actual: project.detailedCosts['7302']?.actual || 0 });
+          }
+          if (project.detailedCosts?.['7303']?.plan || project.detailedCosts?.['7303']?.actual) {
+            chartData.push({ name: 'Install Produc', Plan: project.detailedCosts['7303']?.plan || 0, Actual: project.detailedCosts['7303']?.actual || 0 });
           }
 
           return (
@@ -197,20 +213,36 @@ export default function ProjectsPage() {
                 </div>
                 
                 {/* Overall Financials */}
-                <div style={{ display: 'flex', gap: '32px', textAlign: 'right' }}>
-                  <div>
-                    <div style={{ fontSize: '0.75rem', color: 'var(--text-tertiary)', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Total Plan</div>
-                    <div style={{ fontSize: '1.25rem', fontWeight: 600, color: 'var(--text-primary)' }}>{formatCurrency(totalPlan)}</div>
+                <div style={{ display: 'flex', gap: '16px' }}>
+                  <div style={{ 
+                    padding: '12px 24px', 
+                    background: 'var(--bg-tertiary)', 
+                    borderRadius: '12px', 
+                    border: '1px solid var(--border-light)',
+                    minWidth: '180px',
+                    textAlign: 'center',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    justifyContent: 'center'
+                  }}>
+                    <div style={{ fontSize: '0.7rem', color: 'var(--text-tertiary)', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '4px', fontWeight: 700 }}>Total Plan</div>
+                    <div style={{ fontSize: '1.5rem', fontWeight: 800, color: 'var(--text-primary)' }}>{formatCurrency(totalPlan)}</div>
                   </div>
-                  <div>
-                    <div style={{ fontSize: '0.75rem', color: 'var(--text-tertiary)', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Total Actual</div>
-                    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end' }}>
-                      <div style={{ fontSize: '1.25rem', fontWeight: 600, color: isOverBudgetOverall ? 'var(--danger)' : 'var(--success)' }}>
-                        {formatCurrency(totalActual)}
-                      </div>
-                      <div style={{ fontSize: '0.8rem', fontWeight: 500, color: isOverBudgetOverall ? 'var(--danger)' : 'var(--success)', opacity: 0.9 }}>
-                        {totalPlan > 0 ? `${((totalActual / totalPlan) * 100).toFixed(1)}%` : '0%'}
-                      </div>
+                  <div style={{ 
+                    padding: '12px 24px', 
+                    background: isOverBudgetOverall ? 'rgba(239, 68, 68, 0.08)' : 'rgba(16, 185, 129, 0.08)', 
+                    borderRadius: '12px', 
+                    border: `2px solid ${isOverBudgetOverall ? 'var(--danger)' : 'var(--success)'}`,
+                    minWidth: '180px',
+                    textAlign: 'center',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    justifyContent: 'center'
+                  }}>
+                    <div style={{ fontSize: '0.7rem', color: isOverBudgetOverall ? 'var(--danger)' : 'var(--success)', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '4px', fontWeight: 800 }}>Total Actual</div>
+                    <div style={{ fontSize: '1.5rem', fontWeight: 800, color: isOverBudgetOverall ? 'var(--danger)' : 'var(--success)' }}>{formatCurrency(totalActual)}</div>
+                    <div style={{ fontSize: '0.9rem', fontWeight: 800, color: isOverBudgetOverall ? 'var(--danger)' : 'var(--success)', marginTop: '2px' }}>
+                       {totalPlan > 0 ? `${((totalActual / totalPlan) * 100).toFixed(1)}%` : '0%'}
                     </div>
                   </div>
                 </div>
@@ -221,6 +253,33 @@ export default function ProjectsPage() {
                 
                 {/* Responsibilities Grid */}
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+                
+                {/* Materials Details (2300) - Moved to top */}
+                {(project.detailedCosts?.['2300']?.plan || project.detailedCosts?.['2300']?.actual) && (
+                  <div style={{ padding: '16px', background: 'var(--bg-tertiary)', borderRadius: '12px', border: '1px solid var(--border-light)', display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px', color: 'var(--text-primary)', fontWeight: 700, fontSize: '0.95rem' }}>
+                      <div style={{ padding: '6px', background: 'rgba(59, 130, 246, 0.1)', borderRadius: '6px', color: '#3b82f6' }}><Briefcase size={16} /></div>
+                      Materials (2300)
+                    </div>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', padding: '0 4px' }}>
+                      <div>
+                        <div style={{ fontSize: '0.7rem', color: 'var(--text-tertiary)', textTransform: 'uppercase' }}>Plan</div>
+                        <div style={{ fontWeight: 600 }}>{formatCurrency(project.detailedCosts['2300'].plan)}</div>
+                      </div>
+                      <div style={{ textAlign: 'right' }}>
+                        <div style={{ fontSize: '0.7rem', color: 'var(--text-tertiary)', textTransform: 'uppercase' }}>Actual</div>
+                        <div style={{ display: 'flex', gap: '8px', alignItems: 'baseline' }}>
+                          <span style={{ fontSize: '0.75rem', fontWeight: 700, color: project.detailedCosts['2300'].actual > project.detailedCosts['2300'].plan ? 'var(--danger)' : 'var(--success)' }}>
+                            ({project.detailedCosts['2300'].plan > 0 ? ((project.detailedCosts['2300'].actual / project.detailedCosts['2300'].plan) * 100).toFixed(1) : 0}%)
+                          </span>
+                          <span style={{ fontWeight: 700, color: project.detailedCosts['2300'].actual > project.detailedCosts['2300'].plan ? 'var(--danger)' : 'var(--success)' }}>
+                            {formatCurrency(project.detailedCosts['2300'].actual)}
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                )}
                 
                 <ResponsibilityCard 
                   title="Design (2100)" 
@@ -255,21 +314,36 @@ export default function ProjectsPage() {
                   formatCurrency={formatCurrency}
                 />
 
-                {/* Additional Sections (2300, 7300) */}
-                {(project.detailedCosts?.['2300']?.plan || project.detailedCosts?.['2300']?.actual) && (
-                  <div style={{ padding: '12px', background: 'var(--bg-tertiary)', borderRadius: '8px', fontSize: '0.85rem' }}>
-                    <div style={{ fontWeight: 600, marginBottom: '4px' }}>Materials (2300)</div>
-                    <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                      <span>Plan: {formatCurrency(project.detailedCosts['2300'].plan)}</span>
-                      <span style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
-                        <span style={{ fontSize: '0.75rem', fontWeight: 500, opacity: 0.8 }}>
-                          ({project.detailedCosts['2300'].plan > 0 ? ((project.detailedCosts['2300'].actual / project.detailedCosts['2300'].plan) * 100).toFixed(0) : 0}%)
-                        </span>
-                        <span style={{ color: project.detailedCosts['2300'].actual > project.detailedCosts['2300'].plan ? 'var(--danger)' : 'var(--success)' }}>
-                          Actual: {formatCurrency(project.detailedCosts['2300'].actual)}
-                        </span>
-                      </span>
+                {/* Installation Costs (7301, 7302, 7303) */}
+                {(project.detailedCosts?.['7301'] || project.detailedCosts?.['7302'] || project.detailedCosts?.['7303']) && (
+                  <div style={{ padding: '16px', background: 'var(--bg-tertiary)', borderRadius: '12px', fontSize: '0.85rem', display: 'flex', flexDirection: 'column', gap: '12px', border: '1px solid var(--border-light)' }}>
+                    <div style={{ fontWeight: 700, fontSize: '0.9rem', color: 'var(--brand-primary)', textTransform: 'uppercase', letterSpacing: '0.05em', borderBottom: '1px solid var(--border-light)', paddingBottom: '8px' }}>
+                      Installation Costs
                     </div>
+                    
+                    {[
+                      { code: '7301', label: 'Install Design' },
+                      { code: '7302', label: 'Install Programmer' },
+                      { code: '7303', label: 'Install Production' }
+                    ].map(item => {
+                      const cost = project.detailedCosts?.[item.code as keyof typeof project.detailedCosts];
+                      if (!cost) return null;
+                      const ratio = cost.plan > 0 ? (cost.actual / cost.plan) * 100 : 0;
+                      return (
+                        <div key={item.code} style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
+                          <div style={{ fontWeight: 600, display: 'flex', justifyContent: 'space-between' }}>
+                            <span>{item.label} ({item.code})</span>
+                            <span style={{ color: cost.actual > cost.plan ? 'var(--danger)' : 'var(--success)' }}>
+                              {ratio.toFixed(0)}%
+                            </span>
+                          </div>
+                          <div style={{ display: 'flex', justifyContent: 'space-between', opacity: 0.9 }}>
+                            <span>Plan: {formatCurrency(cost.plan)}</span>
+                            <span>Actual: {formatCurrency(cost.actual)}</span>
+                          </div>
+                        </div>
+                      );
+                    })}
                   </div>
                 )}
                 </div>

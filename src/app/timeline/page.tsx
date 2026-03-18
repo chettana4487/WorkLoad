@@ -2,9 +2,9 @@
 
 import { Project, User, Task } from '@/lib/mockData';
 import { format, eachDayOfInterval, eachWeekOfInterval, eachMonthOfInterval, startOfWeek, endOfWeek, parseISO, addDays, addWeeks, addMonths, startOfMonth, endOfMonth, differenceInDays } from 'date-fns';
-import { useState, useRef, useMemo, useEffect } from 'react';
+import { useState, useRef, useMemo, useEffect, Fragment } from 'react';
 import { ChevronLeft, ChevronRight, Calendar, Layout, Activity, Loader2 } from 'lucide-react';
-import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, ReferenceLine, Legend } from 'recharts';
+import { ComposedChart, Area, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, ReferenceLine, Legend } from 'recharts';
 import { useUserColors } from '@/lib/useUserColors';
 import { useWorkloadLimits } from '@/lib/useWorkloadLimits';
 import UserAvatar from '@/components/UserAvatar';
@@ -204,7 +204,7 @@ export default function TimelinePage() {
             <h2 style={{ fontSize: '1.25rem', fontWeight: 600, marginBottom: '24px' }}>Capacity Overview</h2>
             <div style={{ flex: 1, minHeight: 0 }}>
               <ResponsiveContainer width="100%" height="100%">
-                <AreaChart 
+                <ComposedChart 
                   data={timeSpans.map(spanDate => {
                     let name = '';
                     let fullDateRange = '';
@@ -231,10 +231,13 @@ export default function TimelinePage() {
                       if (viewMode === 'Month') daysInSpan = eachDayOfInterval({ start: spanDate, end: endOfMonth(spanDate) });
               
                       // Gather tasks belonging to this department
-                      const deptTasks = data.tasks.filter(t => t.department === dept);
+                      const usersInDept = data.users.filter(u => u.department === dept).map(u => u.id);
+                      const deptTasks = data.tasks.filter(t => t.department === dept || usersInDept.includes(t.userId));
 
                       let peakLoadTasks = 0;
+                      let installPeakLoadTasks = 0;
                       let totalLoadTasks = 0;
+                      let installTotalLoadTasks = 0;
                       let workingDaysCount = 0;
                       
                       daysInSpan.forEach(day => {
@@ -242,32 +245,51 @@ export default function TimelinePage() {
                         if (!isWeekend) workingDaysCount++;
 
                         let dayLoadTasks = 0;
+                        let dayInstallLoadTasks = 0;
                         deptTasks.forEach(task => {
                           const tStart = parseISO(task.startDate);
                           const tEnd = parseISO(task.endDate);
+                          tEnd.setHours(23, 59, 59, 999);
                           const currentDay = new Date(day);
                           currentDay.setHours(12, 0, 0, 0); // Middle of day to avoid TZ issues
                           if (currentDay >= tStart && currentDay <= tEnd) {
                             dayLoadTasks += 1;
+                            const titleLower = task.title.toLowerCase();
+                            if (titleLower.includes('install') || titleLower.includes('730')) {
+                              dayInstallLoadTasks += 1;
+                            }
                           }
                         });
                         
                         if (!isWeekend) {
                           totalLoadTasks += dayLoadTasks;
+                          installTotalLoadTasks += dayInstallLoadTasks;
                         }
                         if (dayLoadTasks > peakLoadTasks) peakLoadTasks = dayLoadTasks;
+                        if (dayInstallLoadTasks > installPeakLoadTasks) installPeakLoadTasks = dayInstallLoadTasks;
                       });
               
                       let percentage = 0;
+                      let installPercentage = 0;
+                      let installRatio = 0;
                       if (viewMode === 'Week') {
                         percentage = Math.round((totalLoadTasks / (deptLimit * 5)) * 100);
+                        installPercentage = Math.round((installTotalLoadTasks / (deptLimit * 5)) * 100);
+                        installRatio = totalLoadTasks > 0 ? Math.round((installTotalLoadTasks / totalLoadTasks) * 100) : 0;
                       } else if (viewMode === 'Month') {
                         const monthlyLimit = deptLimit * (workingDaysCount > 0 ? workingDaysCount : 1);
                         percentage = Math.round((totalLoadTasks / monthlyLimit) * 100);
+                        installPercentage = Math.round((installTotalLoadTasks / monthlyLimit) * 100);
+                        installRatio = totalLoadTasks > 0 ? Math.round((installTotalLoadTasks / totalLoadTasks) * 100) : 0;
                       } else {
                         percentage = Math.round((peakLoadTasks / deptLimit) * 100);
+                        installPercentage = Math.round((installPeakLoadTasks / deptLimit) * 100);
+                        installRatio = peakLoadTasks > 0 ? Math.round((installPeakLoadTasks / peakLoadTasks) * 100) : 0;
                       }
+                      
                       dataPoint[dept] = percentage;
+                      dataPoint[`${dept}_Install`] = installPercentage;
+                      dataPoint[`${dept}_Install_Ratio`] = installRatio;
                     });
                     return dataPoint;
                   })}
@@ -280,7 +302,17 @@ export default function TimelinePage() {
                     contentStyle={{ backgroundColor: 'var(--bg-primary)', borderColor: 'var(--border-light)', borderRadius: '8px', boxShadow: 'var(--shadow-md)' }}
                     itemStyle={{ fontSize: '0.85rem', fontWeight: 500 }}
                     labelStyle={{ color: 'var(--text-secondary)', marginBottom: '8px' }}
-                    formatter={(value: any, name: any) => [`${value}% Capacity`, name === 'Design' ? 'Elec. Design' : name === 'Engineering' ? 'Programmer' : 'Production']}
+                    formatter={(value: any, name: any, props: any) => {
+                      const isInstall = String(name).includes('_Install');
+                      const baseName = String(name).replace('_Install', '');
+                      const displayName = baseName === 'Design' ? 'Elec. Design' : baseName === 'Engineering' ? 'Programmer' : 'Production';
+                      const installCode = baseName === 'Design' ? '7301' : baseName === 'Engineering' ? '7302' : '7303';
+                      if (isInstall) {
+                        const ratio = props?.payload?.[`${baseName}_Install_Ratio`] || 0;
+                        return [`${value}% Capacity (${ratio}% ของงานทั้งหมด)`, `${displayName} (Install ${installCode})`];
+                      }
+                      return [`${value}% Capacity`, displayName];
+                    }}
                     labelFormatter={(label, payload) => {
                       if (payload && payload.length > 0 && payload[0].payload.fullDateRange) {
                         return payload[0].payload.fullDateRange;
@@ -288,26 +320,48 @@ export default function TimelinePage() {
                       return label;
                     }}
                   />
-                  <Legend verticalAlign="top" height={36} iconType="circle" wrapperStyle={{ fontSize: '0.85rem' }} formatter={(value) => value === 'Design' ? 'Elec. Design' : value === 'Engineering' ? 'Programmer' : 'Production'} />
+                  <Legend 
+                    verticalAlign="top" 
+                    height={36} 
+                    iconType="circle" 
+                    wrapperStyle={{ fontSize: '0.85rem' }} 
+                    formatter={(value) => {
+                      const isInstall = String(value).includes('_Install');
+                      const baseName = String(value).replace('_Install', '');
+                      const displayName = baseName === 'Design' ? 'Elec. Design' : baseName === 'Engineering' ? 'Programmer' : 'Production';
+                      const installCode = baseName === 'Design' ? '7301' : baseName === 'Engineering' ? '7302' : '7303';
+                      return isInstall ? `${displayName} (Install ${installCode})` : displayName;
+                    }} 
+                  />
                   <ReferenceLine y={100} stroke="#ef4444" strokeDasharray="3 3" strokeWidth={2} label={{ position: 'insideBottomLeft', value: `100% Capacity Limit`, fill: '#ef4444', fontSize: 12, offset: 10, fontWeight: 600 }} />
                   
                   {activeDepartments.map((dept) => {
                     const deptColor = dept === 'Design' ? '#10b981' : dept === 'Engineering' ? '#3b82f6' : '#ec4899';
                     return (
-                      <Area 
-                        key={dept}
-                        type="monotone" 
-                        dataKey={dept} 
-                        stroke={deptColor} 
-                        strokeWidth={2}
-                        fill={deptColor} 
-                        fillOpacity={0.4}
-                        activeDot={{ r: 6, strokeWidth: 0 }}
-                        dot={{ r: 4, fill: 'var(--bg-primary)', strokeWidth: 2, stroke: deptColor }}
-                      />
+                      <Fragment key={dept}>
+                        <Area 
+                          type="monotone" 
+                          dataKey={dept} 
+                          stroke={deptColor} 
+                          strokeWidth={2}
+                          fill={deptColor} 
+                          fillOpacity={0.4}
+                          activeDot={{ r: 6, strokeWidth: 0 }}
+                          dot={{ r: 4, fill: 'var(--bg-primary)', strokeWidth: 2, stroke: deptColor }}
+                        />
+                        <Line 
+                          type="monotone" 
+                          dataKey={`${dept}_Install`} 
+                          stroke={deptColor} 
+                          strokeWidth={3}
+                          strokeDasharray="5 5"
+                          dot={false}
+                          activeDot={{ r: 4 }}
+                        />
+                      </Fragment>
                     );
                   })}
-                </AreaChart>
+                </ComposedChart>
               </ResponsiveContainer>
             </div>
           </div>
@@ -499,7 +553,7 @@ export default function TimelinePage() {
                         }}
                         onMouseEnter={(e) => { e.currentTarget.style.transform = 'translateY(-2px)'; }}
                         onMouseLeave={(e) => { e.currentTarget.style.transform = 'translateY(0)'; }}
-                        title={`${project?.projectNumber || ''} - ${task.title} - ${differenceInDays(tEnd, tStart) + 1} Days`}
+                        title={`${project?.projectNumber || ''} | ${project?.name || ''} | Customer: ${project?.customer || 'Unknown'}\nTask: ${task.title}\nDuration: ${differenceInDays(tEnd, tStart) + 1} Days`}
                         >
                           <div style={{ display: 'flex', justifyContent: 'space-between', width: '100%', alignItems: 'center' }}>
                             <span style={{ fontSize: '0.65rem', opacity: 0.9, fontWeight: 700 }}>{project?.projectNumber || 'Unknown'}</span>

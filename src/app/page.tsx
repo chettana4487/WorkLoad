@@ -3,10 +3,15 @@
 import { useState, useEffect } from 'react';
 import { Project, User, Task } from '@/lib/mockData';
 import { Users, FolderKanban, AlertCircle, CheckCircle, Building, MapPin, AlertTriangle, Loader2, Target, TrendingUp, TrendingDown, Eye } from 'lucide-react';
+import { useWorkloadLimits } from '@/lib/useWorkloadLimits';
 
 export default function Dashboard() {
   const [data, setData] = useState<{ projects: Project[], users: User[], tasks: Task[] }>({ projects: [], users: [], tasks: [] });
   const [loading, setLoading] = useState(true);
+  const { limits, isLoaded } = useWorkloadLimits();
+
+  const today = new Date();
+  today.setHours(12, 0, 0, 0);
 
   useEffect(() => {
     fetch('/api/data')
@@ -36,12 +41,18 @@ export default function Dashboard() {
     const totalPlan = (project.detailedCosts?.['2100']?.plan || project.responsibilities.design.plannedCost) + 
                       (project.detailedCosts?.['2400']?.plan || project.responsibilities.program.plannedCost) + 
                       (project.detailedCosts?.['4400']?.plan || project.responsibilities.production.plannedCost) +
-                      (project.detailedCosts?.['2300']?.plan || 0);
+                      (project.detailedCosts?.['2300']?.plan || 0) +
+                      (project.detailedCosts?.['7301']?.plan || 0) +
+                      (project.detailedCosts?.['7302']?.plan || 0) +
+                      (project.detailedCosts?.['7303']?.plan || 0);
 
     const totalActual = (project.detailedCosts?.['2100']?.actual || project.responsibilities.design.actualCost) + 
                         (project.detailedCosts?.['2400']?.actual || project.responsibilities.program.actualCost) + 
                         (project.detailedCosts?.['4400']?.actual || project.responsibilities.production.actualCost) +
-                        (project.detailedCosts?.['2300']?.actual || 0);
+                        (project.detailedCosts?.['2300']?.actual || 0) +
+                        (project.detailedCosts?.['7301']?.actual || 0) +
+                        (project.detailedCosts?.['7302']?.actual || 0) +
+                        (project.detailedCosts?.['7303']?.actual || 0);
 
     const ratio = totalPlan > 0 ? (totalActual / totalPlan) * 100 : 0;
     
@@ -182,30 +193,43 @@ export default function Dashboard() {
       {/* Main Grid Content */}
       <div style={{ display: 'grid', gridTemplateColumns: 'minmax(300px, 1fr) minmax(500px, 2fr)', gap: '24px', alignItems: 'start' }}>
         
-        {/* Department Workload Summary */}
+        {/* Department Capacity Summary */}
         <div className="card" style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
-          <h2 style={{ fontSize: '1.25rem', fontWeight: 600 }}>Department Workload</h2>
+          <h2 style={{ fontSize: '1.25rem', fontWeight: 600 }}>Today's Department Capacity</h2>
           
           <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
             {['Engineering', 'Design', 'Production'].map(dept => {
-              // Calculate real workload or use fallback
               const deptTasks = data.tasks.filter(t => t.department === dept);
-              const totalWorkload = deptTasks.reduce((acc, t) => acc + (t.workloadPercentage || 0), 0);
-              const avgWorkload = deptTasks.length > 0 ? Math.round(totalWorkload / deptTasks.length) : 0;
+              const deptLimit = isLoaded ? limits[dept as keyof typeof limits] || 8 : 8;
+
+              let activeTasksToday = 0;
+              deptTasks.forEach(task => {
+                const tStart = new Date(task.startDate);
+                const tEnd = new Date(task.endDate);
+                tStart.setHours(0,0,0,0);
+                tEnd.setHours(23,59,59,999);
+                if (today >= tStart && today <= tEnd) {
+                  activeTasksToday++;
+                }
+              });
+
+              // If it's a weekend, maybe we shouldn't show 0? Or maybe it's fine.
+              // We'll show the actual load for today.
               
-              const progress = avgWorkload || (dept === 'Engineering' ? 85 : dept === 'Design' ? 60 : 45);
-              const isOver = progress > 80;
+              const progress = Math.round((activeTasksToday / deptLimit) * 100);
+              const isOver = progress >= 100;
+              
               return (
                 <div key={dept}>
                   <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '8px' }}>
-                    <span style={{ fontWeight: 500 }}>{dept}</span>
-                    <span style={{ color: isOver ? 'var(--danger)' : 'var(--text-secondary)' }}>{progress}% Utilized</span>
+                    <span style={{ fontWeight: 500 }}>{dept === 'Design' ? 'Elec. Design' : dept}</span>
+                    <span style={{ color: isOver ? 'var(--danger)' : progress >= 80 ? 'var(--warning-color, #f59e0b)' : 'var(--text-secondary)' }}>{progress}% Utilized</span>
                   </div>
                   <div style={{ width: '100%', height: '8px', background: 'var(--bg-tertiary)', borderRadius: '4px', overflow: 'hidden' }}>
                     <div style={{ 
-                      width: `${progress}%`, 
+                      width: `${Math.min(progress, 100)}%`, 
                       height: '100%', 
-                      background: isOver ? 'var(--danger)' : 'var(--brand-primary)',
+                      background: isOver ? 'var(--danger)' : progress >= 80 ? 'var(--warning-color, #f59e0b)' : 'var(--brand-primary)',
                       borderRadius: '4px'
                     }}></div>
                   </div>
