@@ -256,7 +256,7 @@ export default function ProjectsPage() {
                 
                 {/* Materials Details (2300) - Moved to top */}
                 {(project.detailedCosts?.['2300']?.plan || project.detailedCosts?.['2300']?.actual) && (
-                  <div style={{ padding: '16px', background: 'var(--bg-tertiary)', borderRadius: '12px', border: '1px solid var(--border-light)', display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                  <div style={{ padding: '16px', background: 'var(--bg-secondary)', borderRadius: '12px', border: '1px solid var(--border-light)', display: 'flex', flexDirection: 'column', gap: '8px' }}>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '8px', color: 'var(--text-primary)', fontWeight: 700, fontSize: '0.95rem' }}>
                       <div style={{ padding: '6px', background: 'rgba(59, 130, 246, 0.1)', borderRadius: '6px', color: '#3b82f6' }}><Briefcase size={16} /></div>
                       Materials (2300)

@@ -18,8 +18,16 @@ export default function TimelinePage() {
   const [displayType, setDisplayType] = useState<'timeline' | 'capacity'>('capacity');
   const [baseDate, setBaseDate] = useState(startOfMonth(new Date()));
   const [departmentFilter, setDepartmentFilter] = useState<string>('All');
+  const [taskFilter, setTaskFilter] = useState<'all' | 'in-house' | 'on-site'>('all');
   const { getColor } = useUserColors();
   const { limits, isLoaded } = useWorkloadLimits();
+  
+  const getDepartmentColor = (dept?: string) => {
+    if (dept === 'Design') return '#10b981';
+    if (dept === 'Engineering') return '#3b82f6';
+    if (dept === 'Production') return '#ec4899';
+    return '#6366f1'; // Default
+  };
 
   useEffect(() => {
     fetch('/api/data')
@@ -129,6 +137,56 @@ export default function TimelinePage() {
                 {dept === 'All' ? 'All Departments' : dept === 'Design' ? 'Elec. Design' : dept === 'Engineering' ? 'Programmer' : 'Production'}
               </button>
             ))}
+          </div>
+
+          <div style={{ width: '1px', height: '24px', background: 'var(--border-light)' }}></div>
+
+          {/* Task Type Filter */}
+          <div style={{ display: 'flex', background: 'var(--bg-secondary)', border: '1px solid var(--border-light)', borderRadius: '8px', overflow: 'hidden' }}>
+            <button 
+              onClick={() => setTaskFilter('all')}
+              style={{ 
+                padding: '6px 12px', 
+                fontSize: '0.80rem',
+                fontWeight: taskFilter === 'all' ? 600 : 400,
+                background: taskFilter === 'all' ? 'var(--brand-primary)' : 'transparent',
+                color: taskFilter === 'all' ? 'white' : 'var(--text-secondary)',
+                border: 'none',
+                cursor: 'pointer'
+              }}
+            >
+              ดูรวม
+            </button>
+            <button 
+              onClick={() => setTaskFilter('in-house')}
+              style={{ 
+                padding: '6px 12px', 
+                fontSize: '0.80rem',
+                fontWeight: taskFilter === 'in-house' ? 600 : 400,
+                background: taskFilter === 'in-house' ? 'var(--brand-primary)' : 'transparent',
+                color: taskFilter === 'in-house' ? 'white' : 'var(--text-secondary)',
+                border: 'none',
+                cursor: 'pointer'
+              }}
+              title="2100, 2400, 4400"
+            >
+              ดู In-house
+            </button>
+            <button 
+              onClick={() => setTaskFilter('on-site')}
+              style={{ 
+                padding: '6px 12px', 
+                fontSize: '0.80rem',
+                fontWeight: taskFilter === 'on-site' ? 600 : 400,
+                background: taskFilter === 'on-site' ? 'var(--brand-primary)' : 'transparent',
+                color: taskFilter === 'on-site' ? 'white' : 'var(--text-secondary)',
+                border: 'none',
+                cursor: 'pointer'
+              }}
+              title="7301, 7302, 7303"
+            >
+              ดู On-site
+            </button>
           </div>
 
           <div style={{ width: '1px', height: '24px', background: 'var(--border-light)' }}></div>
@@ -336,7 +394,12 @@ export default function TimelinePage() {
                   <ReferenceLine y={100} stroke="#ef4444" strokeDasharray="3 3" strokeWidth={2} label={{ position: 'insideBottomLeft', value: `100% Capacity Limit`, fill: '#ef4444', fontSize: 12, offset: 10, fontWeight: 600 }} />
                   
                   {activeDepartments.map((dept) => {
-                    const deptColor = dept === 'Design' ? '#10b981' : dept === 'Engineering' ? '#3b82f6' : '#ec4899';
+                    const deptColor = getDepartmentColor(dept);
+                    
+                    // Fading logic for Capacity Chart
+                    const totalOpacity = taskFilter === 'on-site' ? 0.15 : 0.4;
+                    const installOpacity = taskFilter === 'in-house' ? 0.15 : 1;
+
                     return (
                       <Fragment key={dept}>
                         <Area 
@@ -344,8 +407,9 @@ export default function TimelinePage() {
                           dataKey={dept} 
                           stroke={deptColor} 
                           strokeWidth={2}
+                          strokeOpacity={taskFilter === 'on-site' ? 0.2 : 1}
                           fill={deptColor} 
-                          fillOpacity={0.4}
+                          fillOpacity={totalOpacity}
                           activeDot={{ r: 6, strokeWidth: 0 }}
                           dot={{ r: 4, fill: 'var(--bg-primary)', strokeWidth: 2, stroke: deptColor }}
                         />
@@ -354,6 +418,7 @@ export default function TimelinePage() {
                           dataKey={`${dept}_Install`} 
                           stroke={deptColor} 
                           strokeWidth={3}
+                          strokeOpacity={installOpacity}
                           strokeDasharray="5 5"
                           dot={false}
                           activeDot={{ r: 4 }}
@@ -525,6 +590,15 @@ export default function TimelinePage() {
                       
                       const topOffset = 10 + (overlapLevel * 45); 
 
+                      // Fading logic for Timeline View
+                      const taskTitle = task.title.toLowerCase();
+                      const isInstall = taskTitle.includes('install') || taskTitle.includes('730');
+                      const isInHouse = taskTitle.includes('2100') || taskTitle.includes('2400') || taskTitle.includes('4400') || (!isInstall && !task.title.includes('730'));
+
+                      let opacity = 1;
+                      if (taskFilter === 'in-house' && isInstall) opacity = 0.2;
+                      if (taskFilter === 'on-site' && !isInstall) opacity = 0.2;
+
                       return (
                         <div key={task.id} style={{
                           position: 'absolute',
@@ -533,7 +607,8 @@ export default function TimelinePage() {
                           width: `${width - 4}px`,
                           height: '42px',
                           marginLeft: '2px',
-                          background: project?.colorCode || 'var(--brand-primary)',
+                          background: getDepartmentColor(task.department || user.department),
+                          opacity: opacity,
                           borderRadius: '6px',
                           color: 'white',
                           padding: '4px 8px',

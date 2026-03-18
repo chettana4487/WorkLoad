@@ -1,8 +1,9 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
+import { format, parseISO, differenceInDays, startOfMonth, endOfMonth, eachDayOfInterval, addDays } from 'date-fns';
 import { Project, User, Task } from '@/lib/mockData';
-import { Users, FolderKanban, AlertCircle, CheckCircle, Building, MapPin, AlertTriangle, Loader2, Target, TrendingUp, TrendingDown, Eye } from 'lucide-react';
+import { Users, FolderKanban, AlertCircle, CheckCircle, Building, MapPin, AlertTriangle, Loader2, Target, TrendingUp, TrendingDown, Eye, Calendar } from 'lucide-react';
 import { useWorkloadLimits } from '@/lib/useWorkloadLimits';
 
 export default function Dashboard() {
@@ -25,6 +26,39 @@ export default function Dashboard() {
         setLoading(false);
       });
   }, []);
+
+  // Calculate Task Overload Alerts
+  const overloadAlerts = useMemo(() => {
+    const alerts: any[] = [];
+    const daysToCheck = Array.from({ length: 14 }).map((_, i) => addDays(today, i));
+
+    data.users.forEach(user => {
+      const userTasks = data.tasks.filter(t => t.userId === user.id);
+      
+      daysToCheck.forEach(day => {
+        const dayTime = new Date(day);
+        dayTime.setHours(12, 0, 0, 0);
+
+        const dayTasks = userTasks.filter(task => {
+          const tStart = parseISO(task.startDate);
+          const tEnd = parseISO(task.endDate);
+          tEnd.setHours(23, 59, 59, 999);
+          return dayTime >= tStart && dayTime <= tEnd;
+        });
+
+        if (dayTasks.length > 1) {
+          alerts.push({
+            userId: user.id,
+            userName: user.name,
+            date: dayTime,
+            count: dayTasks.length,
+            taskTitles: dayTasks.map(t => t.title)
+          });
+        }
+      });
+    });
+    return alerts.sort((a, b) => a.date.getTime() - b.date.getTime());
+  }, [data.users, data.tasks, today]);
 
   if (loading) {
     return (
@@ -94,11 +128,6 @@ export default function Dashboard() {
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '32px' }}>
       
-      {/* Header Area */}
-      <div>
-        <h1 style={{ fontSize: '2rem', fontWeight: 600, marginBottom: '8px' }}>Dashboard Overview</h1>
-        <p style={{ color: 'var(--text-secondary)' }}>Welcome back. Here is the current workload status for your departments.</p>
-      </div>
 
       {/* Top Value Cards */}
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '24px' }}>
@@ -189,6 +218,42 @@ export default function Dashboard() {
         </div>
 
       </div>
+
+      {/* Overload Alerts Section */}
+      {overloadAlerts.length > 0 && (
+        <div className="card" style={{ background: 'rgba(239, 68, 68, 0.02)' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '16px' }}>
+            <div style={{ color: 'var(--danger)' }}><AlertCircle size={24} /></div>
+            <h2 style={{ fontSize: '1.25rem', fontWeight: 600 }}>การแจ้งเตือน: ภาระงานเกินกำหนด (Task Overload)</h2>
+          </div>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))', gap: '16px' }}>
+            {overloadAlerts.map((alert, idx) => (
+              <div key={idx} style={{ 
+                padding: '12px 16px', 
+                background: 'var(--bg-secondary)', 
+                border: '1px solid var(--border-light)', 
+                borderRadius: '8px',
+                display: 'flex',
+                flexDirection: 'column',
+                gap: '8px'
+              }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                  <span style={{ fontWeight: 700, color: 'var(--text-primary)' }}>{alert.userName}</span>
+                  <span style={{ fontSize: '0.75rem', fontWeight: 600, color: 'var(--danger)', background: 'var(--danger-bg)', padding: '2px 8px', borderRadius: '10px' }}>
+                    {alert.count} Tasks
+                  </span>
+                </div>
+                <div style={{ fontSize: '0.85rem', color: 'var(--text-secondary)', display: 'flex', alignItems: 'center', gap: '6px' }}>
+                  <Calendar size={14} /> {format(alert.date, 'EEEE, d MMM yyyy')}
+                </div>
+                <div style={{ fontSize: '0.75rem', color: 'var(--text-tertiary)', fontStyle: 'italic' }}>
+                  {alert.taskTitles.join(', ')}
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
 
       {/* Main Grid Content */}
       <div style={{ display: 'grid', gridTemplateColumns: 'minmax(300px, 1fr) minmax(500px, 2fr)', gap: '24px', alignItems: 'start' }}>
