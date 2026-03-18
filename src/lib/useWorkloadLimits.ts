@@ -1,8 +1,9 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import { supabase } from './supabase';
 
-type DepartmentLimits = {
+export type DepartmentLimits = {
   Design: number;
   Engineering: number;
   Production: number;
@@ -19,21 +20,66 @@ export function useWorkloadLimits() {
   const [isLoaded, setIsLoaded] = useState(false);
 
   useEffect(() => {
-    try {
-      const stored = localStorage.getItem('workload-limits');
-      if (stored) {
-        setLimits(JSON.parse(stored));
+    // 1. Initial Fetch
+    const fetchLimits = async () => {
+      try {
+        const response = await fetch('/api/data');
+        const data = await response.json();
+        if (data.workloadLimits) {
+          setLimits(data.workloadLimits);
+        }
+      } catch (err) {
+        console.error('Failed to fetch global workload limits:', err);
+      } finally {
+        setIsLoaded(true);
       }
-    } catch (e) {
-      console.error('Failed to parse workload limits from local storage', e);
-    }
-    setIsLoaded(true);
+    };
+
+    fetchLimits();
+
+    // 2. Real-time Subscription
+    const channel = supabase
+      .channel('public:workload_limits')
+      .on(
+        'postgres_changes',
+        {
+          event: '*',
+          schema: 'public',
+          table: 'workload_limits',
+          filter: 'id=eq.global'
+        },
+        (payload: any) => {
+          if (payload.new && payload.new.limits) {
+            setLimits(payload.new.limits);
+          }
+        }
+      )
+      .subscribe();
+
+    return () => {
+      supabase.removeChannel(channel);
+    };
   }, []);
 
-  const updateLimit = (department: keyof DepartmentLimits, newLimit: number) => {
+  const updateLimit = async (department: keyof DepartmentLimits, newLimit: number) => {
+    // Optimistic update
     const updated = { ...limits, [department]: newLimit };
     setLimits(updated);
-    localStorage.setItem('workload-limits', JSON.stringify(updated));
+
+    try {
+      const response = await fetch('/api/settings/limits', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ limits: updated }),
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to update limits on server');
+      }
+    } catch (err) {
+      console.error('Update limit error:', err);
+      // Revert if failed? (Optional: maybe notify user instead)
+    }
   };
 
   return { limits, updateLimit, isLoaded };

@@ -24,6 +24,14 @@ export async function GET() {
 
     if (tasksError) throw tasksError;
 
+    const { data: limitsData, error: limitsError } = await supabase
+      .from('workload_limits')
+      .select('limits')
+      .eq('id', 'global')
+      .single();
+
+    if (limitsError && limitsError.code !== 'PGRST116') throw limitsError;
+
     // Map database fields back to camelCase for frontend compatibility
     const mappedProjects = projects?.map(p => ({
       id: p.id,
@@ -63,7 +71,8 @@ export async function GET() {
     return NextResponse.json({
       projects: mappedProjects || [],
       users: mappedUsers || [],
-      tasks: mappedTasks || []
+      tasks: mappedTasks || [],
+      workloadLimits: limitsData?.limits || null
     });
 
   } catch (error: any) {

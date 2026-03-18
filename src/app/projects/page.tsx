@@ -297,7 +297,8 @@ export default function ProjectsPage() {
                           axisLine={false} 
                         />
                         <Tooltip 
-                          formatter={(value: any) => [formatCurrency(Number(value) || 0), '']}
+                          itemSorter={(item) => (item.name === 'Plan' ? -1 : 1)}
+                          formatter={(value: any, name: any) => [formatCurrency(Number(value) || 0), String(name)]}
                           contentStyle={{ 
                             backgroundColor: isDarkMode ? '#1e293b' : 'var(--bg-primary)', 
                             borderColor: isDarkMode ? '#334155' : 'var(--border-light)', 
@@ -311,21 +312,26 @@ export default function ProjectsPage() {
                         />
                         <Legend 
                           wrapperStyle={{ fontSize: '0.85rem', paddingTop: '20px' }} 
+                          align="center"
+                          verticalAlign="bottom"
+                          iconType="rect"
                         />
                         <Bar 
+                          name="Plan"
                           dataKey="Plan" 
-                          fill={isDarkMode ? "#64748b" : "#cbd5e1"} 
+                          fill="#3b82f6" 
                           radius={[6, 6, 0, 0]} 
                           barSize={32}
                         />
                         <Bar 
+                          name="Actual"
                           dataKey="Actual" 
-                          fill="var(--brand-primary)" 
+                          fill="var(--success)" 
                           radius={[6, 6, 0, 0]} 
                           barSize={32}
                           shape={(props: any) => {
                             const isOver = props.payload.Actual > props.payload.Plan;
-                            const fill = isOver ? 'var(--danger)' : (isDarkMode ? '#3b82f6' : 'var(--brand-primary)');
+                            const fill = isOver ? 'var(--danger)' : 'var(--success)';
                             return <rect x={props.x} y={props.y} width={props.width} height={props.height} fill={fill} rx={6} ry={6} />;
                           }}
                         />
@@ -476,29 +482,29 @@ function ProjectTimeline({ projectId, tasks, users }: { projectId: string, tasks
 
   if (projectTasks.length === 0) return null;
 
-  const colWidth = 24;
+  const colWidth = 32;
 
   return (
     <div style={{ background: 'var(--bg-secondary)', borderRadius: '12px', border: '1px solid var(--border-light)', overflow: 'hidden' }}>
       <div style={{ overflowX: 'auto', padding: '16px' }}>
         <div style={{ minWidth: 'fit-content', position: 'relative' }}>
           {todayOffset >= 0 && (
-            <div style={{ position: 'absolute', left: `${450 + todayOffset + (colWidth / 2)}px`, top: '50px', bottom: 0, borderLeft: '2px dashed var(--danger)', opacity: 0.4, zIndex: 5, pointerEvents: 'none' }} title="Today" />
+            <div style={{ position: 'absolute', left: `${500 + todayOffset + (colWidth / 2)}px`, top: '60px', bottom: 0, borderLeft: '2px dashed var(--danger)', opacity: 0.4, zIndex: 11, pointerEvents: 'none' }} title="Today" />
           )}
-          <div style={{ display: 'flex', marginBottom: '4px' }}>
-            <div style={{ width: '450px', flexShrink: 0, position: 'sticky', left: 0, background: 'var(--bg-secondary)', zIndex: 10, borderRight: '1px solid var(--border-light)' }}></div>
-            {months.map((m, idx) => (
-              <div key={idx} style={{ width: `${m.count * colWidth}px`, flexShrink: 0, textAlign: 'center', fontSize: '0.75rem', fontWeight: 600, color: 'var(--text-secondary)', borderBottom: '1px solid var(--border-light)', paddingBottom: '4px' }}>{m.name}</div>
-            ))}
-          </div>
           <div style={{ display: 'flex', marginBottom: '8px' }}>
-            <div style={{ width: '450px', flexShrink: 0, position: 'sticky', left: 0, background: 'var(--bg-secondary)', zIndex: 10, borderRight: '1px solid var(--border-light)' }}></div>
-            {days.map((day, idx) => (
-              <div key={idx} style={{ minWidth: `${colWidth}px`, textAlign: 'center', fontSize: '0.65rem', color: day.getDay() === 0 || day.getDay() === 6 ? 'var(--danger)' : 'var(--text-tertiary)' }}>{format(day, 'd')}</div>
+            <div style={{ width: '500px', flexShrink: 0, position: 'sticky', left: 0, background: 'var(--bg-secondary)', zIndex: 10, borderRight: '1px solid var(--border-light)' }}></div>
+            {months.map((m, idx) => (
+              <div key={idx} style={{ width: `${m.count * colWidth}px`, flexShrink: 0, textAlign: 'center', fontSize: '0.85rem', fontWeight: 700, color: 'var(--text-secondary)', borderBottom: '1px solid var(--border-light)', paddingBottom: '6px' }}>{m.name}</div>
             ))}
           </div>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-            {projectTasks.map((task) => {
+          <div style={{ display: 'flex', marginBottom: '12px' }}>
+            <div style={{ width: '500px', flexShrink: 0, position: 'sticky', left: 0, background: 'var(--bg-secondary)', zIndex: 10, borderRight: '1px solid var(--border-light)' }}></div>
+            {days.map((day, idx) => (
+              <div key={idx} style={{ minWidth: `${colWidth}px`, textAlign: 'center', fontSize: '0.75rem', fontWeight: 500, color: day.getDay() === 0 || day.getDay() === 6 ? 'var(--danger)' : 'var(--text-tertiary)' }}>{format(day, 'd')}</div>
+            ))}
+          </div>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
+            {projectTasks.map((task, idx) => {
               const tStart = parseISO(task.startDate);
               const tEnd = parseISO(task.endDate);
               const drawStart = tStart < monthStart ? monthStart : tStart;
@@ -508,15 +514,36 @@ function ProjectTimeline({ projectId, tasks, users }: { projectId: string, tasks
               const width = (differenceInDays(drawEnd, drawStart) + 1) * colWidth;
               const user = users.find(u => u.id === task.userId);
               return (
-                <div key={task.id} style={{ display: 'flex', alignItems: 'center', height: '32px' }}>
-                  <div style={{ width: '450px', flexShrink: 0, fontSize: '0.8rem', display: 'flex', alignItems: 'center', gap: '8px', paddingRight: '12px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', position: 'sticky', left: 0, background: 'var(--bg-secondary)', zIndex: 10, borderRight: '1px solid var(--border-light)' }}>
-                    <UserAvatar src={user?.avatarUrl} name={user?.name || 'User'} size={18} />
-                    <span style={{ fontWeight: 500 }}>{user?.name || 'User'}</span>
-                    <span style={{ color: 'var(--text-tertiary)' }}>:</span>
-                    <span style={{ overflow: 'hidden', textOverflow: 'ellipsis' }}>{task.title}</span>
+                <div key={task.id} style={{ display: 'flex', alignItems: 'center', height: '48px', background: idx % 2 === 0 ? 'transparent' : 'rgba(0,0,0,0.02)', borderRadius: '8px' }}>
+                  <div style={{ width: '500px', flexShrink: 0, fontSize: '0.9rem', display: 'flex', alignItems: 'center', gap: '10px', paddingRight: '16px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', position: 'sticky', left: 0, background: idx % 2 === 0 ? 'var(--bg-secondary)' : 'var(--bg-tertiary)', zIndex: 10, borderRight: '1px solid var(--border-light)' }}>
+                    <UserAvatar src={user?.avatarUrl} name={user?.name || 'User'} size={24} />
+                    <span style={{ fontWeight: 700, color: 'var(--text-primary)' }}>{user?.name || 'User'}</span>
+                    <span style={{ color: 'var(--text-tertiary)', fontWeight: 400 }}>|</span>
+                    <span style={{ overflow: 'hidden', textOverflow: 'ellipsis', color: 'var(--text-secondary)', fontWeight: 500 }}>{task.title}</span>
                   </div>
-                  <div style={{ position: 'relative', flex: 1, height: '12px', background: 'var(--bg-tertiary)', borderRadius: '6px' }}>
-                    <div style={{ position: 'absolute', left: `${leftOffset}px`, width: `${width}px`, height: '100%', background: 'var(--brand-primary)', borderRadius: '6px', opacity: 0.8 }} />
+                  <div style={{ position: 'relative', flex: 1, height: '24px', background: 'var(--bg-tertiary)', borderRadius: '12px' }}>
+                    <div 
+                      style={{ 
+                        position: 'absolute', 
+                        left: `${leftOffset}px`, 
+                        width: `${width}px`, 
+                        height: '100%', 
+                        background: 'linear-gradient(90deg, var(--brand-primary), var(--brand-secondary))', 
+                        borderRadius: '12px', 
+                        opacity: 0.9,
+                        boxShadow: '0 2px 4px rgba(0,0,0,0.1)',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        color: 'white',
+                        fontSize: '0.65rem',
+                        fontWeight: 600,
+                        overflow: 'hidden',
+                        whiteSpace: 'nowrap'
+                      }} 
+                    >
+                      {width > 60 && `${differenceInDays(tEnd, tStart) + 1}d`}
+                    </div>
                   </div>
                 </div>
               );
