@@ -359,9 +359,16 @@ export default function TimelinePage() {
                           const currentDay = new Date(day);
                           currentDay.setHours(12, 0, 0, 0); // Middle of day to avoid TZ issues
                           if (currentDay >= tStart && currentDay <= tEnd) {
-                            dayLoadTasks += 1;
                             const titleLower = task.title.toLowerCase();
-                            if (titleLower.includes('install') || titleLower.includes('730')) {
+                            const isInstall = titleLower.includes('install') || titleLower.includes('730');
+
+                            if (taskFilter === 'all') {
+                              dayLoadTasks += 1;
+                              if (isInstall) dayInstallLoadTasks += 1;
+                            } else if (taskFilter === 'in-house' && !isInstall) {
+                              dayLoadTasks += 1;
+                            } else if (taskFilter === 'on-site' && isInstall) {
+                              dayLoadTasks += 1;
                               dayInstallLoadTasks += 1;
                             }
                           }
@@ -415,7 +422,8 @@ export default function TimelinePage() {
                       const installCode = baseName === 'Design' ? '7301' : baseName === 'Engineering' ? '7302' : '7303';
                       if (isInstall) {
                         const ratio = props?.payload?.[`${baseName}_Install_Ratio`] || 0;
-                        return [`${value}% Capacity (${ratio}% ของงานทั้งหมด)`, `${displayName} (Install ${installCode})`];
+                        const ratioText = taskFilter === 'on-site' ? '' : ` (${ratio}% ของงานทั้งหมด)`;
+                        return [`${value}% Capacity${ratioText}`, `${displayName} (Install ${installCode})`];
                       }
                       return [`${value}% Capacity`, displayName];
                     }}
@@ -444,9 +452,6 @@ export default function TimelinePage() {
                   {activeDepartments.map((dept) => {
                     const deptColor = getDepartmentColor(dept);
                     
-                    // Fading logic for Capacity Chart
-                    const totalOpacity = taskFilter === 'on-site' ? 0.15 : 0.4;
-                    const installOpacity = taskFilter === 'in-house' ? 0.15 : 1;
 
                     return (
                       <Fragment key={dept}>
@@ -455,21 +460,21 @@ export default function TimelinePage() {
                           dataKey={dept} 
                           stroke={deptColor} 
                           strokeWidth={2}
-                          strokeOpacity={taskFilter === 'on-site' ? 0.2 : 1}
                           fill={deptColor} 
-                          fillOpacity={totalOpacity}
+                          fillOpacity={0.4}
                           activeDot={{ r: 6, strokeWidth: 0 }}
                           dot={{ r: 4, fill: 'var(--bg-primary)', strokeWidth: 2, stroke: deptColor }}
+                          hide={taskFilter === 'on-site'}
                         />
                         <Line 
                           type="monotone" 
                           dataKey={`${dept}_Install`} 
                           stroke={deptColor} 
                           strokeWidth={3}
-                          strokeOpacity={installOpacity}
                           strokeDasharray="5 5"
                           dot={false}
                           activeDot={{ r: 4 }}
+                          hide={taskFilter === 'in-house'}
                         />
                       </Fragment>
                     );
