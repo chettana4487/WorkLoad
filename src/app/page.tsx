@@ -5,6 +5,7 @@ import { format, parseISO, differenceInDays, startOfMonth, endOfMonth, eachDayOf
 import { Project, User, Task } from '@/lib/mockData';
 import { Users, FolderKanban, AlertCircle, CheckCircle, Building, MapPin, AlertTriangle, Target, TrendingUp, TrendingDown, Eye, Calendar, Activity } from 'lucide-react';
 import Skeleton from '@/components/Skeleton';
+import UserAvatar from '@/components/UserAvatar';
 import { useWorkloadLimits } from '@/lib/useWorkloadLimits';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Cell, Legend } from 'recharts';
 
@@ -58,6 +59,7 @@ export default function Dashboard() {
           alerts.push({
             userId: user.id,
             userName: user.name,
+            userAvatar: user.avatarUrl,
             date: dayTime,
             count: dayTasks.length,
             taskTitles: dayTasks.map(t => t.title)
@@ -273,7 +275,10 @@ export default function Dashboard() {
                 boxShadow: 'var(--shadow-sm)'
               }}>
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                  <span style={{ fontWeight: 700, color: 'var(--text-primary)' }}>{alert.userName}</span>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                    <UserAvatar src={alert.userAvatar} name={alert.userName} size={32} />
+                    <span style={{ fontWeight: 700, color: 'var(--text-primary)' }}>{alert.userName}</span>
+                  </div>
                   <span style={{ fontSize: '0.7rem', fontWeight: 700, color: 'white', background: 'var(--danger)', padding: '2px 8px', borderRadius: '6px' }}>
                     {alert.count} Tasks
                   </span>
