@@ -6,13 +6,12 @@ import { useSidebar } from './SidebarContext';
 
 export default function TopHeader() {
   const { toggleSidebar, isMobile } = useSidebar();
-  const [theme, setTheme] = useState<'light' | 'dark'>('light');
+  const [theme, setTheme] = useState<'light' | 'dark'>('dark');
 
-  // Initialize theme from localStorage or system preference
+  // Initialize theme from localStorage or default to dark
   useEffect(() => {
     const savedTheme = localStorage.getItem('theme') as 'light' | 'dark' | null;
-    const systemTheme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
-    const initialTheme = savedTheme || systemTheme;
+    const initialTheme = savedTheme || 'dark';
     
     setTheme(initialTheme);
     document.documentElement.classList.remove('light', 'dark');
