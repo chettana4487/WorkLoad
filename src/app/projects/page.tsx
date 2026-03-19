@@ -1,6 +1,7 @@
 'use client';
 
-import { Briefcase, Code, PenTool, Users, Target, Activity, Calendar, Loader2 } from 'lucide-react';
+import { Briefcase, Code, PenTool, Users, Target, Activity, Calendar, AlertCircle, AlertTriangle, Eye, CheckCircle } from 'lucide-react';
+import Skeleton from '@/components/Skeleton';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 import { useState, useEffect, useMemo } from 'react';
 import { format, parseISO, differenceInDays, startOfMonth, endOfMonth, eachDayOfInterval } from 'date-fns';
@@ -80,10 +81,47 @@ export default function ProjectsPage() {
     }).format(amount);
   };
 
+  const getBudgetStatus = (totalPlan: number, totalActual: number) => {
+    const ratio = totalPlan > 0 ? (totalActual / totalPlan) * 100 : 0;
+    if (ratio > 100) return { label: 'Over', color: 'var(--danger)', icon: <AlertCircle size={14} /> };
+    if (ratio >= 90) return { label: 'Warning', color: '#f97316', icon: <AlertTriangle size={14} /> };
+    if (ratio >= 70) return { label: 'Focus', color: '#eab308', icon: <Eye size={14} /> };
+    return { label: 'Normal', color: 'var(--success)', icon: <CheckCircle size={14} /> };
+  };
+
   if (loading) {
     return (
-      <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
-        <Loader2 className="animate-spin" size={48} color="var(--brand-primary)" />
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '32px' }}>
+        {/* Header Skeleton */}
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+          <Skeleton width={300} height={32} />
+          <Skeleton width={120} height={40} borderRadius="8px" />
+        </div>
+
+        {/* Grid Layout Skeleton */}
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(400px, 1fr))', gap: '24px' }}>
+          {Array.from({ length: 6 }).map((_, i) => (
+            <div key={i} className="card glass-panel" style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
+                <div style={{ display: 'flex', gap: '12px', alignItems: 'center', width: '70%' }}>
+                  <Skeleton width={12} height={12} borderRadius="50%" />
+                  <Skeleton width="100%" height={24} />
+                </div>
+                <Skeleton width={40} height={20} borderRadius="10px" />
+              </div>
+              
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                <Skeleton width="40%" height={16} />
+                <Skeleton width="90%" height={14} />
+              </div>
+
+              <div style={{ borderTop: '1px solid var(--border-light)', paddingTop: '16px', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
+                <Skeleton width="100%" height={40} borderRadius="8px" />
+                <Skeleton width="100%" height={40} borderRadius="8px" />
+              </div>
+            </div>
+          ))}
+        </div>
       </div>
     );
   }
@@ -94,7 +132,7 @@ export default function ProjectsPage() {
       {/* Header */}
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', flexWrap: 'wrap', gap: '16px' }}>
         <div>
-          <h1 style={{ fontSize: '2rem', fontWeight: 600, marginBottom: '8px' }}>Projects Portfolio</h1>
+          <h1 style={{ fontSize: '2rem', fontWeight: 600, marginBottom: '8px' }}>Project Portfolio</h1>
           <p style={{ color: 'var(--text-secondary)' }}>Track project construction responsibilities and budget allocations across Design, Program, and Production.</p>
         </div>
         <div style={{ display: 'flex', gap: '16px', alignItems: 'center' }}>
@@ -163,6 +201,7 @@ export default function ProjectsPage() {
                               (project.detailedCosts?.['7302']?.actual || 0) +
                               (project.detailedCosts?.['7303']?.actual || 0);
 
+          const budgetStatus = getBudgetStatus(totalPlan, totalActual);
           const isOverBudgetOverall = totalActual > totalPlan;
 
           const chartData = [
@@ -206,8 +245,8 @@ export default function ProjectsPage() {
                     <span style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
                       <Activity size={14} /> {project.status}
                     </span>
-                    <span style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
-                      <Target size={14} /> {project.health}
+                    <span style={{ display: 'flex', alignItems: 'center', gap: '4px', color: budgetStatus.color, fontWeight: 600 }}>
+                      {budgetStatus.icon} {budgetStatus.label}
                     </span>
                   </div>
                 </div>

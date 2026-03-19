@@ -3,7 +3,8 @@
 import { useState, useEffect, useMemo } from 'react';
 import { format, parseISO, differenceInDays, startOfMonth, endOfMonth, eachDayOfInterval, addDays } from 'date-fns';
 import { Project, User, Task } from '@/lib/mockData';
-import { Users, FolderKanban, AlertCircle, CheckCircle, Building, MapPin, AlertTriangle, Loader2, Target, TrendingUp, TrendingDown, Eye, Calendar } from 'lucide-react';
+import { Users, FolderKanban, AlertCircle, CheckCircle, Building, MapPin, AlertTriangle, Target, TrendingUp, TrendingDown, Eye, Calendar } from 'lucide-react';
+import Skeleton from '@/components/Skeleton';
 import { useWorkloadLimits } from '@/lib/useWorkloadLimits';
 
 export default function Dashboard() {
@@ -62,8 +63,39 @@ export default function Dashboard() {
 
   if (loading) {
     return (
-      <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
-        <Loader2 className="animate-spin" size={48} color="var(--brand-primary)" />
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '32px' }}>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '24px' }}>
+          <Skeleton height={100} borderRadius="12px" />
+          <Skeleton height={100} borderRadius="12px" />
+          <Skeleton height={100} borderRadius="12px" />
+          <Skeleton height={100} borderRadius="12px" />
+        </div>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '24px' }}>
+          <Skeleton height={120} borderRadius="12px" />
+          <Skeleton height={120} borderRadius="12px" />
+          <Skeleton height={120} borderRadius="12px" />
+          <Skeleton height={120} borderRadius="12px" />
+        </div>
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 2fr', gap: '24px' }}>
+          <div className="card" style={{ height: '400px' }}>
+            <Skeleton width="60%" height={24} style={{ marginBottom: '24px' }} />
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+              <Skeleton height={40} />
+              <Skeleton height={40} />
+              <Skeleton height={40} />
+              <Skeleton height={40} />
+            </div>
+          </div>
+          <div className="card" style={{ height: '400px' }}>
+            <Skeleton width="40%" height={24} style={{ marginBottom: '24px' }} />
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+              <Skeleton height={60} />
+              <Skeleton height={60} />
+              <Skeleton height={60} />
+              <Skeleton height={60} />
+            </div>
+          </div>
+        </div>
       </div>
     );
   }
@@ -318,7 +350,9 @@ export default function Dashboard() {
                 <li key={p.id} style={{ display: 'flex', alignItems: 'center', gap: '12px', padding: '12px', border: '1px solid var(--border-light)', borderRadius: '8px', background: p.metrics.status === 'Over' ? 'rgba(239, 68, 68, 0.05)' : 'transparent' }}>
                   <div style={{ width: '12px', height: '12px', borderRadius: '50%', background: p.colorCode }}></div>
                   <div style={{ flex: 1 }}>
-                    <div style={{ fontWeight: 600, display: 'flex', alignItems: 'center', gap: '8px' }}>
+                    <div style={{ fontWeight: 600, display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap' }}>
+                      <span style={{ color: 'var(--brand-primary)', fontSize: '0.75rem', fontWeight: 700 }}>{p.projectNumber}</span>
+                      <span style={{ color: 'var(--text-tertiary)', fontSize: '0.75rem' }}>|</span>
                       {p.name}
                       <span style={{ 
                         fontSize: '0.65rem', 

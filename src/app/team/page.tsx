@@ -2,7 +2,8 @@
 
 import { useState, useMemo, useEffect } from 'react';
 import { Project, User, Task } from '@/lib/mockData';
-import { Users, Briefcase, Activity, AlertCircle, Loader2 } from 'lucide-react';
+import { Users, Briefcase, Activity, AlertCircle } from 'lucide-react';
+import Loading from '@/components/Loading';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, Cell } from 'recharts';
 import { useUserColors } from '@/lib/useUserColors';
 import UserAvatar from '@/components/UserAvatar';
@@ -85,11 +86,7 @@ export default function UsersPage() {
   , [userWorkloads]);
 
   if (loading) {
-    return (
-      <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
-        <Loader2 className="animate-spin" size={48} color="var(--brand-primary)" />
-      </div>
-    );
+    return <Loading />;
   }
 
   return (
