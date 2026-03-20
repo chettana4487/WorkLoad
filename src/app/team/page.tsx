@@ -8,6 +8,8 @@ import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, Responsive
 import { useUserColors } from '@/lib/useUserColors';
 import UserAvatar from '@/components/UserAvatar';
 
+import { getDepartmentColor } from '@/lib/colors';
+
 export default function UsersPage() {
   const { colors } = useUserColors();
   const [data, setData] = useState<{ projects: Project[], users: User[], tasks: Task[] }>({ projects: [], users: [], tasks: [] });
@@ -194,7 +196,7 @@ export default function UsersPage() {
               />
               <Bar dataKey="projects" name="Assigned Projects" radius={[4, 4, 0, 0]}>
                 {chartData.map((entry, index) => (
-                  <Cell key={`cell-${index}`} fill={colors[entry.id] || 'var(--brand-primary)'} />
+                  <Cell key={`cell-${index}`} fill={getDepartmentColor(entry.department)} />
                 ))}
               </Bar>
             </BarChart>
