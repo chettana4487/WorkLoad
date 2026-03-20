@@ -7,6 +7,7 @@ import { useState, useEffect, useMemo } from 'react';
 import { format, parseISO, differenceInDays, startOfMonth, endOfMonth, eachDayOfInterval } from 'date-fns';
 import { Project, User, Task } from '@/lib/mockData';
 import UserAvatar from '@/components/UserAvatar';
+import { getDepartmentColor } from '@/lib/colors';
 
 export default function ProjectsPage() {
   const [data, setData] = useState<{ projects: Project[], users: User[], tasks: Task[] }>({ projects: [], users: [], tasks: [] });
@@ -626,6 +627,8 @@ function ProjectTimeline({ projectId, tasks, users }: { projectId: string, tasks
               const leftOffset = differenceInDays(drawStart, monthStart) * colWidth;
               const width = (differenceInDays(drawEnd, drawStart) + 1) * colWidth;
               const user = users.find(u => u.id === task.userId);
+              const barColor = getDepartmentColor(task.department || user?.department);
+              
               return (
                 <div key={task.id} style={{ display: 'flex', alignItems: 'center', height: '48px', background: idx % 2 === 0 ? 'transparent' : 'rgba(0,0,0,0.02)', borderRadius: '8px' }}>
                   <div style={{ width: '500px', flexShrink: 0, fontSize: '0.9rem', display: 'flex', alignItems: 'center', gap: '10px', paddingRight: '16px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', position: 'sticky', left: 0, background: idx % 2 === 0 ? 'var(--bg-secondary)' : 'var(--bg-tertiary)', zIndex: 10, borderRight: '1px solid var(--border-light)' }}>
@@ -641,7 +644,7 @@ function ProjectTimeline({ projectId, tasks, users }: { projectId: string, tasks
                         left: `${leftOffset}px`, 
                         width: `${width}px`, 
                         height: '100%', 
-                        background: 'linear-gradient(90deg, var(--brand-primary), var(--brand-secondary))', 
+                        background: barColor, 
                         borderRadius: '12px', 
                         opacity: 0.9,
                         boxShadow: '0 2px 4px rgba(0,0,0,0.1)',
@@ -667,3 +670,4 @@ function ProjectTimeline({ projectId, tasks, users }: { projectId: string, tasks
     </div>
   );
 }
+

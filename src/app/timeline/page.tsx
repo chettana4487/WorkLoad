@@ -9,6 +9,8 @@ import { ComposedChart, Area, Line, XAxis, YAxis, CartesianGrid, Tooltip, Respon
 import { useUserColors } from '@/lib/useUserColors';
 import { useWorkloadLimits } from '@/lib/useWorkloadLimits';
 import UserAvatar from '@/components/UserAvatar';
+import { getDepartmentColor } from '@/lib/colors';
+
 
 type ViewMode = 'Day' | 'Week' | 'Month';
 
@@ -22,13 +24,6 @@ export default function TimelinePage() {
   const [taskFilter, setTaskFilter] = useState<'all' | 'in-house' | 'on-site'>('all');
   const { getColor } = useUserColors();
   const { limits, isLoaded } = useWorkloadLimits();
-  
-  const getDepartmentColor = (dept?: string) => {
-    if (dept === 'Design') return '#10b981';
-    if (dept === 'Engineering') return '#3b82f6';
-    if (dept === 'Production') return '#ec4899';
-    return '#6366f1'; // Default
-  };
 
   useEffect(() => {
     fetch('/api/data')
