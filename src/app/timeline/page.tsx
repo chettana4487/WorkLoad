@@ -325,7 +325,7 @@ export default function TimelinePage() {
                     const dataPoint: any = { name, fullDateRange };
                     
                     activeDepartments.forEach(dept => {
-                      const deptLimit = isLoaded ? limits[dept as keyof typeof limits] || 8 : 8;
+                      const deptLimit = isLoaded ? Number(limits[dept as keyof typeof limits]) || 8 : 8;
 
                       let daysInSpan = [spanDate];
                       if (viewMode === 'Week') daysInSpan = eachDayOfInterval({ start: spanDate, end: endOfWeek(spanDate, { weekStartsOn: 1 }) });
