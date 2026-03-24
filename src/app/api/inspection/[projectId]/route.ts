@@ -3,10 +3,10 @@ import { supabase, supabaseAdmin } from '@/lib/supabase';
 
 export async function GET(
   req: Request,
-  { params }: { params: { projectId: string } }
+  { params }: { params: Promise<{ projectId: string }> }
 ) {
   try {
-    const { projectId } = params;
+    const { projectId } = await params;
     const client = supabaseAdmin || supabase;
 
     console.log(`Fetching inspections for projectId: ${projectId}`);
