@@ -92,7 +92,7 @@ export default function Dashboard() {
       };
 
       ['Engineering', 'Design', 'Production'].forEach(dept => {
-        const deptLimit = limits[dept as keyof typeof limits] || 10;
+        const deptLimit = Number(limits[dept as keyof typeof limits]) || 10;
         const deptTasks = data.tasks.filter(t => t.department === dept);
         
         let activeCount = 0;
@@ -308,7 +308,7 @@ export default function Dashboard() {
           <div style={{ display: 'flex', flexDirection: 'column', gap: '24px', flex: 1, justifyContent: 'center' }}>
             {['Design', 'Engineering', 'Production'].map(dept => {
               const deptTasks = data.tasks.filter(t => t.department === dept);
-              const deptLimit = isLoaded ? limits[dept as keyof typeof limits] || 10 : 10;
+              const deptLimit = isLoaded ? Number(limits[dept as keyof typeof limits]) || 10 : 10;
               const deptColor = dept === 'Design' ? '#10b981' : dept === 'Engineering' ? '#3b82f6' : '#ec4899';
               const displayName = dept === 'Design' ? 'Elec. Design' : dept === 'Engineering' ? 'Programmer' : dept;
 
