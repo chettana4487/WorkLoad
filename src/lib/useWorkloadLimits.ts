@@ -7,6 +7,8 @@ export type DepartmentLimits = {
   Design: number;
   Engineering: number;
   Production: number;
+  lastWorkloadUpload?: string;
+  lastCostUpload?: string;
 };
 
 const DEFAULT_LIMITS: DepartmentLimits = {

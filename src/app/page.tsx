@@ -58,7 +58,7 @@ export default function Dashboard() {
         if (dayTasks.length > 1) {
           alerts.push({
             userId: user.id,
-            userName: user.name,
+            userName: user.name.replace(/^[A-Z0-9]+\s+/i, ''),
             userAvatar: user.avatarUrl,
             date: dayTime,
             count: dayTasks.length,
@@ -250,7 +250,7 @@ export default function Dashboard() {
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
               <div style={{ color: 'var(--danger)' }}><AlertCircle size={24} /></div>
-              <h2 style={{ fontSize: '1.25rem', fontWeight: 600 }}>การแจ้งเตือน: ภาระงานเกินกำหนด (Task Overload)</h2>
+              <h2 style={{ fontSize: '1.25rem', fontWeight: 600 }}>Task Overload Alerts</h2>
             </div>
             {overloadAlerts.length > 4 && (
               <button 

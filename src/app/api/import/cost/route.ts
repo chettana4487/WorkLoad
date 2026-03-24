@@ -103,6 +103,23 @@ export async function POST(req: Request) {
         if (updateError) throw updateError;
     }
 
+    // 2. Update last upload timestamp
+    const { data: globalData } = await supabase
+      .from('workload_limits')
+      .select('limits')
+      .eq('id', 'global')
+      .single();
+    
+    const currentLimits = globalData?.limits || { Design: 10, Engineering: 10, Production: 10 };
+    const updatedLimits = { 
+      ...currentLimits, 
+      lastCostUpload: new Date().toISOString() 
+    };
+    
+    await supabase
+      .from('workload_limits')
+      .upsert({ id: 'global', limits: updatedLimits }, { onConflict: 'id' });
+
     return NextResponse.json({ success: true });
 
   } catch (error: any) {

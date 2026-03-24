@@ -3,9 +3,12 @@
 import { Sun, Moon, Menu } from 'lucide-react';
 import { useState, useEffect } from 'react';
 import { useSidebar } from './SidebarContext';
+import { format, parseISO } from 'date-fns';
+import { useWorkloadLimits } from '@/lib/useWorkloadLimits';
 
 export default function TopHeader() {
   const { toggleSidebar, isMobile } = useSidebar();
+  const { limits } = useWorkloadLimits();
   const [theme, setTheme] = useState<'light' | 'dark'>('dark');
 
   // Initialize theme from localStorage or default to dark
@@ -66,6 +69,33 @@ export default function TopHeader() {
           ELECTRICAL ENGINEERING
         </div>
       </div>
+
+      {/* Last Upload Timestamps Display */}
+      {!isMobile && (
+        <div style={{ 
+          display: 'flex', 
+          flexDirection: 'column', 
+          gap: '4px', 
+          fontSize: '0.7rem', 
+          color: 'var(--text-tertiary)',
+          padding: '4px 12px',
+          borderLeft: '1px solid var(--border-light)',
+          marginLeft: '8px'
+        }}>
+          {limits.lastWorkloadUpload && (
+            <div style={{ display: 'flex', gap: '6px', alignItems: 'center' }}>
+              <span style={{ fontWeight: 600, color: 'var(--brand-primary)', whiteSpace: 'nowrap' }}>Workload:</span>
+              <span style={{ whiteSpace: 'nowrap' }}>{format(parseISO(limits.lastWorkloadUpload), 'dd/MM/yyyy HH:mm:ss')}</span>
+            </div>
+          )}
+          {limits.lastCostUpload && (
+            <div style={{ display: 'flex', gap: '6px', alignItems: 'center' }}>
+              <span style={{ fontWeight: 600, color: '#10b981', whiteSpace: 'nowrap' }}>Cost:</span>
+              <span style={{ whiteSpace: 'nowrap' }}>{format(parseISO(limits.lastCostUpload), 'dd/MM/yyyy HH:mm:ss')}</span>
+            </div>
+          )}
+        </div>
+      )}
 
       <div style={{ display: 'flex', alignItems: 'center', gap: isMobile ? '8px' : '20px' }}>
         <button 
