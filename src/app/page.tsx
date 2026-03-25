@@ -306,7 +306,7 @@ export default function Dashboard() {
           </div>
           
           <div style={{ display: 'flex', flexDirection: 'column', gap: '24px', flex: 1, justifyContent: 'center' }}>
-            {['Design', 'Engineering', 'Production'].map(dept => {
+            {['Design', 'Production', 'Engineering'].map(dept => {
               const deptTasks = data.tasks.filter(t => t.department === dept);
               const deptLimit = isLoaded ? Number(limits[dept as keyof typeof limits]) || 10 : 10;
               const deptColor = dept === 'Design' ? '#10b981' : dept === 'Engineering' ? '#3b82f6' : '#ec4899';
@@ -477,14 +477,14 @@ export default function Dashboard() {
                   <Cell key={`cell-design-${index}`} fill="#10b981" fillOpacity={entry.Design >= 100 ? 1 : entry.Design >= 80 ? 0.8 : 0.6} />
                 ))}
               </Bar>
-              <Bar dataKey="Engineering" name="Engineering" fill="#3b82f6" radius={[4, 4, 0, 0]} barSize={20}>
-                {forecastData.map((entry, index) => (
-                  <Cell key={`cell-eng-${index}`} fill="#3b82f6" fillOpacity={entry.Engineering >= 100 ? 1 : entry.Engineering >= 80 ? 0.8 : 0.6} />
-                ))}
-              </Bar>
               <Bar dataKey="Production" name="Production" fill="#ec4899" radius={[4, 4, 0, 0]} barSize={20}>
                 {forecastData.map((entry, index) => (
                   <Cell key={`cell-prod-${index}`} fill="#ec4899" fillOpacity={entry.Production >= 100 ? 1 : entry.Production >= 80 ? 0.8 : 0.6} />
+                ))}
+              </Bar>
+              <Bar dataKey="Engineering" name="Programmer" fill="#3b82f6" radius={[4, 4, 0, 0]} barSize={20}>
+                {forecastData.map((entry, index) => (
+                  <Cell key={`cell-eng-${index}`} fill="#3b82f6" fillOpacity={entry.Engineering >= 100 ? 1 : entry.Engineering >= 80 ? 0.8 : 0.6} />
                 ))}
               </Bar>
             </BarChart>

@@ -79,7 +79,7 @@ export async function POST(req: Request) {
       const p2300 = Number(getValue(row, ['2300 Plan_Cost', '2300 Plan Cost', '2300_Plan_Cost', 'Materials Plan Cost', 'Materials_Plan_Cost'])) || 0;
       const a2300 = Number(getValue(row, ['2300 Actl_Cost', '2300 Actual Cost', '2300_Actl_Cost', '2300 Actl_cost', 'Materials Actual Cost', 'Materials_Actual_Cost'])) || 0;
       const po2300 = Number(getValue(row, ['2300 PO_Cost', '2300 PO Cost', '2300_PO_Cost', 'Materials PO Cost', 'Materials_PO_Cost'])) || 0;
-      project.detailed_costs['2300'] = { plan: p2300, actual: a2300, po: po2300 };
+      project.detailed_costs['2300'] = { plan: p2300, actual: Math.max(a2300, po2300), po: po2300 };
       
       // 2400 - Program
       const p2400 = Number(getValue(row, ['2400 Plan_Cost', '2400 Plan Cost', '2400_Plan_Cost', 'Program Plan Cost', 'Program_Plan_Cost'])) || 0;
