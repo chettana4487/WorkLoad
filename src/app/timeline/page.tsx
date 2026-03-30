@@ -515,7 +515,7 @@ export default function TimelinePage() {
 
                 if (viewMode === 'Day') {
                   topLabel = format(spanDate, 'EEE');
-                  mainLabel = format(spanDate, 'd');
+                  mainLabel = format(spanDate, 'd MMM');
                 } else if (viewMode === 'Week') {
                   topLabel = `W${format(spanDate, 'w')}`;
                   mainLabel = format(spanDate, 'MMM d');
@@ -538,7 +538,7 @@ export default function TimelinePage() {
                     color: isWeekend ? 'var(--text-tertiary)' : 'var(--text-primary)'
                   }}>
                     <div style={{ fontSize: '0.75rem', fontWeight: 500 }}>{topLabel}</div>
-                    <div style={{ fontSize: '1rem', fontWeight: 600 }}>{mainLabel}</div>
+                    <div style={{ fontSize: viewMode === 'Day' ? '0.85rem' : '1rem', fontWeight: 600 }}>{mainLabel}</div>
                   </div>
                 );
               })}
@@ -550,6 +550,34 @@ export default function TimelinePage() {
             {filteredUsers.map(user => {
               const userTasks = data.tasks.filter(t => t.userId === user.id);
               
+              const visibleTasks = userTasks.filter(t => !t.hideOnTimeline);
+              const sortedTasks = [...visibleTasks].sort((a, b) => new Date(a.startDate).getTime() - new Date(b.startDate).getTime());
+              
+              const rowEnds: number[] = [];
+              const taskRowMap = new Map<string, number>();
+
+              sortedTasks.forEach(task => {
+                const tStart = new Date(task.startDate).getTime();
+                const tEnd = new Date(task.endDate).getTime();
+                
+                let assignedRow = -1;
+                for (let i = 0; i < rowEnds.length; i++) {
+                  if (tStart > rowEnds[i]) {
+                    assignedRow = i;
+                    break;
+                  }
+                }
+                
+                if (assignedRow === -1) {
+                  assignedRow = rowEnds.length;
+                  rowEnds.push(tEnd);
+                } else {
+                  rowEnds[assignedRow] = tEnd;
+                }
+                
+                taskRowMap.set(task.id, assignedRow);
+              });
+
               return (
                 <div key={user.id} style={{ 
                   display: 'flex', 
@@ -603,7 +631,7 @@ export default function TimelinePage() {
                     
                     {/* Tasks */}
                     <div style={{ position: 'relative', flex: 1, minHeight: '80px', height: '100%', overflow: 'hidden' }}>
-                    {userTasks.filter(t => !t.hideOnTimeline).map((task, idx) => {
+                    {visibleTasks.map((task, idx) => {
                       const tStart = parseISO(task.startDate);
                       const tEnd = parseISO(task.endDate);
                       const project = data.projects.find(p => p.id === task.projectId);
@@ -628,13 +656,7 @@ export default function TimelinePage() {
                       const left = daysFromStart * pixelsPerDay;
                       const width = durationDays * pixelsPerDay;
                       
-                      let overlapLevel = 0;
-                      for (let i = 0; i < idx; i++) {
-                        const otherTask = userTasks[i];
-                        const otherStart = parseISO(otherTask.startDate);
-                        const otherEnd = parseISO(otherTask.endDate);
-                        if (tStart <= otherEnd && tEnd >= otherStart) overlapLevel++;
-                      }
+                      const overlapLevel = taskRowMap.get(task.id) || 0;
                       
                       const topOffset = 10 + (overlapLevel * 45); 
 
