@@ -1,8 +1,8 @@
 import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
 import './globals.css';
-import Sidebar from '@/components/Sidebar';
-import TopHeader from '@/components/TopHeader';
+import LayoutWrapper from '@/components/LayoutWrapper';
+import MaintenancePage from './maintenance/page';
 
 const inter = Inter({ subsets: ['latin'], variable: '--font-inter' });
 
@@ -11,28 +11,24 @@ export const metadata: Metadata = {
   description: 'Track department and individual workload across projects',
 };
 
-import { SidebarProvider } from '@/components/SidebarContext';
-
 export default function RootLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  const isMaintenance = process.env.NEXT_PUBLIC_MAINTENANCE_MODE === 'true';
+
   return (
     <html lang="en" className="dark">
       <body className={inter.variable}>
-        <SidebarProvider>
-          <div className="app-container">
-            <Sidebar />
-            <div className="main-content">
-              <TopHeader />
-              <main className="page-container animate-fade-in">
-                {children}
-              </main>
-            </div>
-          </div>
-        </SidebarProvider>
+        {isMaintenance ? (
+          <MaintenancePage />
+        ) : (
+          <LayoutWrapper>{children}</LayoutWrapper>
+        )}
       </body>
     </html>
   );
 }
+
+

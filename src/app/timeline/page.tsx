@@ -70,7 +70,7 @@ export default function TimelinePage() {
 
   if (loading) {
     return (
-      <div style={{ display: 'flex', flexDirection: 'column', gap: '24px', height: '100%' }}>
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '24px', height: 'calc(100vh - 128px)', overflow: 'hidden' }}>
         {/* Header Controls Skeleton */}
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
           <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
@@ -124,7 +124,7 @@ export default function TimelinePage() {
   }
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: '24px', height: '100%' }}>
+    <div style={{ display: 'flex', flexDirection: 'column', gap: '24px', height: 'calc(100vh - 128px)', minHeight: '500px', overflow: 'hidden' }}>
       
       {/* Header Controls */}
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
@@ -298,7 +298,7 @@ export default function TimelinePage() {
     </div>
 
       {/* Main Timeline View */}
-      <div className="card" style={{ padding: displayType === 'capacity' ? '24px' : 0, overflowX: 'auto', overflowY: 'auto', display: 'flex', flexDirection: 'column', flex: 1, minHeight: '600px' }}>
+      <div className="card" style={{ padding: displayType === 'capacity' ? '24px' : 0, overflowX: 'auto', overflowY: 'auto', display: 'flex', flexDirection: 'column', flex: 1, minHeight: '400px', position: 'relative' }}>
         
         {displayType === 'capacity' ? (
           <div style={{ width: '100%', height: '100%', minHeight: '500px', flex: 1, display: 'flex', flexDirection: 'column' }}>
@@ -479,7 +479,7 @@ export default function TimelinePage() {
             </div>
           </div>
         ) : (
-        <div style={{ minWidth: `${250 + (timeSpans.length * colWidth)}px`, display: 'flex', flexDirection: 'column', minHeight: '100%' }}>
+        <div style={{ minWidth: `${250 + (timeSpans.length * colWidth)}px`, display: 'flex', flexDirection: 'column' }}>
           
           {/* Top Header - Dates */}
           <div style={{ 
@@ -488,7 +488,7 @@ export default function TimelinePage() {
             background: 'var(--bg-tertiary)',
             position: 'sticky',
             top: 0,
-            zIndex: 30
+            zIndex: 50
           }}>
             {/* Sticky Top-Left Corner */}
             <div style={{ 
@@ -501,7 +501,7 @@ export default function TimelinePage() {
               position: 'sticky',
               left: 0,
               background: 'var(--bg-tertiary)',
-              zIndex: 40
+              zIndex: 60
             }}>
               Team Member
             </div>
